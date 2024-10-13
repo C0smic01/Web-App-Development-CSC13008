@@ -6,7 +6,6 @@ function validateInput(inputElement, errorMessage) {
         inputElement.focus();
         return false;
     }
-    notification.textContent = '';
     return true;
 }
 
@@ -20,8 +19,9 @@ document.getElementById('num2').addEventListener('blur', function() {
 
 function validateOperation() {
     const operation = document.querySelector('input[name="operation"]:checked');
+    const notification = document.getElementById('notification');
     if (!operation) {
-        document.getElementById('notification').textContent = 'Vui lòng chọn một phép tính.';
+        notification.textContent = 'Vui lòng chọn một phép tính.';
         return false;
     }
     return true;
@@ -32,9 +32,18 @@ function calculate() {
     const num2Input = document.getElementById('num2');
     const notification = document.getElementById('notification');
 
-    if (!validateInput(num1Input, 'Giá trị nhập ở ô Số thứ nhất không phải là số')) return;
-    if (!validateInput(num2Input, 'Giá trị nhập ở ô Số thứ hai không phải là số')) return;
-    if (!validateOperation()) return;
+    if (!validateInput(num1Input, 'Giá trị nhập ở ô Số thứ nhất không phải là số')) {
+        notification.textContent = 'Vui lòng nhập hai số hợp lệ để thực hiện phép tính.';
+        return;
+    }
+    if (!validateInput(num2Input, 'Giá trị nhập ở ô Số thứ hai không phải là số')) {
+        notification.textContent = 'Vui lòng nhập hai số hợp lệ để thực hiện phép tính.';
+        return;
+    }
+    if (!validateOperation()) {
+        notification.textContent = 'Vui lòng chọn một phép tính.';
+        return;
+    }
 
     const num1 = parseFloat(num1Input.value);
     const num2 = parseFloat(num2Input.value);
