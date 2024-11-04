@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const path = require("path");
-
+const sequelize = require('./config/database');
+const User = require('./models/User');
 
 // Config template engine EJS
 app.set('view engine', 'ejs');
@@ -37,7 +38,26 @@ app.get('/contact', (req, res) => {
 });
 
 
+// Sync db
+(async () => {
+  try {
 
+    await sequelize.sync({ force: false });
+    console.log("Database & tables sync!");
+
+    if(await User.count() == 0)
+    {
+      await User.create({
+        user_name: 'John Doe',
+        phone: '1234567890',
+        email: 'john@example.com',
+      });
+      console.log("Sample user created!");
+    }
+  } catch (error) {
+    console.error("Unable to sync database:", error);
+  }
+})();
 
 
 // Start server
