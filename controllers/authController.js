@@ -4,11 +4,11 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
 exports.login = (req, res) => {
-    res.render('layouts/layout', { body: '../auth/login' });
+    res.render('layouts/layout', { body: '../login/login' });
 };
 
 exports.getRegister = (req, res) => {
-    res.render('layouts/layout', { body: '../auth/register' });
+    res.render('layouts/layout', { body: '../register/register' });
 };
 
 exports.postRegister = async (req, res) => {
@@ -17,7 +17,7 @@ exports.postRegister = async (req, res) => {
 
         if (password !== confirm_password) {
             return res.status(400).render('layouts/layout', {
-                body: '../auth/register',
+                body: '../register/register',
                 error: 'Passwords do not match'
             });
         }
@@ -25,7 +25,7 @@ exports.postRegister = async (req, res) => {
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
             return res.status(400).render('layouts/layout', {
-                body: '../auth/register',
+                body: '../register/register',
                 error: 'Email already registered'
             });
         }
@@ -39,11 +39,11 @@ exports.postRegister = async (req, res) => {
             password: hashedPassword
         });
 
-        res.redirect('/auth/login');
+        res.redirect('/login/login');
     } catch (error) {
         console.error('Registration error:', error);
         res.status(500).render('layouts/layout', {
-            body: '../auth/register',
+            body: '../register/register',
             error: 'Registration failed. Please try again.'
         });
     }
