@@ -1,7 +1,7 @@
 CREATE TABLE users (
     user_id SERIAL NOT NULL PRIMARY KEY,
     user_name VARCHAR(255),
-    phone VARCHAR(10) NOT NULL,
+    phone VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -38,11 +38,22 @@ CREATE TABLE products (
     price FLOAT NOT NULL,
     remaining INTEGER NOT NULL,
     img VARCHAR(255),
-    rating_score FLOAT DEFAULT 5,
     status_id INTEGER,
-    FOREIGN KEY (status_id) REFERENCES status(status_id)
+    manufacturer_id INTEGER,
+    FOREIGN KEY (status_id) REFERENCES status(status_id),
+    FOREIGN KEY (manufacturer_id) REFERENCES manufacturers(manufacturer_id)
 );
-
+create table categories (
+    category_id serial not null primary key ,
+    category_name varchar(255) not null
+);
+create table product_category (
+    product_id integer not null,
+    category_id integer not null,
+    primary key (product_id,category_id),
+    foreign key (product_id) references products(product_id),
+    foreign key (category_id) references categories(category_id)
+);
 create table reviews (
 	product_id integer not null ,
 	user_id integer not null,
