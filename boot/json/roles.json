@@ -1,0 +1,22 @@
+ [
+      {
+        "role_id": 1,
+        "role_name": "MANAGER",
+        "description" : "manage most aspect of website"
+      },
+      {
+        "role_id": 2,
+        "role_name": "ADMIN",
+        "description" : "manage anything"
+      },
+      {
+        "role_id": 3,
+        "role_name": "EDITOR",
+        "description" : "manage products contents"
+      },
+      {
+        "role_id": 4,
+        "role_name": "USER",
+        "description" : "default role"
+      }
+    ]

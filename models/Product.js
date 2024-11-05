@@ -38,5 +38,17 @@ const Product = sequelize.define('products', {
     createdAt: 'created_at',
     updatedAt: 'updated_at',
 });
+Product.associate = (models)=>{
+    Product.belongsToMany(models.users,{
+        foreignKey: {name :'product_id'},
+        through : 'reviews'
+    }),
+    Product.belongsTo(models.status,{
+        foreignKey: {name :'status_id'}
+    }),
+    Product.belongsTo(models.manufacturers,{
+        foreignKey : {name : 'manufacturer_id'},
+    })
 
+}
 module.exports = Product

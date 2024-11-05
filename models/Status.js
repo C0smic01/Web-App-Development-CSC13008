@@ -19,5 +19,14 @@ const Status = sequelize.define('status', {
 }, {
     timestamps: false
 });
+Status.associate=  (models)=>{
+    Status.hasMany(models.products,{
+        foreignKey : {name :'status_id', allowNull : false}
+    })
+    Status.belongsToMany(models.orders,{
+        foreignKey: {name : 'order_id', allowNull: false},
+        through : 'order_status'
+    })
+}
 
 module.exports = Status

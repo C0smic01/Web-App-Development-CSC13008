@@ -13,5 +13,9 @@ const Manufacturer = sequelize.define('manufacturers', {
 }, {
     timestamps: false
 });
-
+Manufacturer.associate = (models)=>{
+    Manufacturer.hasMany(models.products,{
+        foreignKey: {name : 'manufacturer_id',allowNull : false}
+    })
+}
 module.exports = Manufacturer;

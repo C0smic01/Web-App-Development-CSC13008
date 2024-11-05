@@ -40,5 +40,18 @@ const User = sequelize.define('users', {
     createdAt: 'created_at',
     updatedAt: 'updated_at',
 });
-
+User.associate = (models)=>{
+    User.hasMany(models.reviews,{
+        foreignKey : {name : 'user_id', allowNull : false},
+        onDelete : 'CASCADE'
+    }),
+    User.belongsToMany(models.roles,{
+        foreignKey : {name : 'user_id', allowNull : false},
+        through : 'user_role'
+    }),
+    User.hasMany(models.orders,{
+        foreignKey :{name : 'user_id',allowNull : false},
+        onDelete : 'CASCADE'
+    })
+}
 module.exports = User

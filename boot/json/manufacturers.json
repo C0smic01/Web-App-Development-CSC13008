@@ -1,0 +1,50 @@
+[
+      {
+        "manufacturer_id": 1,
+        "m_name": "Gorczany - Smith"
+      },
+      {
+        "manufacturer_id": 2,
+        "m_name": "Douglas, O'Hara and Gerlach"
+      },
+      {
+        "manufacturer_id": 3,
+        "m_name": "Zemlak and Sons"
+      },
+      {
+        "manufacturer_id": 4,
+        "m_name": "Cartwright - Bahringer"
+      },
+      {
+        "manufacturer_id": 5,
+        "m_name": "Botsford and Sons"
+      },
+      {
+        "manufacturer_id": 6,
+        "m_name": "Rempel - Yundt"
+      },
+      {
+        "manufacturer_id": 7,
+        "m_name": "Shields - Beier"
+      },
+      {
+        "manufacturer_id": 8,
+        "m_name": "Heller - Koss"
+      },
+      {
+        "manufacturer_id": 9,
+        "m_name": "Kovacek Inc"
+      },
+      {
+        "manufacturer_id": 10,
+        "m_name": "D'Amore, Robel and Murphy"
+      },
+      {
+        "manufacturer_id": 11,
+        "m_name": "Emmerich - Corkery"
+      },
+      {
+        "manufacturer_id": 12,
+        "m_name": "Cummerata Inc"
+      }
+    ]

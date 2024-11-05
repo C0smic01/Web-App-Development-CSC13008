@@ -27,4 +27,17 @@ const Order = sequelize.define('orders', {
     updatedAt: false
 });
 
+Order.associate = (models)=>{
+    Order.belongsTo(models.users,{
+        foreignKey : {name : 'user_id', allowNull : false}
+    })
+    Order.hasMany(models.order_details,{
+        foreignKey: {name : 'order_id',allowNull : false}
+    })
+    Order.belongsToMany(models.status,{
+        foreignKey : {name : 'order_id',allowNull: false},
+        through : 'order_status'
+    })
+}
+
 module.exports = Order;

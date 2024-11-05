@@ -1,0 +1,73 @@
+[
+      {
+        "status_id": 1,
+        "status_name": "SOLD_OUT",
+        "status_type": "PRODUCT"
+      },
+      {
+        "status_id": 2,
+        "status_name": "OUT_OF_STOCK",
+        "status_type": "PRODUCT"
+      },
+      {
+        "status_id": 3,
+        "status_name": "ON_SALE",
+        "status_type": "PRODUCT"
+      },
+      {
+        "status_id": 4,
+        "status_name": "IN_STOCK",
+        "status_type": "PRODUCT"
+      },
+      {
+        "status_id": 5,
+        "status_name": "DISCONTINUED",
+        "status_type": "PRODUCT"
+      },
+      {
+        "status_id": 6,
+        "status_name": "LOW_STOCK",
+        "status_type": "PRODUCT"
+      },
+      {
+        "status_id": 7,
+        "status_name": "COMING_SOON",
+        "status_type": "PRODUCT"
+      },
+      {
+        "status_id": 8,
+        "status_name": "PENDING",
+        "status_type": "ORDER"
+      },
+      {
+        "status_id": 9,
+        "status_name": "CONFIRMED",
+        "status_type": "ORDER"
+      },
+      {
+        "status_id": 10,
+        "status_name": "PROCESSING",
+        "status_type": "ORDER"
+      },
+      {
+        "status_id": 11,
+        "status_name": "SHIPPED",
+        "status_type": "ORDER"
+      },{
+        "status_id": 12,
+        "status_name": "DELIVERED",
+        "status_type": "ORDER"
+      },{
+        "status_id": 13,
+        "status_name": "CANCELED",
+        "status_type": "ORDER"
+      },{
+        "status_id": 14,
+        "status_name": "RETURNED",
+        "status_type": "ORDER"
+      },{
+        "status_id": 15,
+        "status_name": "FAILED",
+        "status_type": "ORDER"
+      }
+]

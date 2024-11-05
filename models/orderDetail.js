@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const Order = require('./Order');
 
 const OrderDetail = sequelize.define('order_details', {
     order_id: {
@@ -23,5 +24,9 @@ const OrderDetail = sequelize.define('order_details', {
 }, {
     timestamps: false
 });
-
+Order.associate=  (models)=>{
+    Order.belongsTo(models.orders,{
+        foreignKey : {name : 'order_id', allowNull : false}
+    })
+}
 module.exports = OrderDetail;
