@@ -1,6 +1,6 @@
 const ejs = require('ejs');
 const path = require('path');
-const User = require('../models/User');
+const { User } = require('../models');
 const bcrypt = require('bcryptjs');
 
 exports.login = (req, res) => {
