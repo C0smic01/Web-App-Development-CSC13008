@@ -31,4 +31,17 @@ sequelize.sync({force: false}).then(async()=>{
   await sampleData.createUserSample();
 })
 
-module.exports = sequelize;
+module.exports = {
+  sequelize,
+  User,
+  Role,
+  UserRole,
+  Manufacturer,
+  Status,
+  Product,
+  Category,
+  Review,
+  Order,
+  OrderDetail,
+  OrderStatus
+};
