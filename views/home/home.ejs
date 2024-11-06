@@ -85,135 +85,30 @@
             <p>Summer Collection New Morden Design</p>
             
             <div class="pro-container">
-
-                <div class="pro" onclick="window.location.href='./subpages/sproduct.html';">
-                    <img src="/img/products/f6.jpg" alt="P-6">
-                    <div class="des">
-                        <span>cara</span>
-                        <h5>Cartoon Astronaut T-Shirts</h5>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <h4>$129</h4>
-                    </div>
-                    <a href="../cart/cart.html" class="cart"><i class="fa-solid fa-bag-shopping" ></i></a>
-                </div>
-                <div class="pro" onclick="window.location.href='../sproduct/sproduct.html';">
-                    <img src="/img/products/n1.jpg" alt="P-7">
-                    <div class="des">
-                        <span>cara</span>
-                        <h5>Cartoon Astronaut T-Shirts</h5>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <h4>$69</h4>
-                    </div>
-                    <a href="../cart/cart.html" class="cart"><i class="fa-solid fa-bag-shopping"></i></a>
-                </div>
-                <div class="pro" onclick="window.location.href='../sproduct/sproduct.html';">
-                    <img src="./img/products/f8.jpg" alt="P-8">
-                    <div class="des">
-                        <span>cara</span>
-                        <h5>Cartoon Astronaut T-Shirts</h5>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <h4>$89</h4>
-                    </div>
-                    <a href="../cart/cart.html" class="cart"><i class="fa-solid fa-bag-shopping"></i></a>
-                </div>
-
-                <div class="pro" onclick="window.location.href='./subpages/sproduct.html';">
-                    <img src="./img/products/f5.jpg" alt="P-5">
-                    <div class="des">
-                        <span>cara</span>
-                        <h5>Cartoon Astronaut T-Shirts</h5>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <h4>$99</h4>
-                    </div>
-                    <a href="subpages/cart.html" class="cart"><i class="fa-solid fa-bag-shopping"></i></a>
-                </div>
+                <% if(data && data.length >0) {%>
                 
+                <%    data.forEach(product=>{ %>
+                    <div class="pro" onclick="window.location.href='/products/<%-product.product_id%>';">
+                        <img src=<%-product.img%> alt="P-6">
+                        <div class="des">
+                            <!-- <span>cara</span> -->
+                            <h5> <%= product.product_name%></h5>
+                            <div class="star">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <h4><%= product.price/1000%>K</h4>
+                        </div>
+                        <a href="../cart/cart.html" class="cart"><i class="fa-solid fa-bag-shopping" ></i></a>
+                    </div>
+                <% }) %>
 
-                <div class="pro" onclick="window.location.href='./subpages/sproduct.html';">
-                    <img src="./img/products/n8.jpg" alt="P-1">
-                    <div class="des">
-                        <span>cara</span>
-                        <h5>Cartoon Astronaut T-Shirts</h5>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <h4>$109</h4>
-                    </div>
-                    <a href="subpages/cart.html" class="cart"><i class="fa-solid fa-bag-shopping" ></i></a>
-                </div>
 
-                <div class="pro" onclick="window.location.href='./subpages/sproduct.html';">
-                    <img src="./img/products/n5.jpg" alt="P-2">
-                    <div class="des">
-                        <span>cara</span>
-                        <h5>Cartoon Astronaut T-Shirts</h5>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <h4>$99</h4>
-                    </div>
-                    <a href="subpages/cart.html" class="cart"><i class="fa-solid fa-bag-shopping" ></i></a>
-                </div>
-                <div class="pro" onclick="window.location.href='./subpages/sproduct.html';">
-                    <img src="./img/products/f7.jpg" alt="P-3">
-                    <div class="des">
-                        <span>cara</span>
-                        <h5>Cartoon Astronaut T-Shirts</h5>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <h4>$119</h4>
-                    </div>
-                    <a href="subpages/cart.html" class="cart"><i class="fa-solid fa-bag-shopping"></i></a>
-                </div>
-                <div class="pro" onclick="window.location.href='./subpages/sproduct.html';">
-                    <img src="./img/products/f3.jpg" alt="P-4">
-                    <div class="des">
-                        <span>cara</span>
-                        <h5>Cartoon Astronaut T-Shirts</h5>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <h4>$69</h4>
-                    </div>
-                    <a href="subpages/cart.html" class="cart"><i class="fa-solid fa-bag-shopping"></i></a>
-                </div>
+                <% } %>
+                
 
             </div>
         </section>

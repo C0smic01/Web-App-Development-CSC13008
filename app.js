@@ -26,6 +26,9 @@ app.use('/auth', authRoutes);
 const cartRoutes = require('./routes/cartRoutes');
 app.use('/cart', cartRoutes);
 
+const productRoutes = require('./routes/productRoutes')
+app.use('/products',productRoutes)
+
 // Static routes
 app.get('/about', (req, res) => {
   res.render('layouts/layout', { body: '../about/about' });
@@ -35,6 +38,10 @@ app.get('/contact', (req, res) => {
   res.render('layouts/layout', { body: '../contact/contact' });
 });
 
+
+// Middleware error handler
+const AppErrorHandler = require('./utils/AppErrorHandler.js')
+app.use(AppErrorHandler)
 // db
 const sequelize = require('./models/index.js');
 

@@ -34,5 +34,8 @@
 },{
     "category_id" : 11 ,
     "category_name" : "Hoodie"
+},{
+    "category_id" : 12 ,
+    "category_name" : "Shirt"
 }
 ]
