@@ -32,9 +32,7 @@ const createCategorySample = async () => {
       }
 
       console.log("Sample category created!");
-    } else {
-      console.log("Categories table already has data.");
-    }
+    } 
   } catch (error) {
     console.error("Unable to create sample category:", error);
   }
@@ -55,8 +53,6 @@ const createManufacturerSample = async () => {
       }
 
       console.log("Sample manufacturers created!");
-    } else {
-      console.log("Manufacturers table already has data.");
     }
   } catch (error) {
     console.error("Unable to create sample manufacturers:", error);
@@ -80,9 +76,7 @@ const createRoleSample = async () => {
       }
 
       console.log("Sample roles created!");
-    } else {
-      console.log("Table role already has data.");
-    }
+    } 
   } catch (error) {
     console.error("Unable to create sample role:", error);
   }
@@ -104,8 +98,6 @@ const createStatusSample = async () => {
       }
 
       console.log("Sample status created!");
-    } else {
-      console.log("Status table already has data.");
     }
   } catch (error) {
     console.error("Unable to create sample status:", error);
@@ -130,8 +122,6 @@ const createProductSample = async () => {
       }
 
       console.log("Sample products created!");
-    } else {
-      console.log("Products table already has data.");
     }
   } catch (error) {
     console.error("Unable to create sample products:", error);
@@ -156,9 +146,7 @@ const createUserSample = async () => {
       }
 
       console.log("Sample users created!");
-    } else {
-      console.log("Users table already has data.");
-    }
+    } 
   } catch (error) {
     console.error("Unable to create sample users:", error);
   }

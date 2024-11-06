@@ -17,6 +17,10 @@ module.exports = (sequelize,DataTypes)=>{
                 min: 0
             }
         },
+        img : {
+            type : DataTypes.STRING,
+            allowNull : true
+        },
         remaining: {
             type: DataTypes.INTEGER,
             allowNull: false,
