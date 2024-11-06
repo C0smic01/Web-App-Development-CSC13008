@@ -5,10 +5,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Register</title>
-
     </head>
     <body>
-        
         <!-- Hero Section -->
         <section id="page-header" class="blog-header">
             <h2>#JoinTheJourney</h2>
@@ -19,16 +17,31 @@
         <section id="register-form">
             <div class="form-box">
                 <h2>Register</h2>
-                <form action="/register" method="POST">
-                    <input type="text" placeholder="Username" name="username" required>
+                <% if (typeof error !== 'undefined' && error !== null) { %>
+                    <div id="error-message" class="alert alert-error">
+                        <%= error %>
+                    </div>
+                <% } %>
+                <form action="/auth/register" method="POST">
+                    <input type="text" placeholder="Username" name="user_name" required>
                     <input type="email" placeholder="Email" name="email" required>
+                    <input type="tel" placeholder="Phone (optional)" name="phone">
                     <input type="password" placeholder="Password" name="password" required>
                     <input type="password" placeholder="Confirm Password" name="confirm_password" required>
                     <button type="submit" class="normal">Register</button>
-                    <p>Already have an account? <a href="login.html">Login</a></p>
+                    <p>Already have an account? <a href="/auth/login">Login</a></p>
                 </form>
             </div>
         </section>
 
+        <script>
+            // Auto-hide error message after 5 seconds
+            const errorMessage = document.getElementById('error-message');
+            if (errorMessage) {
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 5000);
+            }
+        </script>
     </body>
 </html>
