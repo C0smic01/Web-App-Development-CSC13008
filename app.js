@@ -7,9 +7,7 @@ const cors = require('cors');
 const app = express();
 const path = require("path");
 
-
 const { sequelize } = require('./models');
-
 
 const sessionStore = new SequelizeStore({
     db: sequelize,
@@ -85,11 +83,11 @@ app.use((req, res, next) => {
     });
 });
 
-// Middleware error handler
+
 const AppErrorHandler = require('./utils/AppErrorHandler.js')
 app.use(AppErrorHandler)
-// db
-const sequelize = require('./models/index.js');
+
+// const sequelize = require('./models/index.js');
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
