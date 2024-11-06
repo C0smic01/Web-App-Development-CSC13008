@@ -17,22 +17,19 @@ exports.postRegister = async (req, res) => {
             });
         }
 
-        // Check password match
         if (password !== confirm_password) {
             return res.status(400).json({
                 message: 'Passwords do not match'
             });
         }
 
-        // Check email exists
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
-            return res.status(409).json({  // 409 Conflict
+            return res.status(409).json({  
                 message: 'Email already registered'
             });
         }
 
-        // Create new user
         const hashedPassword = await bcrypt.hash(password, 12);
         await User.create({
             user_name,
@@ -41,8 +38,7 @@ exports.postRegister = async (req, res) => {
             password: hashedPassword
         });
 
-        // Return success
-        return res.status(201).json({  // 201 Created
+        return res.status(201).json({  
             message: 'Registration successful'
         });
 
@@ -62,27 +58,23 @@ exports.postLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Check if email and password are provided
         if (!email || !password) {
             return res.status(400).json({
                 message: 'Email and password are required'
             });
         }
 
-        // Find user by email
         const user = await User.findOne({ 
             where: { email },
-            attributes: ['user_id', 'user_name', 'email', 'password'] // Only select needed fields
+            attributes: ['user_id', 'user_name', 'email', 'password'] 
         });
 
-        // Check if user exists
         if (!user) {
             return res.status(401).json({
                 message: 'Invalid email or password'
             });
         }
 
-        // Verify password
         const isValidPassword = await bcrypt.compare(password, user.password);
         if (!isValidPassword) {
             return res.status(401).json({
@@ -90,14 +82,12 @@ exports.postLogin = async (req, res) => {
             });
         }
 
-        // Create session data (you'll need to set up session middleware)
         req.session.user = {
             user_id: user.user_id,
             user_name: user.user_name,
             email: user.email
         };
 
-        // Return success
         return res.status(200).json({
             message: 'Login successful',
             user: {
