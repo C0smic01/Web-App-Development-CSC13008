@@ -1,10 +1,10 @@
-const ejs = require('ejs');
-const path = require('path');
-const { User } = require('../models');
-const bcrypt = require('bcryptjs');
+const authService = require('../service/authService');
 
 exports.getRegister = (req, res) => {
-    res.render('layouts/layout', { body: '../register/register' });
+    res.render('layouts/layout', { 
+        body: '../register/register',
+        error: null 
+    });
 };
 
 exports.postRegister = async (req, res) => {
@@ -12,46 +12,52 @@ exports.postRegister = async (req, res) => {
         const { user_name, email, phone, password, confirm_password } = req.body;
 
         if (!user_name || !email || !password || !confirm_password) {
-            return res.status(400).json({
-                message: 'All fields are required'
+            return res.render('layouts/layout', {
+                body: '../register/register',
+                error: 'All fields are required'
             });
         }
 
         if (password !== confirm_password) {
-            return res.status(400).json({
-                message: 'Passwords do not match'
+            return res.render('layouts/layout', {
+                body: '../register/register',
+                error: 'Passwords do not match'
             });
         }
 
-        const existingUser = await User.findOne({ where: { email } });
-        if (existingUser) {
-            return res.status(409).json({  
-                message: 'Email already registered'
-            });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 12);
-        await User.create({
+        const result = await authService.registerUser({
             user_name,
             email,
             phone,
-            password: hashedPassword
+            password
         });
 
-        return res.status(201).json({  
-            message: 'Registration successful'
-        });
+        if (!result.success) {
+            return res.render('layouts/layout', {
+                body: '../register/register',
+                error: result.message
+            });
+        }
+
+        // Redirect to login page after successful registration
+        return res.redirect('/auth/login?registered=true');
 
     } catch (error) {
         console.error('Registration error:', error);
-        return res.status(500).json({
-            message: 'Registration failed. Please try again.'
+        return res.render('layouts/layout', {
+            body: '../register/register',
+            error: 'Registration failed. Please try again.'
         });
     }
 };
 
-exports.login = (req, res) => {
-    res.render('layouts/layout', { body: '../login/login' });
+exports.getLogin = (req, res) => {
+    const registered = req.query.registered === 'true';
+    res.render('layouts/layout', { 
+        body: '../login/login',
+        error: null,
+        success: registered ? 'Registration successful! Please login.' : null
+    });
 };
 
 exports.postLogin = async (req, res) => {
@@ -59,47 +65,36 @@ exports.postLogin = async (req, res) => {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            return res.status(400).json({
-                message: 'Email and password are required'
+            return res.render('layouts/layout', {
+                body: '../login/login',
+                error: 'Email and password are required'
             });
         }
 
-        const user = await User.findOne({ 
-            where: { email },
-            attributes: ['user_id', 'user_name', 'email', 'password'] 
-        });
+        const result = await authService.loginUser(email, password);
 
-        if (!user) {
-            return res.status(401).json({
-                message: 'Invalid email or password'
+        if (!result.success) {
+            return res.render('layouts/layout', {
+                body: '../login/login',
+                error: result.message
             });
         }
 
-        const isValidPassword = await bcrypt.compare(password, user.password);
-        if (!isValidPassword) {
-            return res.status(401).json({
-                message: 'Invalid email or password'
-            });
-        }
-
+        // Set session
         req.session.user = {
-            user_id: user.user_id,
-            user_name: user.user_name,
-            email: user.email
+            user_id: result.user.user_id,
+            user_name: result.user.user_name,
+            email: result.user.email
         };
 
-        return res.status(200).json({
-            message: 'Login successful',
-            user: {
-                user_name: user.user_name,
-                email: user.email
-            }
-        });
+        // Redirect to home page after successful login
+        return res.redirect('/');
 
     } catch (error) {
         console.error('Login error:', error);
-        return res.status(500).json({
-            message: 'Login failed. Please try again.'
+        return res.render('layouts/layout', {
+            body: '../login/login',
+            error: 'Login failed. Please try again.'
         });
     }
 };
