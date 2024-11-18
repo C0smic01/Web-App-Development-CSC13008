@@ -1,6 +1,6 @@
 module.exports = (sequelize,DataTypes)=>{
     
-    const Product = sequelize.define('products', {
+    const Product = sequelize.define('Product', {
         product_id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -28,6 +28,11 @@ module.exports = (sequelize,DataTypes)=>{
                 min: 0, 
             }
         },
+        description:{
+            type: DataTypes.STRING,
+            allowNull: true
+        }
+        ,
         status_id :{
             type : DataTypes.INTEGER,
             allowNull : true
@@ -48,24 +53,27 @@ module.exports = (sequelize,DataTypes)=>{
         timestamps: true, 
         createdAt: 'created_at',
         updatedAt: 'updated_at',
+        tableName: 'products'
     });
     Product.associate = (models)=>{
-        Product.belongsToMany(models.users,{
+        Product.belongsToMany(models.User,{
             foreignKey: {name :'product_id'},
             as : 'product_review',
             through : 'reviews'
         }),
-        Product.belongsTo(models.status,{
+        Product.belongsTo(models.Status,{
             foreignKey: {name :'status_id'}
         }),
-        Product.belongsTo(models.manufacturers,{
+        Product.belongsTo(models.Manufacturer,{
             foreignKey : {name : 'manufacturer_id'},
         }),
-        Product.belongsToMany(models.categories,{
-            foreignKey: {name :'product_id'},
-            as : 'categories',
-            through : 'product_category'
-        })
+        Product.belongsToMany(models.Category, {
+            foreignKey: 'product_id',
+            through: 'product_category',
+            otherKey: 'category_id',
+            as: 'categories'
+
+        });
     }
     return Product
 }

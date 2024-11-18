@@ -1,5 +1,5 @@
 module.exports = (sequelize,DataTypes)=>{
-    const Order = sequelize.define('orders', {
+    const Order = sequelize.define('Order', {
         order_id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -21,17 +21,18 @@ module.exports = (sequelize,DataTypes)=>{
     }, {
         timestamps: true,
         createdAt: 'created_at',
-        updatedAt: false
+        updatedAt: false,
+        tableName: 'orders'
     });
     
     Order.associate = (models)=>{
-        Order.belongsTo(models.users,{
+        Order.belongsTo(models.User,{
             foreignKey : {name : 'user_id', allowNull : false}
         })
-        Order.hasMany(models.order_details,{
+        Order.hasMany(models.OrderDetails,{
             foreignKey: {name : 'order_id',allowNull : false}
         })
-        Order.belongsToMany(models.status,{
+        Order.belongsToMany(models.Status,{
             foreignKey : {name : 'order_id',allowNull: false},
             through : 'order_status'
         })

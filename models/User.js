@@ -1,6 +1,6 @@
 module.exports = (sequelize,DataTypes)=>{
     
-    const User = sequelize.define('users', {
+    const User = sequelize.define('User', {
         user_id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -19,7 +19,7 @@ module.exports = (sequelize,DataTypes)=>{
         },
         phone: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
         email: {
             type: DataTypes.STRING,
@@ -41,18 +41,19 @@ module.exports = (sequelize,DataTypes)=>{
         timestamps: true, 
         createdAt: 'created_at',
         updatedAt: 'updated_at',
+        tableName: 'users'
     });
     User.associate = (models)=>{
-        User.hasMany(models.reviews,{
+        User.hasMany(models.Review,{
             foreignKey : {name : 'user_id', allowNull : false},
             onDelete : 'CASCADE',
             as : 'user_review'
         }),
-        User.belongsToMany(models.roles,{
+        User.belongsToMany(models.Role,{
             foreignKey : {name : 'user_id', allowNull : false},
             through : 'user_role'
         }),
-        User.hasMany(models.orders,{
+        User.hasMany(models.Order,{
             foreignKey :{name : 'user_id',allowNull : false},
             onDelete : 'CASCADE'
         })

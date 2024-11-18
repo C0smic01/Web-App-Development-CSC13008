@@ -1,6 +1,6 @@
 module.exports = (sequelize,DataTypes)=>{
     
-    const Status = sequelize.define('status', {
+    const Status = sequelize.define('Status', {
         status_id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -20,10 +20,10 @@ module.exports = (sequelize,DataTypes)=>{
         tableName : 'status'
     });
     Status.associate=  (models)=>{
-        Status.hasMany(models.products,{
+        Status.hasMany(models.Product,{
             foreignKey : {name :'status_id', allowNull : false}
         })
-        Status.belongsToMany(models.orders,{
+        Status.belongsToMany(models.Order,{
             foreignKey: {name : 'order_id', allowNull: false},
             through : 'order_status'
         })

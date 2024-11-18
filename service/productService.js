@@ -1,21 +1,10 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../config/database');
-const Product = require('../models/Product')(sequelize, Sequelize.DataTypes);
+const { Op } = require('sequelize'); 
+const {Category,Product} = require('../models/index.js')
 
 const QueryHelper = require('../utils/QueryHelper')
 const AppError = require('../utils/AppError')
 
-const getAllProducts = async (queryStr) => {
-    try {
-        const queryHelper = new QueryHelper(Product, queryStr);
-        let products = await queryHelper.executeQuery()
-        products = products.map(p=>p.dataValues)
-        return products
-    } catch (e) {
-        console.error('Error fetching products:', e);
-        throw new AppError('Cannot get all products, error: ' + e.message, 404);
-    }
-};
 
 
 
@@ -57,5 +46,50 @@ const getProductByNameAndDescription = async(searchTerm)=>{
         }
     })
     return products.map(p=>p.dataValues)
+}
+
+const getAllProducts= async(query)=> {
+    try {
+        const filterConditions = {};
+
+        if (query.category_id) {
+            filterConditions['$categories.category_id$'] = query.category_id; 
+        }
+
+        if (query.price) {
+            const priceConditions = {};
+            if (query.price.gte) {
+                priceConditions[Op.gte] = Number(query.price.gte)
+            }
+            if (query.price.lte) {
+                priceConditions[Op.lte] = Number(query.price.lte)
+            }
+
+            if (priceConditions[Op.gte] || priceConditions[Op.lte]) {
+                filterConditions['price'] = priceConditions;
+            }
+        }
+
+        if (query.manufacturer_id) {
+            filterConditions['manufacturer_id'] = query.manufacturer_id; 
+        }
+
+        if (query.status_id) {
+            filterConditions['status_id'] = query.status_id;
+        }
+        const products = await Product.findAll({
+            where: filterConditions, 
+            include: [{
+                model: Category,
+                as: 'categories',
+                required: false
+            }]
+        });
+
+        return products;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error filtering products');
+    }
 }
 module.exports = {getAllProducts,getProductById,getProductByNameAndDescription}

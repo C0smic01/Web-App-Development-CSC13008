@@ -1,5 +1,5 @@
 module.exports = (sequelize,DataTypes)=>{
-    const Manufacturer = sequelize.define('manufacturers', {
+    const Manufacturer = sequelize.define('Manufacturer', {
         manufacturer_id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -9,10 +9,11 @@ module.exports = (sequelize,DataTypes)=>{
             type: DataTypes.STRING
         }
     }, {
-        timestamps: false
+        timestamps: false,
+        tableName: 'manufacturers'
     });
     Manufacturer.associate = (models)=>{
-        Manufacturer.hasMany(models.products,{
+        Manufacturer.hasMany(models.Product,{
             foreignKey: {name : 'manufacturer_id',allowNull : false}
         })
     }

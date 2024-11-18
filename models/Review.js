@@ -28,7 +28,7 @@ const Review = sequelize.define('reviews', {
 
 module.exports = (sequelize,DataTypes)=>{
     
-    const Review = sequelize.define('reviews', {
+    const Review = sequelize.define('Review', {
         product_id: {
             type: DataTypes.INTEGER,
             primaryKey: true
@@ -50,7 +50,8 @@ module.exports = (sequelize,DataTypes)=>{
             }
         }
     }, {
-        timestamps: false
+        timestamps: false,
+        tableName: 'reviews'
     });
     return Review
 }

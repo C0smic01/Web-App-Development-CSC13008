@@ -1,6 +1,6 @@
 module.exports = (sequelize,DataTypes)=>{
     
-    const OrderDetail = sequelize.define('order_details', {
+    const OrderDetail = sequelize.define('OrderDetails', {
         order_id: {
             type: DataTypes.INTEGER,
             primaryKey: true
@@ -20,10 +20,11 @@ module.exports = (sequelize,DataTypes)=>{
             defaultValue: 1
         }
     }, {
-        timestamps: false
+        timestamps: false,
+        tableName: 'order_details'
     });
     OrderDetail.associate=  (models)=>{
-        OrderDetail.belongsTo(models.orders,{
+        OrderDetail.belongsTo(models.Order,{
             foreignKey : {name : 'order_id', allowNull : false}
         })
     }

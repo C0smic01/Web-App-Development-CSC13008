@@ -1,5 +1,5 @@
 module.exports = (sequelize,DataTypes)=>{
-    const Category = sequelize.define('categories', {
+    const Category = sequelize.define('Category', {
         category_id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -13,11 +13,14 @@ module.exports = (sequelize,DataTypes)=>{
         timestamps: true, 
         createdAt: 'created_at',
         updatedAt: 'updated_at',
+        tableName: 'categories'
     });
     Category.associate = (models)=>{
-        Category.belongsToMany(models.products,{
-            foreignKey: {name :'category_id'},
-            through : 'product_category'
+        Category.belongsToMany(models.Product,{
+            foreignKey: 'category_id',
+            through : 'product_category',
+            as: 'products'
+
         })
     }
     return Category

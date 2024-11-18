@@ -1,6 +1,6 @@
 module.exports = (sequelize,DataTypes)=>{
     
-    const Role = sequelize.define('roles', {
+    const Role = sequelize.define('Role', {
         role_id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -16,11 +16,12 @@ module.exports = (sequelize,DataTypes)=>{
             allowNull: false
         }
     }, {
-        timestamps: false
+        timestamps: false,
+        tableName: 'roles'
     });
     Role.associate = (models)=>{
     
-        Role.belongsToMany(models.users,{
+        Role.belongsToMany(models.User,{
             foreignKey : {name : 'role_id',allowNull : false},
             through : 'user_role',
             onDelete : 'CASCADE'

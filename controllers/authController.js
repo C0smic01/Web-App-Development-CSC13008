@@ -10,7 +10,6 @@ exports.getRegister = (req, res) => {
 exports.postRegister = async (req, res) => {
     try {
         const { user_name, email, phone, password, confirm_password } = req.body;
-
         if (!user_name || !email || !password || !confirm_password) {
             return res.render('layouts/layout', {
                 body: '../register/register',
@@ -33,17 +32,17 @@ exports.postRegister = async (req, res) => {
         });
 
         if (!result.success) {
+            console.log(result.message)
+
             return res.render('layouts/layout', {
                 body: '../register/register',
                 error: result.message
             });
         }
-
         // Redirect to login page after successful registration
         return res.redirect('/auth/login?registered=true');
 
     } catch (error) {
-        console.error('Registration error:', error);
         return res.render('layouts/layout', {
             body: '../register/register',
             error: 'Registration failed. Please try again.'

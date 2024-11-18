@@ -54,3 +54,6 @@
 #login-form p a:hover {
     text-decoration: underline;
 }
+.alert-success{
+    color : green;
+}
