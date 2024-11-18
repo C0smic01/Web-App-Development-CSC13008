@@ -87,8 +87,6 @@ app.use((req, res, next) => {
 const AppErrorHandler = require('./utils/AppErrorHandler.js')
 app.use(AppErrorHandler)
 
-// const sequelize = require('./models/index.js');
-
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).render('layouts/layout', { 
