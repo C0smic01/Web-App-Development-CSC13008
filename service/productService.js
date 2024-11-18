@@ -36,4 +36,26 @@ const getProductById = async(productId)=>{
         throw new AppError('Cannot get product with id : '+productId,500)
     }
 }
-module.exports = {getAllProducts,getProductById}
+
+const getProductByNameAndDescription = async(searchTerm)=>{
+    const products = await Product.findAll({
+        where:{
+            name:{
+                [Sequelize.Op.or]:[
+                    {
+                        name: {
+                            [Sequelize.Op.like] : `%${searchTerm}%`
+                        }
+                    },
+                    {
+                        description: {
+                            [Sequelize.Op.like] : `%${searchTerm}%`
+                        }
+                    }
+                ]
+            }
+        }
+    })
+    return products.map(p=>p.dataValues)
+}
+module.exports = {getAllProducts,getProductById,getProductByNameAndDescription}
