@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Home</title>
-    </head>
-
-    <body>
+    <div>
         <!-- Hero Section -->
         <section id="img-slider" >
             <div class="slide active">
@@ -18,7 +9,7 @@
                     <h2 class="select-none">Super Value Deals</h2>
                     <h1 class="select-none">On all products</h1>
                     <p class="select-none">Save more with coupons & up to 70% off!</p>
-                    <button> Shop Now</button>
+                    <button class=""> Shop Now</button>
                 </div>
             </div>
             <div class="slide">
@@ -80,37 +71,12 @@
         </section>
 
         <!-- Products -->
-        <section id="product1" class="section-p1">
+        <section id="product1" class="section-p1 w-full">
             <h2>Featured Products</h2>
             <p>Summer Collection New Morden Design</p>
             
-            <div class="pro-container">
-                <% if(data && data.length >0) {%>
-                
-                <%    data.forEach(product=>{ %>
-                    <div class="pro" onclick="window.location.href='/products/<%-product.product_id%>';">
-                        <img src=<%-product.img%> alt="P-6">
-                        <div class="des">
-                            <!-- <span>cara</span> -->
-                            <h5> <%= product.product_name%></h5>
-                            <div class="star">
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                            </div>
-                            <h4><%= product.price/1000%>K</h4>
-                        </div>
-                        <a href="../cart/cart.html" class="cart"><i class="fa-solid fa-bag-shopping" ></i></a>
-                    </div>
-                <% }) %>
+            <%- include('../product/productList',{products}) %> 
 
-
-                <% } %>
-                
-
-            </div>
         </section>
 
         <!-- Call to Action -->
@@ -153,6 +119,4 @@
         </section>
 
         <script src="https://kit.fontawesome.com/19dfb206c9.js" crossorigin="anonymous"></script>
-    </body>
-
-</html>
+    </div>

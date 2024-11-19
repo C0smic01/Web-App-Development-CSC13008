@@ -6,57 +6,246 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Shop</title>
-        <link rel="stylesheet" href="/CSS/shop.css">
+        <link rel="stylesheet" href="../../public/css/main.css">
+
     </head>
 
     <body>
        
 
-        <!-- Hero Section -->
-        <section id="page-header">
-            <h2 class="select-none" >#slayAtHome</h2>
-            <p class="select-none" >Shop more with Exciting Offers on Curated Brand!</p>
-        </section> 
+        <!-- Search -->
+        <div class="w-full flex flex-col items-center  py-4 pt-12">
+            <h1 class="text-3xl font-extrabold text-gray-800"><%= products.length %> kết quả</h1>
+            <div class="w-1/3 flex border-b-2  py-2">
+                <input 
+                    class="text-gray-800 w-full outline-none text-3xl font-extrabold"
+                    type="text">
+                <img 
+                class="w-6 object-scale-down cursor-pointer"
+                src="./img/search.png" alt="">
+            </div>
+        </div>
 
         <!-- Products -->
-        <section id="product1" class="section-p1">
-        
-            <div class="pro-container">
-            
-                <% if (data && data.length > 0) { %>
-                    <% data.forEach(product => { %>
-                        <div class="pro" onclick="window.location.href='/products/<%= product.product_id %>';">
-                            <img 
-                            onerror="this.onerror=null; this.src='/img/not-found-image.png';"
-                            class="product-image" src=<%- product.img %> alt="P-<%= product.product_id %>">
-                            <div class="des">
-                                <!-- <span><%= product.manufacturer_id %></span> -->
-                                <h5><%= product.product_name %></h5>
-                                <div class="star">
-                                    <% for (let i = 0; i < 5; i++) { %>
-                                        <i class="fa-solid fa-star" style="<%= i < product.rating ? '' : 'opacity: 0.3;' %>"></i>
-                                    <% } %>
-                                </div>
-                                <h4><%= (product.price / 1000) %>K</h4>
-                            </div>
-                            <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
+        <div class="flex justify-between gap-12 px-[40px] py-[40px]">
+            <div class="w-1/4">
+                <div class="flex border-b py-4">
+                    <img 
+                    class="w-10  object-scale-down"
+                    src="./img/filter.png" alt="">
+                    <h1>Bộ lọc</h1>
+                </div>
+                <div class="flex flex-col items-center justify-center border-b py-4">
+                    <div class="w-full flex items-center justify-between cursor-pointer toggle-section"> 
+                        <h1 class="text-base font-extrabold">Giá</h1>
+                        <img 
+                            class="w-6 cursor-pointer transition-transform duration-300 ease-in-out" 
+                            src="./img/arrow-down.png" alt="">
                         </div>
-                    <% }) %>
-                <% } else { %>
-                    <p>No products available.</p>
-                <% } %>
-                
-                
+                    <div class="toggle-content w-full text-xs text-gray-400 flex gap-2 items-center justify-center overflow-hidden max-h-0 transition-all duration-500 ease-in-out">
+                        <div class="w-2/5 relative h-min flex items-center border border-gray-300">
+                            <h1 class="absolute left-0 w-6 my-auto text-center">₫</h1>
+                            <input 
+                                class="w-full h-[20px] pl-6 pr-4 p-5 text-right dir-rtl outline-none font-medium"
+                                type="text">
+                        </div>
+                        <h1>đến</h1>
+                        <div class="w-2/5 relative h-min flex items-center border border-gray-300">
+                            <h1 class="absolute left-0 w-6 my-auto text-center">₫</h1>
+                            <input 
+                                class="w-full h-[20px] pl-6 pr-4 p-5 text-right dir-rtl outline-none font-medium"
+                                type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center justify-center border-b py-4">
+                    <div class="w-full flex items-center justify-between cursor-pointer  toggle-section"> 
+                        <h1 class="text-base font-extrabold">Loại sản phẩm</h1>
+                        <img 
+                        class="w-6 cursor-pointer transition-transform duration-300 ease-in-out" 
+                        src="./img/arrow-down.png" alt="">
+                    </div>
+                    <div class="toggle-content w-full text-xs text-gray-400 flex flex-col gap-4 items-start overflow-hidden max-h-0 transition-all duration-500 ease-in-out">
+                        <div class="check-box flex items-center  h-min gap-2 cursor-pointer">
+                            <div 
+                            style="background-color: #DFDFDF;"
+                            class="w-4 h-4 rounded-sm shadow-[inset_0_0_4px_#CFCFCF]">
+                            </div>
+                            <h1 class="text-gray-600 h-min text-sm font-medium">
+                                T-Shirt
+                            </h1>
+                        </div>
+                        <div class="check-box flex items-center  h-min gap-2 cursor-pointer">
+                            <div 
+                            style="background-color: #DFDFDF;"
+                            class="w-4 h-4 rounded-sm shadow-[inset_0_0_4px_#CFCFCF]">
+                            </div>
+                            <h1 class="text-gray-600 h-min text-sm font-medium">
+                                Polo
+                            </h1>
+                        </div>
+                        <div class="check-box flex items-center  h-min gap-2 cursor-pointer">
+                            <div 
+                            style="background-color: #DFDFDF;"
+                            class="w-4 h-4 rounded-sm shadow-[inset_0_0_4px_#CFCFCF]">
+                            </div>
+                            <h1 class="text-gray-600 h-min text-sm font-medium">
+                                Hoodie
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center justify-center border-b py-4">
+                    <div class="w-full flex items-center justify-between cursor-pointer  toggle-section"> 
+                        <h1 class="text-base font-extrabold">Nhãn hàng</h1>
+                        <img 
+                        class="w-6 cursor-pointer transition-transform duration-300 ease-in-out" 
+                        src="./img/arrow-down.png" alt="">
+                    </div>
+                    <div class="toggle-content w-full text-xs text-gray-400 flex flex-col gap-4 items-start overflow-hidden max-h-0 transition-all duration-500 ease-in-out">
+                        <div class="check-box flex items-center  h-min gap-2 cursor-pointer">
+                            <div 
+                            style="background-color: #DFDFDF;"
+                            class="w-4 h-4 rounded-sm shadow-[inset_0_0_4px_#CFCFCF]">
+                            </div>
+                            <h1 class="text-gray-600 h-min text-sm font-medium">
+                                MLB
+                            </h1>
+                        </div>
+                        <div class="check-box flex items-center  h-min gap-2 cursor-pointer">
+                            <div 
+                            style="background-color: #DFDFDF;"
+                            class="w-4 h-4 rounded-sm shadow-[inset_0_0_4px_#CFCFCF]">
+                            </div>   
+                            <h1 class="text-gray-600 h-min text-sm font-medium">
+                                Drew
+                            </h1>
+                        </div>
+                        <div class="check-box flex items-center  h-min gap-2 cursor-pointer">
+                            <div 
+                            style="background-color: #DFDFDF;"
+                            class="w-4 h-4 rounded-sm shadow-[inset_0_0_4px_#CFCFCF]">
+                            </div>
+                            <h1 class="text-gray-600 h-min text-sm font-medium">
+                                Supreme
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center justify-center border-b py-4">
+                    <div class="w-full flex items-center justify-between cursor-pointer toggle-section  "> 
+                        <h1 class="text-base font-extrabold">Tình trạng</h1>
+                        <img 
+                        class="w-6 cursor-pointer transition-transform duration-300 ease-in-out" 
+                        src="./img/arrow-down.png" alt="">
+                    </div>
+                    <div class="toggle-content w-full text-xs text-gray-400 flex flex-col gap-4 items-start overflow-hidden max-h-0 transition-all duration-500 ease-in-out">
+                        <div class="check-box flex items-center  h-min gap-2 cursor-pointer">
+                            <div 
+                            style="background-color: #DFDFDF;"
+                            class="w-4 h-4 rounded-sm shadow-[inset_0_0_4px_#CFCFCF]">
+                            </div>
+                            <h1 class="text-gray-600 h-min text-sm font-medium">
+                                ĐANG CẬP NHẬT
+                            </h1>
+                        </div>
+                        <div class="check-box flex items-center  h-min gap-2 cursor-pointer">
+                            <div 
+                            style="background-color: #DFDFDF;"
+                            class="w-4 h-4 rounded-sm shadow-[inset_0_0_4px_#CFCFCF]">
+                            </div>
+                            <h1 class="text-gray-600 h-min text-sm font-medium">
+                                ĐANG CẬP NHẬT
+                            </h1>
+                        </div>
+                        <div class="check-box flex items-center  h-min gap-2 cursor-pointer">
+                            <div 
+                            style="background-color: #DFDFDF;"
+                            class="w-4 h-4 rounded-sm shadow-[inset_0_0_4px_#CFCFCF]">
+                            </div>
+                            <h1 class="text-gray-600 h-min text-sm font-medium">
+                                ĐANG CẬP NHẬT
+                            </h1>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
+            <script>
+                const toggleButtons = document.querySelectorAll('.toggle-section');
+            
+                toggleButtons.forEach(button => {
+                    let isClicked = false;  // Biến lưu trạng thái đã click hay chưa
+
+                    button.addEventListener('mouseenter', () => {
+                        if (!isClicked) { 
+                            const img = button.querySelector('img');
+                            img.src = './img/arrow-down-hover.png';
+                        }
+                    });
+
+                    button.addEventListener('mouseleave', () => {
+                        if (!isClicked) { 
+                            const img = button.querySelector('img');
+                            img.src = './img/arrow-down.png';
+                        }
+                    });
+                    
+                    button.addEventListener('click', () => {
+                        const contentSection = button.nextElementSibling;
+                        const img = button.querySelector('img')
+                        isClicked = !isClicked;
+
+                        if (isClicked) {
+                            img.src = './img/arrow-down-hover.png'; 
+                            img.classList.add('rotate-180');
+                            contentSection.classList.remove('max-h-0');
+                            contentSection.classList.add('max-h-[500px]', 'py-4');
+                        } else {
+                            img.src = './img/arrow-down.png';  
+                            img.classList.remove('rotate-180');
+                            contentSection.classList.remove('max-h-[500px]', 'py-4');
+                            contentSection.classList.add('max-h-0');
+                        }
+                    });
+                });
+
+                const filterCheckboxes = document.querySelectorAll('.check-box');
+                filterCheckboxes.forEach(checkbox=>{
+                    checkbox.addEventListener('click',()=>{
+                        const selectedCheckbox = document.createElement('img');
+                        const img = checkbox.querySelector('img');
+                        const h1 = checkbox.querySelector('h1');
+                        if (img) {
+                            img.remove();
+                            h1.classList.remove('text-black');
+                            h1.classList.add('text-gray-600'); 
+                        } else {
+                            const selectedCheckbox = document.createElement('img');
+                            selectedCheckbox.src = './img/checkbox.png'; 
+                            selectedCheckbox.alt = 'Image';
+                            selectedCheckbox.classList.add('w-full','h-full')
+                            checkbox.querySelector('div').appendChild(selectedCheckbox);  
+
+                            h1.classList.remove('text-gray-600');
+                            h1.classList.add('text-black'); 
+                        }
+                      
+                    })
+                })
+
+            </script>
+            <div class="">
+                <%- include('../product/productList',{products})%>
+            </div>
+
+        </div>
 
         <!--Slider Page Icon  -->
         <section id="pagination" class="section-p1">
             <a href="#">1</a>
             <a href="#">2</a>
             <a href="#">3</a>
-            <a href="#"><i class="fa-solid fa-arrow-right"></i></a>
+            <a href="#"><i class="fa-solid fa-arrow-right">12</i></a>
         </section>
 
 

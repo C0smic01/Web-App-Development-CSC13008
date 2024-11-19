@@ -1,30 +1,36 @@
-<!-- views/layouts/layout.ejs -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/img/favicon.ico">
-    <link rel="stylesheet" href="/css/cart.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/shop.css">
-    <link rel="stylesheet" href="/css/sproduct.css">
-    <link rel="stylesheet" href="/css/blog.css">
-    <link rel="stylesheet" href="/css/about.css">
-    <link rel="stylesheet" href="/css/contact.css">
-    <link rel="stylesheet" href="/css/register.css">
-    <link rel="stylesheet" href="/css/login.css">
-    <link rel="stylesheet" href="/css/responsive.css">
-</head>
-<body>
+    <!-- views/layouts/layout.ejs -->
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="/img/favicon.ico">
+        <link rel="stylesheet" href="/css/cart.css">
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/shop.css">
+        <link rel="stylesheet" href="/css/sproduct.css">
+        <link rel="stylesheet" href="/css/blog.css">
+        <link rel="stylesheet" href="/css/about.css">
+        <link rel="stylesheet" href="/css/contact.css">
+        <link rel="stylesheet" href="/css/register.css">
+        <link rel="stylesheet" href="/css/login.css">
+        <link rel="stylesheet" href="/css/responsive.css">
+        <link rel="stylesheet" href="/css/main.css">
+        <script src="https://cdn.tailwindcss.com"></script>
 
-    <%- include('./header.ejs') %>
-    <main>
-        <%- include(body) %> 
-    </main>
+    </head>
+    <body>
+        <header>
+            <%- include('../layouts/header') -%>
+        </header>
 
-    <%- include('./footer.ejs') %>
+        <main>
+            <%- body %> 
+        </main>
+        <footer>
+            <%- include('footer') -%>
+        </footer>
 
 
-</body>
-</html>
+    </body>
+    </html>

@@ -1,72 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Product Details</title>
-    </head>
-    <body>
-        <section id="prodetails" class="section-p1">
-             <% if(data){ %>
-                <div class="single-pro-img">
-                    <img src=<%- data.img  %> alt="P-1" width="100%" id="mainImg">
-                </div>
-                <div class="single-pro-details">
-                    <h5>Home >
-                        <% if(data.categories && data.categories.length > 0) { %>
-                            <% data.categories.map((category, index) => { %>
-                                <%= category.category_name %><%= index < data.categories.length - 1 ? ' / ' : '' %>
-                            <% }) %>
-                        <% } else { %>
-                            Unknown Category
-                        <% } %>
-                    </h5>
-                    <h4><%- data.product_name  %></h4>
-                    <h2><%- data.price/1000 %>K</h2>
-                    <select>
-                        <option>Select Size</option>
-                        <option>XL</option>
-                        <option>Medium</option>
-                        <option>Small</option>
-                        <option>Large</option>
-                    </select>
-                    <input type="number" value="1">
-                    <button class="normal">Add to cart</button>
-                    <h4>Product Details</h4>
-                    <span>This stylish men's fashion t-shirt boasts a modern and sleek design, perfect for the contemporary
-                        urban wardrobe.The unique graphic print on the front adds an eye-catching element to elevate any casual
-                        outfit.
-                    </span>
-                </div>
-             <% }  %>   
-        </section>
-
-        <section id="related-products" class="section-p1">
-            <h2>You May Also Like</h2>
-            
-            <div class="pro-container">
-                <% for(let i = 0; i < 4; i++) { %>
-                    <% if(relatedProducts && relatedProducts[i]) { %>
-                        <a href="/products/<%- relatedProducts[i].product_id %>" class="pro">
-                            <div class="img-container">
-                                <img src="<%- relatedProducts[i].img %>" alt="<%- relatedProducts[i].product_name %>">
-                            </div>
-                            <div class="des">
-                                <h5><%- relatedProducts[i].product_name %></h5>
-                                <div class="star">
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                </div>
-                                <h4><%- relatedProducts[i].price/1000 %>K</h4>
-                            </div>
-                        </a>
-                    <% } %>
-                <% } %>
+<div 
+    style="transition: box-shadow 0.2s;transition: transform 0.2s; box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.02);border: 1px solid #cce7d0 " 
+    onmouseover="this.style.boxShadow='20px 20px 30px rgba(0, 0, 0, 0.06)';" 
+    onmouseout="this.style.boxShadow='20px 20px 30px rgba(0, 0, 0, 0.02)';"
+    class=" relative p-3 rounded-2xl border border-teal-400 border-solid cursor-pointer hover:scale-105 " 
+    onclick="window.location.href='/products/<%-product.product_id%>';">
+        <img 
+            class="h-[350px] object-cover rounded-xl w-full" src=<%= product.img %> alt="P-6">
+            <div class="flex flex-col items-start pt-4 gap-2">
+                            <!-- <span>cara</span> -->
+                <h5 class="text-sm font-light"> <%= product.product_name%></h5>
+                    <div class="star">
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                    </div>
+                <h4 
+                    style="color: #088178;"
+                    class="text-base font-semibold"><%= product.price/1000%>K</h4>
             </div>
-        </section>
-    </body>
-</html>
+            <a href="../cart/cart.html" 
+                style="color: #088178;background-color: #e8f6ea;"
+                class="flex items-center justify-center w-10 h-10 rounded-full absolute bottom-[20px] right-[15px] font-semibold ">
+                <i class="fa-solid fa-bag-shopping" ></i>
+            </a>
+</div>

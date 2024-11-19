@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Product Details</title>
+    </head>
+    <body>
+        <section id="prodetails" class="section-p1">
+             <% if(product){ %>
+                <div class="w-[40%] ">
+                    <img 
+                    class="h-[500px] object-contain"
+                    src=<%= product.img  %> alt="P-1" width="100%" id="mainImg">
+                </div>
+                <div class="w-[50%] pt-[30px]">
+                    <h5 class="text-sm font-semibold">Home >
+                        <% if(product.categories && product.categories.length > 0) { %>
+                            <% product.categories.map((category, index) => { %>
+                                <%= category.category_name %><%= index < product.categories.length - 1 ? ' / ' : '' %>
+                            <% }) %>
+                        <% } else { %>
+                            Unknown Category
+                        <% } %>
+                    </h5>
+                    <h4
+                    class="pt-[40px] font-bold text-2xl"
+                    ><%= product.product_name  %></h4>
+                    <h4 
+                        style="color: #088178;"
+                        class="text-xl font-bold pt-[40px] "><%= product.price%>
+                        <span class="text-lg font-normal">
+                            vnd
+                        </span>
+                    </h4>                    
+                    <select 
+                    style="border: 1px solid #088178; "
+                    class="block px-[10px] py-[5px] my-[10px] rounded-[5px] outline-none text-sm "
+                    >
+                        <option>Select Size</option>
+                        <option>XL</option>
+                        <option>Medium</option>
+                        <option>Small</option>
+                        <option>Large</option>
+                    </select>
+                   <div
+                   class="h-[50px]"
+                   >
+                        <input 
+                        style="border: 1px solid #088178; "
+                        class="outline-none text-center rounded-[4px] p-[4px] mr-[10px] text-base pl-[10px] w-[50px] h-full"
+                        type="number" value="1">
+                        <button 
+                        style="background-color: #088178"
+                        class="rounded-md text-center text-sm font-semibold px-[16px] text-white p-[8px] h-full">Add to cart</button>
+                   </div>
+                    <h4 class="text-2xl font-bold pt-[40px] py-[20px]">Product Details</h4>
+                    <span class="text-sm">This stylish men's fashion t-shirt boasts a modern and sleek design, perfect for the contemporary
+                        urban wardrobe.The unique graphic print on the front adds an eye-catching element to elevate any casual
+                        outfit.
+                    </span>
+                </div>
+             <% }  %>   
+        </section>
+
+        <section>
+            <h2 class="text-xl font-semibold text-center w-full mt-[40px] py-[20px] ">You May Also Like</h2>
+            
+            <div class="flex w-full justify-between px-[80px] ">
+                <%- include('productList',{products:relatedProducts})%>
+                
+            </div>
+        </section>
+    </body>
+</html>
