@@ -1,41 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Product Details</title>
     </head>
-
     <body>
-       
-        <!-- Product Detail -->
         <section id="prodetails" class="section-p1">
-            <!-- Single Product Image -->
              <% if(data){ %>
                 <div class="single-pro-img">
                     <img src=<%- data.img  %> alt="P-1" width="100%" id="mainImg">
-    
-                    <!-- <div class="small-img-group">
-                        <div class="small-img-col">
-                            <img src="../img/products/f1.jpg" width="100%" alt="P-1" class="small-img">
-                        </div>
-                        <div class="small-img-col">
-                            <img src="../img/products/f2.jpg" width="100%" alt="P-2" class="small-img">
-                        </div>
-                        <div class="small-img-col">
-                            <img src="../img/products/f3.jpg" width="100%" alt="P-3" class="small-img">
-                        </div>
-                        <div class="small-img-col">
-                            <img src="../img/products/f4.jpg" width="100%" alt="P-4" class="small-img">
-                        </div>
-    
-                    </div> -->
                 </div>
-                    <!-- Single Product Detail -->
                 <div class="single-pro-details">
-                    <h5>Home / T-Shirt</h5>
+                    <h5>Home >
+                        <% if(data.categories && data.categories.length > 0) { %>
+                            <% data.categories.map((category, index) => { %>
+                                <%= category.category_name %><%= index < data.categories.length - 1 ? ' / ' : '' %>
+                            <% }) %>
+                        <% } else { %>
+                            Unknown Category
+                        <% } %>
+                    </h5>
                     <h4><%- data.product_name  %></h4>
                     <h2><%- data.price/1000 %>K</h2>
                     <select>
@@ -53,89 +39,34 @@
                         outfit.
                     </span>
                 </div>
-             <% }  %>
-
-           
-
+             <% }  %>   
         </section>
 
-        <!-- Products -->
-        <!-- <section id="product1" class="section-p1">
-            <h2>Featured Products</h2>
-            <p>Summer Collection New Morden Design</p>
+        <section id="related-products" class="section-p1">
+            <h2>You May Also Like</h2>
             
             <div class="pro-container">
-
-                <div class="pro">
-                    <img src="../img/products/f6.jpg" alt="P-6">
-                    <div class="des">
-                        <span>cara</span>
-                        <h5>Cartoon Astronaut T-Shirts</h5>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <h4>$129</h4>
-                    </div>
-                    <a href="subpages/cart.html" class="cart"><i class="fa-solid fa-bag-shopping" ></i></a>
-                </div>
-                <div class="pro">
-                    <img src="../img/products/n1.jpg" alt="P-7">
-                    <div class="des">
-                        <span>cara</span>
-                        <h5>Cartoon Astronaut T-Shirts</h5>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <h4>$69</h4>
-                    </div>
-                    <a href="subpages/cart.html" class="cart"><i class="fa-solid fa-bag-shopping"></i></a>
-                </div>
-
-                <div class="pro">
-                    <img src="../img/products/n8.jpg" alt="P-1">
-                    <div class="des">
-                        <span>cara</span>
-                        <h5>Cartoon Astronaut T-Shirts</h5>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <h4>$109</h4>
-                    </div>
-                    <a href="subpages/cart.html" class="cart"><i class="fa-solid fa-bag-shopping" ></i></a>
-                </div>
-
-                <div class="pro">
-                    <img src="../img/products/n5.jpg" alt="P-2">
-                    <div class="des">
-                        <span>cara</span>
-                        <h5>Cartoon Astronaut T-Shirts</h5>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <h4>$99</h4>
-                    </div>
-                    <a href="subpages/cart.html" class="cart"><i class="fa-solid fa-bag-shopping" ></i></a>
-                </div>
-
+                <% for(let i = 0; i < 4; i++) { %>
+                    <% if(relatedProducts && relatedProducts[i]) { %>
+                        <a href="/products/<%- relatedProducts[i].product_id %>" class="pro">
+                            <div class="img-container">
+                                <img src="<%- relatedProducts[i].img %>" alt="<%- relatedProducts[i].product_name %>">
+                            </div>
+                            <div class="des">
+                                <h5><%- relatedProducts[i].product_name %></h5>
+                                <div class="star">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                                <h4><%- relatedProducts[i].price/1000 %>K</h4>
+                            </div>
+                        </a>
+                    <% } %>
+                <% } %>
             </div>
         </section>
-
-        -->
-            
     </body>
-
 </html>

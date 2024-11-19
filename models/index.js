@@ -15,13 +15,14 @@ const OrderStatus = require('./OrderStatus')(sequelize, Sequelize.DataTypes);
 
 Object.values(sequelize.models).forEach(model => {
   if (model.associate) {
+    // console.log(`Associating model: ${model.name}`);
     model.associate(sequelize.models);
   }
 });
 
 const sampleData = require('../boot/createSample')
 // Sync db
-sequelize.sync({force: false}).then(async()=>{
+sequelize.sync({alter: true}).then(async()=>{
   console.log("Database & tables sync!");
   await sampleData.createCategorySample();
   await sampleData.createManufacturerSample();
@@ -29,6 +30,7 @@ sequelize.sync({force: false}).then(async()=>{
   await sampleData.createStatusSample();
   await sampleData.createProductSample();
   await sampleData.createUserSample();
+  await sampleData.createProductCategorySample();
 })
 
 module.exports = {
