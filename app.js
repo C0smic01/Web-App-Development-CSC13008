@@ -4,29 +4,66 @@ const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const helmet = require('helmet');
 const cors = require('cors');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const flash = require('connect-flash');
 const app = express();
 const path = require("path");
 
 const { sequelize } = require('./models');
+const { User } = require('./models');
+
+
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+}, async (email, password, done) => {
+    try {
+        const user = await User.findOne({ 
+            where: { email },
+            attributes: ['user_id', 'user_name', 'email', 'password']
+        });
+
+        if (!user) {
+            return done(null, false, { message: 'Invalid email or password' });
+        }
+
+        const isValid = await user.validatePassword(password);
+        if (!isValid) {
+            return done(null, false, { message: 'Invalid email or password' });
+        }
+
+        return done(null, user);
+    } catch (error) {
+        return done(error);
+    }
+}));
+
+
+passport.serializeUser((user, done) => {
+    done(null, user.user_id);
+});
+
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await User.findByPk(id, {
+            attributes: ['user_id', 'user_name', 'email']
+        });
+        done(null, user);
+    } catch (error) {
+        done(error);
+    }
+});
 
 const sessionStore = new SequelizeStore({
     db: sequelize,
     tableName: 'sessions',
-    checkExpirationInterval: 15 * 60 * 1000, // Clean up expired sessions every 15 minutes
-    expiration: 24 * 60 * 60 * 1000  // Session expires after 24 hours
+    checkExpirationInterval: 15 * 60 * 1000,
+    expiration: 24 * 60 * 60 * 1000
 });
 
-// Security middleware
-app.use(helmet({
-    contentSecurityPolicy: false, 
-}));
-app.use(cors({
-    origin: process.env.NODE_ENV === 'production' ? 'your-production-domain.com' : 'http://localhost:3000',
-    credentials: true
-}));
-
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'your-dev-secret-key', 
+    secret: process.env.SESSION_SECRET || 'your-dev-secret-key',
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
@@ -35,7 +72,42 @@ app.use(session({
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
-        sameSite: 'strict' 
+        sameSite: 'strict'
+    }
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
+app.use((req, res, next) => {
+    res.locals.user = req.user;
+    res.locals.errors = req.flash('error');
+    res.locals.successes = req.flash('success');
+    next();
+});
+
+
+// Security middleware
+app.use(helmet({
+    contentSecurityPolicy: false,
+}));
+app.use(cors({
+    origin: process.env.NODE_ENV === 'production' ? 'your-production-domain.com' : 'http://localhost:3000',
+    credentials: true
+}));
+
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'your-dev-secret-key',
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
+    name: 'sessionId',
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: 'strict'
     }
 }));
 

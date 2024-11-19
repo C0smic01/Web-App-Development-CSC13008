@@ -15,17 +15,17 @@ class AuthService {
                 };
             }
 
-            const hashedPassword = await bcrypt.hash(userData.password, 12);
-            await User.create({
+            const user = await User.create({
                 user_name: userData.user_name,
                 email: userData.email,
                 phone: userData.phone,
-                password: hashedPassword
+                password: userData.password
             });
 
             return {
                 success: true,
-                message: 'Registration successful'
+                message: 'Registration successful',
+                user
             };
 
         } catch (error) {
