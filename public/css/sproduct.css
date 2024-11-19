@@ -71,19 +71,142 @@
     line-height: 25px;
 }
 
+/* ********* Related products ************ */
+
+#related-products {
+    text-align: center;
+    margin-top: 50px;
+    padding: 0 80px;
+}
+
+#related-products h2 {
+    font-size: 2.2rem;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+#related-products p {
+    color: #465b52;
+    margin-bottom: 30px;
+}
+
+#related-products .pro-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+#related-products .pro {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    width: 23%;
+    min-width: 200px;
+    padding: 10px;
+    border: 1px solid #cce7d0;
+    border-radius: 15px;
+    cursor: pointer;
+    box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.02);
+    margin: 15px 0;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+#related-products .pro:hover {
+    box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.06);
+    transform: translateY(-5px);
+}
+
+#related-products .pro .img-container {
+    width: 100%;
+    position: relative;
+    padding-bottom: 100%; 
+}
+
+#related-products .pro img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+#related-products .pro .des {
+    text-align: start;
+    padding: 10px 0;
+}
+
+#related-products .pro .des span {
+    color: #606063;
+    font-size: 12px;
+}
+
+#related-products .pro .des h5 {
+    padding-top: 7px;
+    color: #1a1a1a;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#related-products .pro .des i {
+    font-size: 12px;
+    color: rgb(243, 181, 25);
+}
+
+#related-products .pro .des h4 {
+    padding-top: 7px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #088178;
+}
+
+#related-products .pro .cart {
+    display: none;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 477px) {
+    #related-products .pro-container {
+        justify-content: center;
+    }
+    
+    #related-products .pro {
+        margin: 15px;
+    }
+}
+
 /* ********* Responsive ************ */
-@media screen and (max-width:477px){
-    /* Single Product */
-    #prodetails {
-        display: flex;
-        flex-direction: column;
+@media screen and (max-width: 768px) {
+    #related-products {
+        padding: 0 40px;
     }
-    #prodetails .single-pro-img {
-        width: 100%;
-        margin-right: 0;
+    
+    #related-products .pro-container {
+        justify-content: space-around;
     }
-    #prodetails .single-pro-details {
-        width: 100%;
-        padding-top: 0px;
+    
+    #related-products .pro {
+        width: 45%;
+        min-width: 150px;
+        margin: 10px;
+    }
+}
+
+@media screen and (max-width: 477px) {
+    #related-products {
+        padding: 0 20px;
+    }
+    
+    #related-products .pro-container {
+        justify-content: center;
+    }
+    
+    #related-products .pro {
+        width: 80%;
+        margin: 10px;
     }
 }

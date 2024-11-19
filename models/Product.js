@@ -71,8 +71,8 @@ module.exports = (sequelize,DataTypes)=>{
             foreignKey: 'product_id',
             through: 'product_category',
             otherKey: 'category_id',
-            as: 'categories'
-
+            as: 'categories',
+            timestamps: false
         });
     }
     return Product

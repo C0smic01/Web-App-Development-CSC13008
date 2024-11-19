@@ -17,7 +17,6 @@ const OrderDetail = require('../models/OrderDetails')(sequelize, Sequelize.DataT
 const OrderStatus = require('../models/OrderStatus')(sequelize, Sequelize.DataTypes);
 
 
-
 const createCategorySample = async () => {
   try {
     if (await Category.count() === 0) {
@@ -37,6 +36,7 @@ const createCategorySample = async () => {
     console.error("Unable to create sample category:", error);
   }
 };
+
 
 const createManufacturerSample = async () => {
   try {
@@ -82,6 +82,7 @@ const createRoleSample = async () => {
   }
 };
 
+
 const createStatusSample = async () => {
   try {
     if (await Status.count() === 0) {
@@ -103,6 +104,8 @@ const createStatusSample = async () => {
     console.error("Unable to create sample status:", error);
   }
 };
+
+
 const createProductSample = async () => {
   try {
     if (await Product.count() === 0) {
@@ -127,6 +130,8 @@ const createProductSample = async () => {
     console.error("Unable to create sample products:", error);
   }
 };
+
+
 const createUserSample = async () => {
   try {
     if (await User.count() === 0) {
@@ -152,4 +157,34 @@ const createUserSample = async () => {
   }
 }
 
-module.exports = {createCategorySample,createUserSample,createStatusSample,createRoleSample,createProductSample,createManufacturerSample}
+
+const createProductCategorySample = async () => {
+  try {
+    const existingAssociations = await sequelize.query(
+      'SELECT COUNT(*) as count FROM product_category',
+      { type: sequelize.QueryTypes.SELECT }
+    );
+
+    if (parseInt(existingAssociations[0].count) === 0) {
+      const data = fs.readFileSync(path.join(__dirname, './json/product_category.json'), 'utf-8');
+      const productCategories = JSON.parse(data);
+
+      for (const pc of productCategories) {
+        await sequelize.query(
+          'INSERT INTO product_category (product_id, category_id) VALUES (?, ?)',
+          { 
+            replacements: [pc.product_id, pc.category_id],
+            type: sequelize.QueryTypes.INSERT 
+          }
+        );
+      }
+
+      console.log("Sample product categories created!");
+    }
+  } catch (error) {
+    console.error("Unable to create sample product_categories:", error);
+  }
+};
+
+
+module.exports = {createCategorySample, createUserSample, createStatusSample, createRoleSample, createProductSample, createManufacturerSample, createProductCategorySample}

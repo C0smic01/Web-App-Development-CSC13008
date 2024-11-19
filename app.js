@@ -84,6 +84,11 @@ app.use((req, res, next) => {
 });
 
 
+<<<<<<< HEAD
+=======
+const AppErrorHandler = require('./utils/AppErrorHandler.js')
+app.use(AppErrorHandler)
+>>>>>>> 36520fe91ec03674df28bb4099078dc5bb891af1
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
