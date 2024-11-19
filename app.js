@@ -84,10 +84,6 @@ app.use((req, res, next) => {
 });
 
 
-const AppErrorHandler = require('./utils/AppErrorHandler.js')
-app.use(AppErrorHandler)
-
-// const sequelize = require('./models/index.js');
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
@@ -96,6 +92,9 @@ app.use((err, req, res, next) => {
         message: 'Something went wrong!' 
     });
 });
+
+const AppErrorHandler = require('./utils/AppErrorHandler.js')
+app.use(AppErrorHandler)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
