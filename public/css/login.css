@@ -1,4 +1,3 @@
-/* Link this CSS file in the HTML file */
 #login-form {
     display: flex;
     justify-content: center;
@@ -22,6 +21,29 @@
     color: #333;
 }
 
+.alert {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    text-align: left;
+}
+
+.alert-error {
+    background-color: #fde8e8;
+    border: 1px solid #f8b4b4;
+    color: #c81e1e;
+}
+
+.alert-success {
+    background-color: #e8f5e9;
+    border: 1px solid #a5d6a7;
+    color: #1b5e20;
+}
+
+.error-message, .success-message {
+    margin: 5px 0;
+}
+
 #login-form input {
     width: 100%;
     padding: 10px;
@@ -40,10 +62,15 @@
     font-size: 16px;
     cursor: pointer;
     transition: background 0.3s;
+    margin: 10px 0;
 }
 
 #login-form button.normal:hover {
     background: #066557;
+}
+
+#login-form p {
+    margin: 8px 0;
 }
 
 #login-form p a {

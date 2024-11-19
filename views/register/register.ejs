@@ -17,17 +17,48 @@
         <section id="register-form">
             <div class="form-box">
                 <h2>Register</h2>
-                <% if (typeof error !== 'undefined' && error !== null) { %>
-                    <div id="error-message" class="alert alert-error">
-                        <%= error %>
+                
+                <!-- Error Messages -->
+                <% if (messages && messages.error && messages.error.length > 0) { %>
+                    <div id="error-messages" class="alert alert-error">
+                        <% messages.error.forEach(function(error) { %>
+                            <div class="error-message"><%= error %></div>
+                        <% }); %>
                     </div>
                 <% } %>
+
+                <!-- Success Messages -->
+                <% if (messages && messages.success && messages.success.length > 0) { %>
+                    <div id="success-messages" class="alert alert-success">
+                        <% messages.success.forEach(function(success) { %>
+                            <div class="success-message"><%= success %></div>
+                        <% }); %>
+                    </div>
+                <% } %>
+
                 <form action="/auth/register" method="POST">
-                    <input type="text" placeholder="Username" name="user_name" required>
-                    <input type="email" placeholder="Email" name="email" required>
-                    <input type="tel" placeholder="Phone (optional)" name="phone">
-                    <input type="password" placeholder="Password" name="password" required>
-                    <input type="password" placeholder="Confirm Password" name="confirm_password" required>
+                    <input type="text" 
+                           placeholder="Username" 
+                           name="user_name" 
+                           value="<%= locals.formData ? formData.user_name : '' %>"
+                           required>
+                    <input type="email" 
+                           placeholder="Email" 
+                           name="email"
+                           value="<%= locals.formData ? formData.email : '' %>"
+                           required>
+                    <input type="tel" 
+                           placeholder="Phone (optional)" 
+                           name="phone"
+                           value="<%= locals.formData ? formData.phone : '' %>">
+                    <input type="password" 
+                           placeholder="Password" 
+                           name="password" 
+                           required>
+                    <input type="password" 
+                           placeholder="Confirm Password" 
+                           name="confirm_password" 
+                           required>
                     <button type="submit" class="normal">Register</button>
                     <p>Already have an account? <a href="/auth/login">Login</a></p>
                 </form>
@@ -35,13 +66,13 @@
         </section>
 
         <script>
-            // Auto-hide error message after 5 seconds
-            const errorMessage = document.getElementById('error-message');
-            if (errorMessage) {
+            // Auto-hide messages after 5 seconds
+            const messages = document.querySelectorAll('.alert');
+            messages.forEach(message => {
                 setTimeout(() => {
-                    errorMessage.style.display = 'none';
+                    message.style.display = 'none';
                 }, 5000);
-            }
+            });
         </script>
     </body>
 </html>

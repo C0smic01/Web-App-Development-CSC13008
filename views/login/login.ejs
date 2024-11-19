@@ -17,19 +17,35 @@
         <section id="login-form">
             <div class="form-box">
                 <h2>Login</h2>
-                <% if (typeof success !== 'undefined' && success !== null) { %>
-                    <div id="success-message" class="alert alert-success">
-                        <%= success %>
+                
+                <!-- Error Messages -->
+                <% if (messages && messages.error && messages.error.length > 0) { %>
+                    <div id="error-messages" class="alert alert-error">
+                        <% messages.error.forEach(function(error) { %>
+                            <div class="error-message"><%= error %></div>
+                        <% }); %>
                     </div>
                 <% } %>
-                <% if (typeof error !== 'undefined' && error !== null) { %>
-                    <div id="error-message" class="alert alert-error">
-                        <%= error %>
+
+                <!-- Success Messages -->
+                <% if (messages && messages.success && messages.success.length > 0) { %>
+                    <div id="success-messages" class="alert alert-success">
+                        <% messages.success.forEach(function(success) { %>
+                            <div class="success-message"><%= success %></div>
+                        <% }); %>
                     </div>
                 <% } %>
+
                 <form action="/auth/login" method="POST">
-                    <input type="email" placeholder="Email" name="email" required>
-                    <input type="password" placeholder="Password" name="password" required>
+                    <input type="email" 
+                           placeholder="Email" 
+                           name="email" 
+                           value="<%= locals.formData ? formData.email : '' %>"
+                           required>
+                    <input type="password" 
+                           placeholder="Password" 
+                           name="password" 
+                           required>
                     <button type="submit" class="normal">Login</button>
                     <p>Don't have an account? <a href="/auth/register">Register</a></p>
                     <p><a href="/auth/forgot-password">Forgot Password?</a></p>
@@ -39,20 +55,12 @@
 
         <script>
             // Auto-hide messages after 5 seconds
-            const errorMessage = document.getElementById('error-message');
-            const successMessage = document.getElementById('success-message');
-            
-            if (errorMessage) {
+            const messages = document.querySelectorAll('.alert');
+            messages.forEach(message => {
                 setTimeout(() => {
-                    errorMessage.style.display = 'none';
+                    message.style.display = 'none';
                 }, 5000);
-            }
-            
-            if (successMessage) {
-                setTimeout(() => {
-                    successMessage.style.display = 'none';
-                }, 5000);
-            }
+            });
         </script>
     </body>
 </html>
