@@ -2,11 +2,12 @@ const passport = require('passport');
 const authService = require('../service/authService');
 
 exports.getRegister = (req, res) => {
-    res.render('register/register',{
+    res.render('register/register', {
         messages: {
-            error: req.flash('error'),
-            success: req.flash('success')
-        }
+            error: [],
+            success: []
+        },
+        formData: {}
     });
 };
 
@@ -28,13 +29,12 @@ exports.postRegister = async (req, res, next) => {
 
         // If there are validation errors, render the page with errors
         if (errors.length > 0) {
-            return res.render('layouts/layout', {
-                body: 'register/register',
+            return res.render('register/register', {
                 messages: {
                     error: errors,
                     success: []
                 },
-                formData: { user_name, email, phone } // Preserve form data
+                formData: { user_name, email, phone }
             });
         }
 
@@ -47,38 +47,43 @@ exports.postRegister = async (req, res, next) => {
         });
 
         if (!result.success) {
-            console.log(result.message)
-
-            return res.render('register/register',{
+            return res.render('register/register', {
                 messages: {
                     error: [result.message],
                     success: []
                 },
-                formData: { user_name, email, phone } // Preserve form data
+                formData: { user_name, email, phone }
             });
         }
-        // Redirect to login page after successful registration
-        return res.redirect('/auth/login?registered=true');
+        
+        // Redirect to login page with success message
+        res.render('login/login', {
+            messages: {
+                error: [],
+                success: ['Registration successful! Please log in to continue.']
+            },
+            formData: { email } // Pre-fill the email field for convenience
+        });
 
     } catch (error) {
         console.error('Registration error:', error);
-        res.render('register/register',
-            {messages: {
+        return res.render('register/register', {
+            messages: {
                 error: ['An unexpected error occurred'],
                 success: []
             },
-            formData: { user_name, email, phone }} // Preserve form data
-        );
+            formData: { user_name, email, phone }
+        });
     }
 };
 
 exports.getLogin = (req, res) => {
-    res.render('login/login',{
+    res.render('login/login', {
         messages: {
-            error: req.flash('error'),
-            success: req.flash('success')
+            error: [],
+            success: []
         },
-        formData: {} // Initialize empty form data
+        formData: {}
     });
 };
 
@@ -87,7 +92,7 @@ exports.postLogin = (req, res, next) => {
     
     // Basic validation
     if (!email || !password) {
-        return res.render('login/login',{
+        return res.render('login/login', {
             messages: {
                 error: ['Please provide both email and password'],
                 success: []
@@ -99,7 +104,7 @@ exports.postLogin = (req, res, next) => {
     // Custom passport authentication handling
     passport.authenticate('local', (err, user, info) => {
         if (err) {
-            return res.render('login/login',{
+            return res.render('login/login', {
                 messages: {
                     error: ['An unexpected error occurred'],
                     success: []
@@ -109,24 +114,24 @@ exports.postLogin = (req, res, next) => {
         }
 
         if (!user) {
-            return res.render('login/login',{
+            return res.render('login/login', {
                 messages: {
                     error: [info.message || 'Invalid email or password'],
                     success: []
                 },
-                formData: {}
+                formData: { email }
             });
         }
 
         // Log in the user
         req.logIn(user, (err) => {
             if (err) {
-                return res.render('login/login',{
+                return res.render('login/login', {
                     messages: {
                         error: ['Error during login process'],
                         success: []
                     },
-                    formData: {}
+                    formData: { email }
                 });
             }
 
@@ -144,10 +149,8 @@ exports.postLogin = (req, res, next) => {
 exports.logout = (req, res, next) => {
     req.logout((err) => {
         if (err) {
-            req.flash('error', 'Error logging out');
             return res.redirect('/');
         }
-        req.flash('success', 'Successfully logged out');
         res.redirect('/auth/login');
     });
 };
