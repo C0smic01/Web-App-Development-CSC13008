@@ -1,5 +1,6 @@
 const toggleButtons = document.querySelectorAll(".toggle-section");
 
+// Handle toggle hidden sections when clicking on the title
 toggleButtons.forEach((button) => {
   let isClicked = false;
 
@@ -35,17 +36,35 @@ toggleButtons.forEach((button) => {
     }
   });
 });
-const fetchData = (subQuery = "") => {
+
+// Fetch data via AJAX
+const fetchData = () => {
   const filters = document.querySelectorAll(".filter");
   let queryString = "";
+
+  // Foreach checkboxes
   filters.forEach((filter) => {
     if (filter.classList.contains("selected")) {
       queryString += filter.dataset.query + "&";
     }
   });
-  if (subQuery.length > 0) {
-    queryString += subQuery + "&";
+
+  // Concat the price's query
+  const priceInputs = document.querySelectorAll(".price-filter");
+  priceInputs.forEach((input) => {
+    const name = input.name;
+    const value = input.value;
+    if (value) {
+      queryString += `${name}=${value}&`;
+    }
+  });
+
+  // Concat the search's query
+  const searchInput = document.querySelector("#search-input");
+  if (searchInput.value) {
+    queryString += `${searchInput.name}=${searchInput.value}&`;
   }
+
   queryString = queryString.slice(0, -1);
   const response = fetch(`/products/partial?${queryString}`)
     .then((response) => {
@@ -63,6 +82,18 @@ const fetchData = (subQuery = "") => {
       console.error("Error:", error);
     });
 };
+
+// Handle price filter when input
+
+const priceInputs = document.querySelectorAll(".price-filter");
+priceInputs.forEach((input) => {
+  input.addEventListener("change", () => {
+    fetchData();
+  });
+});
+
+// Handle filter when click on checkbox
+
 const checkboxes = document.querySelectorAll(".check-box");
 checkboxes.forEach((checkbox) => {
   checkbox.addEventListener("click", () => {
@@ -91,7 +122,10 @@ checkboxes.forEach((checkbox) => {
   });
 });
 
+// Handle when clicking search button
 document.querySelector(".search-btn").addEventListener("click", () => {
   const searchBar = document.querySelector("#search-input");
-  fetchData(`${searchBar.name}=${searchBar.value}`);
+  if (searchBar.value) {
+    fetchData();
+  }
 });
