@@ -1,28 +1,40 @@
+const { Op } = require('sequelize'); 
 class QueryHelper {
     constructor(model, queryString) {
-        this.model = model; // Lưu mô hình
+        this.model = model; 
         this.queryString = queryString; 
-        this.queryOptions = {}; // Khởi tạo options cho truy vấn
+        this.queryOptions = {}; 
     }
 
     filter() {
         const queryObj = { ...this.queryString };
         const excludedFields = ["page", "sort", "limit"];
         excludedFields.forEach(field => delete queryObj[field]);
-
+    
         let whereCondition = {};
         Object.keys(queryObj).forEach(key => {
-            if (queryObj[key].includes(',')) {
-                whereCondition[key] = queryObj[key].split(',');
+
+            if (typeof queryObj[key] === 'object' && !Array.isArray(queryObj[key])) {
+
+                Object.keys(queryObj[key]).forEach(operator => {
+
+                    if (Op[operator]) {  
+                        const value = queryObj[key][operator];
+                        if (!whereCondition[key]) {
+                            whereCondition[key] = {};
+                        }
+    
+                        whereCondition[key][Op[operator]] = isNaN(Number(value)) ? value : Number(value);
+                    }
+                });
             } else {
                 whereCondition[key] = queryObj[key];
             }
         });
-
         this.queryOptions.where = whereCondition; 
         return this;
     }
-
+    
     sort() {
         if (this.queryString.sort) {
             const sortBy = this.queryString.sort.split(',').map(field => field.trim());
@@ -49,9 +61,9 @@ class QueryHelper {
     }
 
     async executeQuery() {
+        console.log(model)
 
         this.filter().sort().limit().paginate();
-        
         return await this.model.findAll(this.queryOptions);
     }
 }

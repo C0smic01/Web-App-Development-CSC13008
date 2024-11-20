@@ -319,16 +319,7 @@ body {
   text-align: center;
 }
 
-#product1 .pro-container {
-  padding: 20px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
+
 
 #product1 .pro {
   width: 23%;
@@ -349,10 +340,6 @@ body {
   box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.06);
 }
 
-#product1 .pro img {
-  width: 100%;
-  border-radius: 20px;
-}
 
 #product1 .pro .des {
   text-align: start;

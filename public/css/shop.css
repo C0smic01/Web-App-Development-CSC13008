@@ -45,41 +45,20 @@
     font-weight: 600;
 }
 
-.pro-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start; /* Căn trái */
-    align-items: flex-start; /* Căn các phần tử ở phía trên */
-}
-
-.pro-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start; /* Căn trái */
-    align-items: flex-start; /* Căn các phần tử ở phía trên */
-}
 
 .pro {
     background-color: #fff; 
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     overflow: hidden;
-    margin: 10px; /* Khoảng cách giữa các phần tử */
+    margin: 10px; 
     transition: transform 0.2s;
-    width: calc(25% - 20px); /* 4 phần tử trên một dòng */
-    box-sizing: border-box; /* Đảm bảo phần tử không vượt quá container */
-}
+    width: calc(25% - 20px);
+    box-sizing: border-box; 
+} */
 
 .pro:hover {
-    transform: scale(1.05); /* Tạo hiệu ứng hover */
-}
-
-.product-image {
-    width: 100%; /* Đảm bảo ảnh luôn phủ toàn bộ chiều rộng container */
-    height: 100%;
-    min-height: 300px;
-    max-height: 300px;
-    object-fit: cover; /* Cắt ảnh cho phù hợp với kích thước container mà không làm méo ảnh */
+    transform: scale(1.05); 
 }
 
 

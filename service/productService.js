@@ -12,6 +12,7 @@ const getProductById = async(productId) => {
         let product = await Product.findByPk(productId, {
             include: [{
                 model: Category,
+                as: 'categories',
                 through: { attributes: [] }
             }]
         });
@@ -69,6 +70,25 @@ const getAllProducts= async(query)=> {
             }
         }
 
+        if (query.search) {
+            const searchLower = query.search.toLowerCase(); 
+        
+            filterConditions[Op.or] = [
+                Sequelize.where(
+                    Sequelize.fn('LOWER', Sequelize.col('product_name')),
+                    {
+                        [Op.like]: `%${searchLower}%`
+                    }
+                ),
+                Sequelize.where(
+                    Sequelize.fn('LOWER', Sequelize.col('description')),
+                    {
+                        [Op.like]: `%${searchLower}%`
+                    }
+                )
+            ];
+        }
+
         if (query.manufacturer_id) {
             filterConditions['manufacturer_id'] = query.manufacturer_id; 
         }
@@ -85,21 +105,19 @@ const getAllProducts= async(query)=> {
             }]
         });
 
-        return products;
+        return products.map(p=>p.get({ plain: true }));
     } catch (error) {
         console.error(error);
         throw new Error('Error filtering products');
     }
 }
-module.exports = {getAllProducts,getProductById,getProductByNameAndDescription}
-
-};
 
 const getRelatedProducts = async(currentProductId, queryStr = {}) => {
     try {
         const currentProduct = await Product.findByPk(currentProductId, {
             include: [{
                 model: Category,
+                as: 'categories',
                 through: { attributes: [] }
             }]
         });
@@ -121,6 +139,7 @@ const getRelatedProducts = async(currentProductId, queryStr = {}) => {
             include: [{
                 model: Category,
                 through: { attributes: [] },
+                as: 'categories',
                 where: {
                     category_id: categoryIds // Match at least one category
                 }

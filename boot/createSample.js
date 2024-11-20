@@ -6,15 +6,10 @@ const sequelize = require('../config/database');
 
 const User = require('../models/User')(sequelize, Sequelize.DataTypes);
 const Role = require('../models/Role')(sequelize, Sequelize.DataTypes);
-const UserRole = require('../models/UserRole')(sequelize, Sequelize.DataTypes);
 const Manufacturer = require('../models/Manufacturer')(sequelize, Sequelize.DataTypes);
 const Status = require('../models/Status')(sequelize, Sequelize.DataTypes);
 const Product = require('../models/Product')(sequelize, Sequelize.DataTypes);
 const Category = require('../models/Category')(sequelize, Sequelize.DataTypes);
-const Review = require('../models/Review')(sequelize, Sequelize.DataTypes);
-const Order = require('../models/Order')(sequelize, Sequelize.DataTypes);
-const OrderDetail = require('../models/OrderDetails')(sequelize, Sequelize.DataTypes);
-const OrderStatus = require('../models/OrderStatus')(sequelize, Sequelize.DataTypes);
 
 
 const createCategorySample = async () => {
@@ -48,7 +43,7 @@ const createManufacturerSample = async () => {
       for (const m of manufacturers) {
         await Manufacturer.create({
           manufacturer_id: m.manufacturer_id,
-          m_name: m.name
+          m_name: m.m_name
         });
       }
 

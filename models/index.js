@@ -11,7 +11,6 @@ const Category = require('./Category')(sequelize, Sequelize.DataTypes);
 const Review = require('./Review')(sequelize, Sequelize.DataTypes);
 const Order = require('./Order')(sequelize, Sequelize.DataTypes);
 const OrderDetail = require('./OrderDetails')(sequelize, Sequelize.DataTypes);
-const OrderStatus = require('./OrderStatus')(sequelize, Sequelize.DataTypes);
 
 Object.values(sequelize.models).forEach(model => {
   if (model.associate) {
@@ -44,6 +43,5 @@ module.exports = {
   Category,
   Review,
   Order,
-  OrderDetail,
-  OrderStatus
+  OrderDetail
 };

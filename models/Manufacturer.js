@@ -6,7 +6,8 @@ module.exports = (sequelize,DataTypes)=>{
             primaryKey: true
         },
         m_name: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false
         }
     }, {
         timestamps: false,
