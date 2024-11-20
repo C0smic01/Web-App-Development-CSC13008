@@ -128,12 +128,12 @@ const getRelatedProducts = async(currentProductId, queryStr = {}) => {
                     category_id: categoryIds // Match at least one category
                 }
             }],
-            limit: queryStr.limit || 4,
+            limit: queryStr.limit || 3,
             order: sequelize.random()
         });
 
         // If not enough related products, fetch additional random products
-        if (relatedProducts.length < (queryStr.limit || 4)) {
+        if (relatedProducts.length < (queryStr.limit || 3)) {
             const additionalProducts = await Product.findAll({
                 where: {
                     product_id: {
@@ -143,7 +143,7 @@ const getRelatedProducts = async(currentProductId, queryStr = {}) => {
                         ]
                     }
                 },
-                limit: (queryStr.limit || 4) - relatedProducts.length,
+                limit: (queryStr.limit || 3) - relatedProducts.length,
                 order: sequelize.random()
             });
             
