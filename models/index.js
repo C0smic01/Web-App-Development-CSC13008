@@ -21,7 +21,7 @@ Object.values(sequelize.models).forEach(model => {
 
 const sampleData = require('../boot/createSample')
 // Sync db
-sequelize.sync({alter: true}).then(async()=>{
+sequelize.sync({force: false}).then(async()=>{
   console.log("Database & tables sync!");
   await sampleData.createCategorySample();
   await sampleData.createManufacturerSample();
