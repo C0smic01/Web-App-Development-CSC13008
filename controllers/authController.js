@@ -92,7 +92,7 @@ exports.postLogin = (req, res, next) => {
                 error: ['Please provide both email and password'],
                 success: []
             },
-            formData: { email } // Preserve email only, not password
+            formData: { email }
         });
     }
 
@@ -114,7 +114,7 @@ exports.postLogin = (req, res, next) => {
                     error: [info.message || 'Invalid email or password'],
                     success: []
                 },
-                formData: { email }
+                formData: {}
             });
         }
 
@@ -126,7 +126,7 @@ exports.postLogin = (req, res, next) => {
                         error: ['Error during login process'],
                         success: []
                     },
-                    formData: { email }
+                    formData: {}
                 });
             }
 
