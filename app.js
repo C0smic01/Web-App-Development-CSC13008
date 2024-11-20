@@ -145,11 +145,11 @@ app.use('/products',productRoutes)
 
 // Static routes
 app.get('/about', (req, res) => {   
-    res.render('../about/about' );
+    res.render('about/about' );
 });
 
 app.get('/contact', (req, res) => {
-    res.render('../contact/contact' );
+    res.render('contact/contact' );
 });
 
 // app.use((req, res, next) => {

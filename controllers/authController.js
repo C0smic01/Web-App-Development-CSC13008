@@ -2,8 +2,7 @@ const passport = require('passport');
 const authService = require('../service/authService');
 
 exports.getRegister = (req, res) => {
-    res.render('layouts/layout', { 
-        body: '../register/register',
+    res.render('register/register',{
         messages: {
             error: req.flash('error'),
             success: req.flash('success')
@@ -30,7 +29,7 @@ exports.postRegister = async (req, res, next) => {
         // If there are validation errors, render the page with errors
         if (errors.length > 0) {
             return res.render('layouts/layout', {
-                body: '../register/register',
+                body: 'register/register',
                 messages: {
                     error: errors,
                     success: []
@@ -50,8 +49,7 @@ exports.postRegister = async (req, res, next) => {
         if (!result.success) {
             console.log(result.message)
 
-            return res.render('layouts/layout', {
-                body: '../register/register',
+            return res.render('register/register',{
                 messages: {
                     error: [result.message],
                     success: []
@@ -64,7 +62,7 @@ exports.postRegister = async (req, res, next) => {
 
     } catch (error) {
         console.error('Registration error:', error);
-        res.render('../register/register',
+        res.render('register/register',
             {messages: {
                 error: ['An unexpected error occurred'],
                 success: []
@@ -75,8 +73,7 @@ exports.postRegister = async (req, res, next) => {
 };
 
 exports.getLogin = (req, res) => {
-    res.render('layouts/layout', { 
-        body: '../login/login',
+    res.render('login/login',{
         messages: {
             error: req.flash('error'),
             success: req.flash('success')
@@ -90,8 +87,7 @@ exports.postLogin = (req, res, next) => {
     
     // Basic validation
     if (!email || !password) {
-        return res.render('layouts/layout', {
-            body: '../login/login',
+        return res.render('login/login',{
             messages: {
                 error: ['Please provide both email and password'],
                 success: []
@@ -103,8 +99,7 @@ exports.postLogin = (req, res, next) => {
     // Custom passport authentication handling
     passport.authenticate('local', (err, user, info) => {
         if (err) {
-            return res.render('layouts/layout', {
-                body: '../login/login',
+            return res.render('login/login',{
                 messages: {
                     error: ['An unexpected error occurred'],
                     success: []
@@ -114,8 +109,7 @@ exports.postLogin = (req, res, next) => {
         }
 
         if (!user) {
-            return res.render('layouts/layout', {
-                body: '../login/login',
+            return res.render('login/login',{
                 messages: {
                     error: [info.message || 'Invalid email or password'],
                     success: []
@@ -127,8 +121,7 @@ exports.postLogin = (req, res, next) => {
         // Log in the user
         req.logIn(user, (err) => {
             if (err) {
-                return res.render('layouts/layout', {
-                    body: '../login/login',
+                return res.render('login/login',{
                     messages: {
                         error: ['Error during login process'],
                         success: []
