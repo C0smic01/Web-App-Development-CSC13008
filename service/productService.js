@@ -26,27 +26,6 @@ const getProductById = async(productId) => {
     }
 }
 
-const getProductByNameAndDescription = async(searchTerm)=>{
-    const products = await Product.findAll({
-        where:{
-            name:{
-                [Sequelize.Op.or]:[
-                    {
-                        name: {
-                            [Sequelize.Op.like] : `%${searchTerm}%`
-                        }
-                    },
-                    {
-                        description: {
-                            [Sequelize.Op.like] : `%${searchTerm}%`
-                        }
-                    }
-                ]
-            }
-        }
-    })
-    return products.map(p=>p.dataValues)
-}
 
 const getAllProducts= async(query)=> {
     try {
@@ -96,13 +75,18 @@ const getAllProducts= async(query)=> {
         if (query.status_id) {
             filterConditions['status_id'] = query.status_id;
         }
+        const limit = query.limit ? Math.min(parseInt(query.limit, 10), 15) : 15 
         const products = await Product.findAll({
             where: filterConditions, 
+            limit: limit,
             include: [{
                 model: Category,
                 as: 'categories',
-                required: false
-            }]
+                required: false,
+                through: { attributes: [] }
+
+            }],
+            subQuery: false
         });
 
         return products.map(p=>p.get({ plain: true }));
