@@ -9,8 +9,13 @@
                 <li><a class="nav-link" href="/products">Shop</a></li>
                 <li><a class="nav-link" href="/about">About</a></li>
                 <li><a class="nav-link" href="/contact">Contact</a></li>
-                <li><a class="nav-link" href="/auth/login">Login</a></li>
-                <li><a class="nav-link" href="/auth/register">Register</a></li>
+                <% if (!user) { %>
+                    <li><a class="nav-link" href="/auth/login">Login</a></li>
+                    <li><a class="nav-link" href="/auth/register">Register</a></li>
+                <% } else { %>
+                    <li><a class="nav-link" href="/profile">Profile</a></li>
+                    <li><a class="nav-link" href="/auth/logout">Logout</a></li>
+                <% } %>
                 <li class="lg-bag"><a href="/cart"><i class="fa-solid fa-bag-shopping head-Cart"></i></a></li>
             </ul>
         </div>

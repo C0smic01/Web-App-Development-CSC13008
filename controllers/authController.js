@@ -17,17 +17,14 @@ exports.postRegister = async (req, res, next) => {
 
         let errors = [];
 
-        // Validate required fields
         if (!user_name || !email || !password || !confirm_password) {
             errors.push('All fields are required');
         }
 
-        // Validate password match
         if (password !== confirm_password) {
             errors.push('Passwords do not match');
         }
 
-        // If there are validation errors, render the page with errors
         if (errors.length > 0) {
             return res.render('register/register', {
                 messages: {
@@ -38,7 +35,6 @@ exports.postRegister = async (req, res, next) => {
             });
         }
 
-        // Attempt to register user
         const result = await authService.registerUser({
             user_name,
             email,
@@ -56,13 +52,12 @@ exports.postRegister = async (req, res, next) => {
             });
         }
         
-        // Redirect to login page with success message
         res.render('login/login', {
             messages: {
                 error: [],
                 success: ['Registration successful! Please log in to continue.']
             },
-            formData: { email } // Pre-fill the email field for convenience
+            formData: { email }
         });
 
     } catch (error) {
@@ -90,18 +85,15 @@ exports.getLogin = (req, res) => {
 exports.postLogin = (req, res, next) => {
     const { email, password } = req.body;
     
-    // Basic validation
     if (!email || !password) {
         return res.render('login/login', {
             messages: {
                 error: ['Please provide both email and password'],
                 success: []
             },
-            formData: { email }
         });
     }
 
-    // Custom passport authentication handling
     passport.authenticate('local', (err, user, info) => {
         if (err) {
             return res.render('login/login', {
@@ -119,7 +111,6 @@ exports.postLogin = (req, res, next) => {
                     error: [info.message || 'Invalid email or password'],
                     success: []
                 },
-                formData: { email }
             });
         }
 
@@ -146,11 +137,27 @@ exports.postLogin = (req, res, next) => {
     })(req, res, next);
 };
 
-exports.logout = (req, res, next) => {
-    req.logout((err) => {
-        if (err) {
-            return res.redirect('/');
+exports.logout = async (req, res, next) => {
+    try {
+        if (req.session && req.sessionStore) {
+            await authService.logoutUser(req.sessionStore, req.sessionID);
         }
-        res.redirect('/auth/login');
-    });
+
+        req.logout((err) => {
+            if (err) {
+                return next(err);
+            }
+            
+            req.session.destroy((err) => {
+                if (err) {
+                    return next(err);
+                }
+                res.clearCookie('sessionId');
+                res.redirect('/');
+            });
+        });
+    } catch (error) {
+        console.error('Logout error:', error);
+        next(error);
+    }
 };
