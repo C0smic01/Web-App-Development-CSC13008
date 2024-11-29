@@ -64,10 +64,14 @@ exports.postRegister = async (req, res, next) => {
         console.error('Registration error:', error);
         return res.render('register/register', {
             messages: {
-                error: ['An unexpected error occurred'],
+                error: ['Password must be at least 6 characters long'],
                 success: []
             },
-            formData: { user_name, email, phone }
+            formData: { 
+                user_name: req.body.user_name, 
+                email: req.body.email, 
+                phone: req.body.phone 
+            }
         });
     }
 };

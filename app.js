@@ -68,7 +68,7 @@ app.use(session({
     saveUninitialized: false,
     name: 'sessionId',
     cookie: {
-        secure: process.env.NODE_ENV === 'production',
+        secure: false,
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
         sameSite: 'strict'
@@ -90,7 +90,7 @@ app.use(helmet({
     contentSecurityPolicy: false,
 }));
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production' ? 'your-production-domain.com' : 'http://localhost:3000',
+    origin: process.env.NODE_ENV === 'production' ? 'http://54.196.6.12:3000/' : 'http://localhost:3000',
     credentials: true
 }));
 
