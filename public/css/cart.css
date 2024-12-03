@@ -122,7 +122,6 @@
 }
 
 #sub-total table td span{
-    text-decoration: line-through;
     font-style: italic;
     margin-right: 3px;
 }
