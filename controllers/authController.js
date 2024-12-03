@@ -151,3 +151,16 @@ exports.logout = (req, res, next) => {
         res.redirect('/auth/login');
     });
 };
+
+exports.getAuthStatus = (req,res,next)=>{
+    if (req.isAuthenticated()) {
+        return res.json({
+            isAuthenticated: true,
+            user: {
+                username: req.user.username,
+                avatar: req.user.avatar || '/img/default-avatar.png',
+            },
+        });
+    }
+    return res.json({ isAuthenticated: false });
+}
