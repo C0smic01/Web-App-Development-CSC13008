@@ -73,7 +73,17 @@
                         <td><strong class="card-total">$ 325</strong></td>
                     </tr>
                 </table>
-                <button id="checkoutBtn" class="normal">Proceed to checkout</button>
+                <%if(user){ %>
+                    <button id="checkoutBtn" class="normal">Proceed to checkout</button>
+
+                <%}else{%>
+                    <button 
+                    style="cursor: not-allowed;"
+                    id="checkoutBtn"  class="normal " disabled>Proceed to checkout</button>
+                    <p class="text-red-500 text-sm">Bạn cần đăng nhập để thiết lập đơn hàng.</p>
+
+                <%}%>
+                <!-- <button id="checkoutBtn" class="normal">Proceed to checkout</button> -->
             </div>
           </section>
   
