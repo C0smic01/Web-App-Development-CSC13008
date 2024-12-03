@@ -98,9 +98,10 @@ document.getElementById("checkoutBtn").addEventListener("click", function() {
   .then(data=>{
       console.log(data)
       cart.clearCart()
+      renderCart();
   })
   .then(data => {
-     // window.location.href = '/order';
+     window.location.href = '/order';
   })
   .catch(error => {
       console.error('Error:', error);
