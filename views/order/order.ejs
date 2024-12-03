@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section id="orders-container">
+    <div id="orders-list" class="flex justify-center">
+      <div class="w-2/3">
+        <%- include('orderList',{orders})%>
+
+      </div>
+      <!-- Orders will be dynamically inserted here -->
+    </div>
+  </section>
+
+  <script src="orders.js"></script>
+</body>
+</html>

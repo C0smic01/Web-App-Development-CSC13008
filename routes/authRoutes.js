@@ -3,10 +3,11 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 const { isNotAuthenticated, isAuthenticated } = require('../middleware/auth');
 
-router.get('/login', authController.getLogin);
-router.post('/login', authController.postLogin);
-router.get('/register', authController.getRegister);
-router.post('/register', authController.postRegister);
-router.get('/logout', authController.logout);
+router.get('/login', isNotAuthenticated, authController.getLogin);
+router.post('/login', isNotAuthenticated, authController.postLogin);
+router.get('/register', isNotAuthenticated, authController.getRegister);
+router.post('/register', isNotAuthenticated, authController.postRegister);
+router.get('/logout', isAuthenticated, authController.logout);
 router.get('/status',authController.getAuthStatus)
+
 module.exports = router;

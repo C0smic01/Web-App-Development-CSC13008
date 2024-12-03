@@ -6,7 +6,6 @@ const helmet = require('helmet');
 const cors = require('cors');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const flash = require('connect-flash');
 const app = express();
 const path = require("path");
 const expressLayouts = require('express-ejs-layouts');
@@ -58,7 +57,7 @@ passport.deserializeUser(async (id, done) => {
 const sessionStore = new SequelizeStore({
     db: sequelize,
     tableName: 'sessions',
-    checkExpirationInterval: 15 * 60 * 1000,
+    checkExpirationInterval: 5 * 60 * 1000,
     expiration: 24 * 60 * 60 * 1000
 });
 
@@ -69,7 +68,7 @@ app.use(session({
     saveUninitialized: false,
     name: 'sessionId',
     cookie: {
-        secure: process.env.NODE_ENV === 'production',
+        secure: false,
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
         sameSite: 'strict'
@@ -78,12 +77,11 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash());
+
 
 app.use((req, res, next) => {
-    res.locals.user = req.user;
-    res.locals.errors = req.flash('error');
-    res.locals.successes = req.flash('success');
+    res.locals.user = req.user || null; 
+
     next();
 });
 
@@ -93,23 +91,10 @@ app.use(helmet({
     contentSecurityPolicy: false,
 }));
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production' ? 'your-production-domain.com' : 'http://localhost:3000',
+    origin: process.env.NODE_ENV === 'production' ? 'http://54.196.6.12:3000/' : 'http://localhost:3000',
     credentials: true
 }));
 
-app.use(session({
-    secret: process.env.SESSION_SECRET || 'your-dev-secret-key',
-    store: sessionStore,
-    resave: false,
-    saveUninitialized: false,
-    name: 'sessionId',
-    cookie: {
-        secure: process.env.NODE_ENV === 'production',
-        httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000,
-        sameSite: 'strict'
-    }
-}));
 
 sessionStore.sync();
 
@@ -122,7 +107,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/cart', express.static(path.join(__dirname, 'cart')));
 const authMiddleware = (req, res, next) => {
-    res.locals.user = req.session.user || null;
+    res.locals.user = req.user || null;
     next();
 };
 
@@ -134,9 +119,11 @@ const shopRoutes = require('./routes/shopRoutes');
 app.use('/shop', shopRoutes);
 const authRoutes = require('./routes/authRoutes');
 app.use('/auth', authRoutes);
-const cartRoutes = require('./routes/cartRoutes');
+const cartRoutes = require('./cart/route/cartRoutes');
 app.use('/cart', cartRoutes);
 
+const orderRoutes = require('./order/routes/orderRoutes.js')
+app.use('/order',orderRoutes)
 const productController = require('./controllers/productController.js')
 app.get('/products/partial',productController.getProducts)
 

@@ -133,8 +133,8 @@ body {
   color: #088178;
 }
 
-#navbar li a:hover::after,
-#navbar li a.active::after {
+#navbar li a.nav-link:hover::after,
+#navbar li a.nav-link.active::after {
   content: "";
   width: 30%;
   height: 2px;

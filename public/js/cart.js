@@ -79,6 +79,34 @@ function updateCartTotals(totalQuantity, totalPrice) {
   document.querySelector(".card-shipping").textContent = "$" + shipping
   document.querySelector(".card-total").textContent = "$" + total.toFixed(2);
 }
+
+
+// Checkout to order
+document.getElementById("checkoutBtn").addEventListener("click", function() {
+  const cartItems = cart.loadCart();
+
+  fetch('/order', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+          cart: cartItems,
+      }),
+  })
+  .then(response => response.json())
+  .then(data=>{
+      console.log(data)
+      cart.clearCart()
+  })
+  .then(data => {
+     // window.location.href = '/order';
+  })
+  .catch(error => {
+      console.error('Error:', error);
+  });
+});
+
 // Tải trang lần đầu
 document.addEventListener("DOMContentLoaded", () => {
   renderCart();

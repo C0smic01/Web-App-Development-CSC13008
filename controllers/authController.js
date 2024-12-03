@@ -2,11 +2,12 @@ const passport = require('passport');
 const authService = require('../service/authService');
 
 exports.getRegister = (req, res) => {
-    res.render('register/register',{
+    res.render('register/register', {
         messages: {
-            error: req.flash('error'),
-            success: req.flash('success')
-        }
+            error: [],
+            success: []
+        },
+        formData: {}
     });
 };
 
@@ -16,29 +17,24 @@ exports.postRegister = async (req, res, next) => {
 
         let errors = [];
 
-        // Validate required fields
         if (!user_name || !email || !password || !confirm_password) {
             errors.push('All fields are required');
         }
 
-        // Validate password match
         if (password !== confirm_password) {
             errors.push('Passwords do not match');
         }
 
-        // If there are validation errors, render the page with errors
         if (errors.length > 0) {
-            return res.render('layouts/layout', {
-                body: 'register/register',
+            return res.render('register/register', {
                 messages: {
                     error: errors,
                     success: []
                 },
-                formData: { user_name, email, phone } // Preserve form data
+                formData: { user_name, email, phone }
             });
         }
 
-        // Attempt to register user
         const result = await authService.registerUser({
             user_name,
             email,
@@ -47,59 +43,65 @@ exports.postRegister = async (req, res, next) => {
         });
 
         if (!result.success) {
-            console.log(result.message)
-
-            return res.render('register/register',{
+            return res.render('register/register', {
                 messages: {
                     error: [result.message],
                     success: []
                 },
-                formData: { user_name, email, phone } // Preserve form data
+                formData: { user_name, email, phone }
             });
         }
-        // Redirect to login page after successful registration
-        return res.redirect('/auth/login?registered=true');
+        
+        res.render('login/login', {
+            messages: {
+                error: [],
+                success: ['Registration successful! Please log in to continue.']
+            },
+            formData: { email }
+        });
 
     } catch (error) {
         console.error('Registration error:', error);
-        res.render('register/register',
-            {messages: {
-                error: ['An unexpected error occurred'],
+        return res.render('register/register', {
+            messages: {
+                error: ['Password must be at least 6 characters long'],
                 success: []
             },
-            formData: { user_name, email, phone }} // Preserve form data
-        );
+            formData: { 
+                user_name: req.body.user_name, 
+                email: req.body.email, 
+                phone: req.body.phone 
+            }
+        });
     }
 };
 
 exports.getLogin = (req, res) => {
-    res.render('login/login',{
+    res.render('login/login', {
         messages: {
-            error: req.flash('error'),
-            success: req.flash('success')
+            error: [],
+            success: []
         },
-        formData: {} // Initialize empty form data
+        formData: {}
     });
 };
 
 exports.postLogin = (req, res, next) => {
     const { email, password } = req.body;
     
-    // Basic validation
     if (!email || !password) {
-        return res.render('login/login',{
+        return res.render('login/login', {
             messages: {
                 error: ['Please provide both email and password'],
                 success: []
             },
-            formData: { email } // Preserve email only, not password
         });
     }
 
-    // Custom passport authentication handling
     passport.authenticate('local', (err, user, info) => {
         if (err) {
-            return res.render('login/login',{
+            console.error('Error during login: ', err); 
+            return res.render('login/login', {
                 messages: {
                     error: ['An unexpected error occurred'],
                     success: []
@@ -109,19 +111,20 @@ exports.postLogin = (req, res, next) => {
         }
 
         if (!user) {
-            return res.render('login/login',{
+            console.log('Login failed: ', info.message); 
+            return res.render('login/login', {
                 messages: {
                     error: [info.message || 'Invalid email or password'],
                     success: []
                 },
-                formData: { email }
             });
         }
 
         // Log in the user
         req.logIn(user, (err) => {
             if (err) {
-                return res.render('login/login',{
+                console.error('Error during session login: ', err)
+                return res.render('login/login', {
                     messages: {
                         error: ['Error during login process'],
                         success: []
@@ -141,16 +144,6 @@ exports.postLogin = (req, res, next) => {
     })(req, res, next);
 };
 
-exports.logout = (req, res, next) => {
-    req.logout((err) => {
-        if (err) {
-            req.flash('error', 'Error logging out');
-            return res.redirect('/');
-        }
-        req.flash('success', 'Successfully logged out');
-        res.redirect('/auth/login');
-    });
-};
 
 exports.getAuthStatus = (req,res,next)=>{
     if (req.isAuthenticated()) {
@@ -164,3 +157,28 @@ exports.getAuthStatus = (req,res,next)=>{
     }
     return res.json({ isAuthenticated: false });
 }
+
+exports.logout = async (req, res, next) => {
+    try {
+        if (req.session && req.sessionStore) {
+            await authService.logoutUser(req.sessionStore, req.sessionID);
+        }
+
+        req.logout((err) => {
+            if (err) {
+                return next(err);
+            }
+            
+            req.session.destroy((err) => {
+                if (err) {
+                    return next(err);
+                }
+                res.clearCookie('sessionId');
+                res.redirect('/');
+            });
+        });
+    } catch (error) {
+        console.error('Logout error:', error);
+        next(error);
+    }
+};

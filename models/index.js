@@ -10,7 +10,7 @@ const Product = require('./Product')(sequelize, Sequelize.DataTypes);
 const Category = require('./Category')(sequelize, Sequelize.DataTypes);
 const Review = require('./Review')(sequelize, Sequelize.DataTypes);
 const Order = require('./Order')(sequelize, Sequelize.DataTypes);
-const OrderDetail = require('./OrderDetails')(sequelize, Sequelize.DataTypes);
+const OrderDetail = require('./OrderDetail')(sequelize, Sequelize.DataTypes);
 
 Object.values(sequelize.models).forEach(model => {
   if (model.associate) {

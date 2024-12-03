@@ -41,7 +41,7 @@ exports.getProducts = async(req, res,next) => {
 exports.getProductDetails = async(req,res,next)=>{
     try{
         const product = await productService.getProductById(req.params.id)
-        const relatedProducts = await productService.getRelatedProducts(req.params.id, {limit: 4})
+        const relatedProducts = await productService.getRelatedProducts(req.params.id, {limit: 3})
         res.render('product/productDetails', {product, relatedProducts})
     }
     catch(e)

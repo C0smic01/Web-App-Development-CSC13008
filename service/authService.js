@@ -71,6 +71,22 @@ class AuthService {
             throw error;
         }
     }
+
+    async logoutUser(sessionStore, sessionId) {
+        try {
+            if (sessionStore && sessionId) {
+                await sessionStore.destroy(sessionId);
+            }
+    
+            return {
+                success: true,
+                message: 'Logout successful'
+            };
+        } catch (error) {
+            console.error('Service - Logout error:', error);
+            throw error;
+        }
+    }
 }
 
 module.exports = new AuthService();
