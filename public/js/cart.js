@@ -84,7 +84,7 @@ function updateCartTotals(totalQuantity, totalPrice) {
 // Checkout to order
 document.getElementById("checkoutBtn").addEventListener("click", function() {
   const cartItems = cart.loadCart();
-
+  if(cartItems.items.length <=0) return ;
   fetch('/order', {
       method: 'POST',
       headers: {
