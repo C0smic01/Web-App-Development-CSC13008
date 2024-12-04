@@ -4,12 +4,12 @@ const bcrypt = require('bcrypt')
 const Sequelize = require('sequelize');
 const sequelize = require('../config/database');
 
-const User = require('../models/User')(sequelize, Sequelize.DataTypes);
-const Role = require('../models/Role')(sequelize, Sequelize.DataTypes);
-const Manufacturer = require('../models/Manufacturer')(sequelize, Sequelize.DataTypes);
-const Status = require('../models/Status')(sequelize, Sequelize.DataTypes);
-const Product = require('../models/Product')(sequelize, Sequelize.DataTypes);
-const Category = require('../models/Category')(sequelize, Sequelize.DataTypes);
+const User = require('../authentication/models/User')(sequelize, Sequelize.DataTypes);
+const Role = require('../authentication/models/Role')(sequelize, Sequelize.DataTypes);
+const Manufacturer = require('../shop/models/Manufacturer')(sequelize, Sequelize.DataTypes);
+const Status = require('../shop/models/Status')(sequelize, Sequelize.DataTypes);
+const Product = require('../shop/models/Product')(sequelize, Sequelize.DataTypes);
+const Category = require('../shop/models/Category')(sequelize, Sequelize.DataTypes);
 
 
 const createCategorySample = async () => {

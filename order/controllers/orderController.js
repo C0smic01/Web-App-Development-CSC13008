@@ -1,7 +1,8 @@
 const orderService = require('../services/orderService')
 exports.getOrders = async(req,res,next)=>{
     try{
-        const orders = await orderService.getAllOrders();
+        const user = res.locals.user.dataValues || res.locals.user
+        const orders = await orderService.getOrdersByUserId(user.user_id);
         orders.forEach(order => {
             order.created_at = new Date(order.created_at).toLocaleDateString('en-US', {
                 month: '2-digit',

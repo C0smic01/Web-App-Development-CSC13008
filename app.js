@@ -9,8 +9,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const app = express();
 const path = require("path");
 const expressLayouts = require('express-ejs-layouts');
-const { sequelize } = require('./models');
-const { User } = require('./models');
+const { sequelize, User } = require('./index.js');
 
 
 passport.use(new LocalStrategy({

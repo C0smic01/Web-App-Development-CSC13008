@@ -3,7 +3,7 @@ const { Op } = require('sequelize');
 const sequelize = require('../../config/database');
 const QueryHelper = require('../../utils/QueryHelper');
 const AppError = require('../../utils/AppError');
-const models = require('../../models');
+const models = require('../../index');
 const Product = models.Product;
 const Category = models.Category;
 

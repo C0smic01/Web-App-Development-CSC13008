@@ -1,13 +1,18 @@
 const AppError = require('../../utils/AppError');
-const models = require('../../models');
-const Order = models.Order;
-const OrderDetail = models.OrderDetail
+const models = require('../../index');
 const User = models.User
 const sequelize = models.sequelize
 const Product = models.Product
-exports.getAllOrders = async () => {
+const Order = models.Order
+const OrderDetail = models.OrderDetail
+exports.getOrdersByUserId = async (user_id) => {
     try {
+        if (!user_id) {
+            throw new AppError("User ID is required", 400);
+        }
+
         const orders = await Order.findAll({
+            where: { user_id: user_id },
             include: [
                 {
                     model: User,
@@ -40,6 +45,7 @@ exports.getAllOrders = async () => {
         throw new AppError('Error while getting orders', 404);
     }
 };
+
 exports.createOrder = async(userId,cart)=>{
     let transaction
     try{
