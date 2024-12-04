@@ -1,9 +1,9 @@
 const ejs = require('ejs');
 const path = require('path');
-const productService = require('../service/productService')
-const categoryService = require('../service/categoryService')
-const manufacturerService = require('../service/manufacturerService')
-const statusService = require('../service/statusService')
+const productService = require('../services/productService')
+const categoryService = require('../services/categoryService')
+const manufacturerService = require('../services/manufacturerService')
+const statusService = require('../services/statusService')
 
 exports.getShop = async(req, res,next) => {
     try{

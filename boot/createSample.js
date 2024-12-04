@@ -115,7 +115,8 @@ const createProductSample = async () => {
           remaining: product.remaining,
           img: product.img,
           status_id: product.status_id,
-          manufacturer_id : product.manufacturer_id
+          manufacturer_id : product.manufacturer_id,
+          description: product.description
         });
       }
 

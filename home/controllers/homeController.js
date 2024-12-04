@@ -1,4 +1,4 @@
-const productService = require('../service/productService')
+const productService = require('../../shop/services/productService')
 
 exports.getHome = async(req, res,next) => {
     const products = await productService.getAllProducts(query = {limit : 6})

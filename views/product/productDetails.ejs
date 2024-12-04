@@ -50,16 +50,14 @@
                         <input 
                         style="border: 1px solid #088178; "
                         class="outline-none text-center rounded-[4px] p-[4px] mr-[10px] text-base pl-[10px] w-[50px] h-full"
-                        type="number" value="1">
+                        type="number" value="1" min="0" max="<%= product.remaining %>">
                         <button 
                         style="background-color: #088178"
                         class="add-to-cart-btn rounded-md text-center text-sm font-semibold px-[16px] text-white p-[8px] h-full">Add to cart</button>
+                        <span class="remaining">Remaining: <%= product.remaining %></span>
                    </div>
                     <h4 class="text-2xl font-bold pt-[40px] py-[20px]">Product Details</h4>
-                    <span class="text-sm">This stylish men's fashion t-shirt boasts a modern and sleek design, perfect for the contemporary
-                        urban wardrobe.The unique graphic print on the front adds an eye-catching element to elevate any casual
-                        outfit.
-                    </span>
+                    <span class="text-sm"><%= product.description %></span>
                 </div>
              <% }  %>   
         </section>
@@ -77,27 +75,44 @@
 
             import {Cart} from '/cart/models/Cart.js'
             const cart = new Cart();
+
+            function showNotification(message) {
+                const notification = document.createElement('div');
+                notification.textContent = message;
+                notification.classList.add('cart-notification');
+
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => {
+                    document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            }
           
             document.querySelector(".add-to-cart-btn").addEventListener("click", function () {
-              const productId = "<%= product.product_id %>"
-              const name = "<%= product.product_name %>"
-              const price = parseFloat("<%= product.price %>")
-              const image = "<%= product.img %>"; 
-              const quantity = parseInt(document.querySelector("input[type='number']").value); 
+                const productId = "<%= product.product_id %>"
+                const name = "<%= product.product_name %>"
+                const price = parseFloat("<%= product.price %>")
+                const image = "<%= product.img %>"; 
+                const quantity = parseInt(document.querySelector("input[type='number']").value); 
 
-              if (quantity <= 0) {
-                alert("Please select a valid quantity.");
-                return;
-              }
-          
-          
-              cart.addItem({
-                productId: productId,
-                name: name,
-                price: price,
-                quantity: quantity,
-                image: image
-              });
+                if (quantity <= 0) {
+                    alert("Please select a valid quantity.");
+                    return;
+                }
+            
+            
+                cart.addItem({
+                    productId: productId,
+                    name: name,
+                    price: price,
+                    quantity: quantity,
+                    image: image
+                });
+
+                showNotification(`${quantity}x ${name} added to cart`);
             });
           </script>
     </body>

@@ -1,171 +1,191 @@
 [
-      {
-        "price": "239.00",
-        "status_id": "6",
-        "product_name": "Oxford Shirt",
-        "remaining": "85",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134201-23030-5he25khysiov72.webp",
-        "manufacturer_id": "3"
-      },
-
-      {
-        "price": "137.00",
-        "status_id": "12",
-        "product_name": "Cotton Silas Shirt",
-        "remaining": "10",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lxzbufyvwpuj05.webp",
-        "manufacturer_id": "3"
-      },
-      {
-        "price": "737.00",
-        "status_id": "11",
-        "product_name": "SL SILAS Shirt",
-        "remaining": "70",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lzfzrlkds1b5fd.webp",
-        "manufacturer_id": "2"
-      },
-      {
-        "price": "695.00",
-        "status_id": "14",
-        "product_name": "SL SILAS Shirt",
-        "remaining": "99",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lzfzrlkduu6l6c.webp",
-        "manufacturer_id": "7"
-      },
-      {
-        "price": "276.00",
-        "status_id": "3",
-        "product_name": "PEALO POLO",
-        "remaining": "76",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m0mx0tgh5zf303.webp",
-        "manufacturer_id": "5"
-      },
-      {
-        "price": "139.00",
-        "status_id": "12",
-        "product_name": "Unisex T-Shirt",
-        "remaining": "38",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lp93sepxbr6638.webp",
-        "manufacturer_id": "11"
-      },
-      {
-        "price": "296.00",
-        "status_id": "7",
-        "product_name": "PEALO Hoodie",
-        "remaining": "94",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lphtf70lx645c1.webp",
-        "manufacturer_id": "6"
-      },
-      {
-        "price": "107.00",
-        "status_id": "2",
-        "product_name": "Sport T-Shirt",
-        "remaining": "32",
-        "img": "https://down-vn.img.susercontent.com/file/sg-11134201-23020-u4xbqcunhbnv26.webp",
-        "manufacturer_id": "4"
-      },
-      {
-        "price": "673.00",
-        "status_id": "12",
-        "product_name": "PEALO Sweater",
-        "remaining": "41",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m0msumxsy8z1a3.webp",
-        "manufacturer_id": "1"
-      },
-      {
-        "price": "717.00",
-        "status_id": "10",
-        "product_name": "PEALO Unisex Jean",
-        "remaining": "55",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lvj21gfhn43x70.webp",
-        "manufacturer_id": "12"
-      },
-      {
-        "price": "383.00",
-        "status_id": "7",
-        "product_name": "PEALO Cardigan",
-        "remaining": "73",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m0o0evntdhn35c.webp",
-        "manufacturer_id": "4"
-      },
-      {
-        "price": "452.00",
-        "status_id": "5",
-        "product_name": "Set Denim on Denim B Brown",
-        "remaining": "12",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m14ak4x0j4or1b.webp",
-        "manufacturer_id": "1"
-      },
-      {
-        "price": "344.00",
-        "status_id": "6",
-        "product_name": "Set Denim - Dark Indigo",
-        "remaining": "10",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m14akdhjzlve19.webp",
-        "manufacturer_id": "4"
-      },
-      {
-        "price": "200.00",
-        "status_id": "15",
-        "product_name": "Haven Jeans",
-        "remaining": "38",
-        "img": "https://down-vn.img.susercontent.com/file/sg-11134201-7rblr-loz955bx7xmb3e.webp",
-        "manufacturer_id": "6"
-      },
-      {
-        "price": "402.00",
-        "status_id": "5",
-        "product_name": "Haven Black Jeans",
-        "remaining": "36",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m1wjd23z7zv702.webp",
-        "manufacturer_id": "3"
-      },
-      {
-        "price": "576.00",
-        "status_id": "4",
-        "product_name": "Karley Leather Jacket",
-        "remaining": "72",
-        "img": "https://down-vn.img.susercontent.com/file/ea5037a49e41e3463b27367bdbe66d72.webp",
-        "manufacturer_id": "6"
-      },
-      {
-        "price": "288.00",
-        "status_id": "13",
-        "product_name": "GAT Shoes Second Sunday White Wind",
-        "remaining": "54",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m1pgjd5h977jb0.webp",
-        "manufacturer_id": "1"
-      },
-      {
-        "price": "555.00",
-        "status_id": "9",
-        "product_name": "Sunday Morning Slides",
-        "remaining": "15",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-luki63efz02t74.webp",
-        "manufacturer_id": "10"
-      },
-      {
-        "price": "390.00",
-        "status_id": "10",
-        "product_name": "Second Sunday Evening Slides",
-        "remaining": "60",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7qukw-lezuznvaotca87.webp",
-        "manufacturer_id": "8"
-      },
-      {
-        "price": "235.00",
-        "status_id": "12",
-        "product_name": "Denis MA1-17344-9",
-        "remaining": "44",
-        "img": "https://down-vn.img.susercontent.com/file/sg-11134301-7rdyr-lz5sd5emq6aq36.webp",
-        "manufacturer_id": "4"
-      },
-      {
-        "price": "368.00",
-        "status_id": "12",
-        "product_name": " Oxford PEALO form Relax Cotton",
-        "remaining": "84",
-        "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m0mttjew93hp1e.webp",
-        "manufacturer_id": "3"
-      }
-    ]
+  {
+    "price": "239.00",
+    "status_id": "6",
+    "product_name": "Oxford Shirt",
+    "remaining": "85",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134201-23030-5he25khysiov72.webp",
+    "manufacturer_id": "3",
+    "description": "A classic Oxford shirt offering a versatile and timeless style. Perfect for professional settings or casual outings, it combines a crisp design with premium fabric for all-day comfort."
+  },
+  {
+    "price": "137.00",
+    "status_id": "12",
+    "product_name": "Cotton Silas Shirt",
+    "remaining": "10",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lxzbufyvwpuj05.webp",
+    "manufacturer_id": "3",
+    "description": "Lightweight and breathable Cotton Silas Shirt crafted from soft, high-quality fabric. Its relaxed fit and simple design make it a go-to choice for warm days and casual outings."
+  },
+  {
+    "price": "737.00",
+    "status_id": "11",
+    "product_name": "SL SILAS Shirt",
+    "remaining": "70",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lzfzrlkds1b5fd.webp",
+    "manufacturer_id": "2",
+    "description": "Premium SL SILAS Shirt featuring sleek craftsmanship and superior fabric. This sophisticated piece is designed for those who value refined elegance and high-end fashion."
+  },
+  {
+    "price": "695.00",
+    "status_id": "14",
+    "product_name": "SL SILAS Shirt",
+    "remaining": "99",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lzfzrlkduu6l6c.webp",
+    "manufacturer_id": "7",
+    "description": "Luxurious SL SILAS Shirt blending impeccable design with premium materials. This timeless piece enhances your wardrobe with a contemporary and sophisticated appeal."
+  },
+  {
+    "price": "276.00",
+    "status_id": "3",
+    "product_name": "PEALO POLO",
+    "remaining": "76",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m0mx0tgh5zf303.webp",
+    "manufacturer_id": "5",
+    "description": "Classic PEALO POLO combining sporty and casual styles. With its comfortable fit and stylish collar, it's ideal for weekend outings or relaxed gatherings."
+  },
+  {
+    "price": "139.00",
+    "status_id": "12",
+    "product_name": "Unisex T-Shirt",
+    "remaining": "38",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lp93sepxbr6638.webp",
+    "manufacturer_id": "11",
+    "description": "Versatile unisex T-shirt made from soft, durable fabric. It offers a relaxed fit for all body types and effortless style for casual occasions."
+  },
+  {
+    "price": "296.00",
+    "status_id": "7",
+    "product_name": "PEALO Hoodie",
+    "remaining": "94",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lphtf70lx645c1.webp",
+    "manufacturer_id": "6",
+    "description": "Cozy PEALO Hoodie with a soft lining for warmth and comfort. Perfect for cool evenings, casual outings, or lounging at home."
+  },
+  {
+    "price": "107.00",
+    "status_id": "2",
+    "product_name": "Sport T-Shirt",
+    "remaining": "32",
+    "img": "https://down-vn.img.susercontent.com/file/sg-11134201-23020-u4xbqcunhbnv26.webp",
+    "manufacturer_id": "4",
+    "description": "High-performance Sport T-Shirt with moisture-wicking fabric. Lightweight and comfortable, it’s perfect for workouts and active lifestyles."
+  },
+  {
+    "price": "673.00",
+    "status_id": "12",
+    "product_name": "PEALO Sweater",
+    "remaining": "41",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m0msumxsy8z1a3.webp",
+    "manufacturer_id": "1",
+    "description": "Luxurious PEALO Sweater combining warmth and style. Made from premium materials, it’s a sophisticated choice for cold weather."
+  },
+  {
+    "price": "717.00",
+    "status_id": "10",
+    "product_name": "PEALO Unisex Jean",
+    "remaining": "55",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lvj21gfhn43x70.webp",
+    "manufacturer_id": "12",
+    "description": "Versatile PEALO Unisex Jean with a modern cut and high-quality denim. These jeans offer a perfect fit for all occasions."
+  },
+  {
+    "price": "383.00",
+    "status_id": "7",
+    "product_name": "PEALO Cardigan",
+    "remaining": "73",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m0o0evntdhn35c.webp",
+    "manufacturer_id": "4",
+    "description": "Elegant PEALO Cardigan with a sophisticated style. Perfect for layering, it provides warmth and a touch of refinement."
+  },
+  {
+    "price": "452.00",
+    "status_id": "5",
+    "product_name": "Set Denim on Denim B Brown",
+    "remaining": "12",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m14ak4x0j4or1b.webp",
+    "manufacturer_id": "1",
+    "description": "Trendy Denim on Denim Set in a rich brown palette. This stylish outfit provides a modern take on classic denim looks."
+  },
+  {
+    "price": "344.00",
+    "status_id": "6",
+    "product_name": "Set Denim - Dark Indigo",
+    "remaining": "10",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m14akdhjzlve19.webp",
+    "manufacturer_id": "4",
+    "description": "Sleek Denim Set in a Dark Indigo shade. A polished and comfortable choice for casual or semi-formal outings."
+  },
+  {
+    "price": "200.00",
+    "status_id": "15",
+    "product_name": "Haven Jeans",
+    "remaining": "38",
+    "img": "https://down-vn.img.susercontent.com/file/sg-11134201-7rblr-loz955bx7xmb3e.webp",
+    "manufacturer_id": "6",
+    "description": "Comfortable Haven Jeans with a flattering fit. Perfect for day-to-night wear, these jeans balance stretch and structure."
+  },
+  {
+    "price": "402.00",
+    "status_id": "5",
+    "product_name": "Haven Black Jeans",
+    "remaining": "36",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m1wjd23z7zv702.webp",
+    "manufacturer_id": "3",
+    "description": "Classic Haven Black Jeans with a sleek, modern fit. These jeans offer timeless style for any occasion."
+  },
+  {
+    "price": "576.00",
+    "status_id": "4",
+    "product_name": "Karley Leather Jacket",
+    "remaining": "72",
+    "img": "https://down-vn.img.susercontent.com/file/ea5037a49e41e3463b27367bdbe66d72.webp",
+    "manufacturer_id": "6",
+    "description": "Iconic Karley Leather Jacket crafted from premium leather. This standout piece blends edgy style with timeless cool."
+  },
+  {
+    "price": "288.00",
+    "status_id": "13",
+    "product_name": "GAT Shoes Second Sunday White Wind",
+    "remaining": "54",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m1pgjd5h977jb0.webp",
+    "manufacturer_id": "1",
+    "description": "Stylish GAT Shoes in a White Wind colorway. These shoes feature a minimalist design that complements various outfits."
+  },
+  {
+    "price": "555.00",
+    "status_id": "9",
+    "product_name": "Sunday Morning Slides",
+    "remaining": "15",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-luki63efz02t74.webp",
+    "manufacturer_id": "10",
+    "description": "Relaxed Sunday Morning Slides with a cushioned design. Ideal for casual weekends or lounging at home."
+  },
+  {
+    "price": "390.00",
+    "status_id": "10",
+    "product_name": "Second Sunday Evening Slides",
+    "remaining": "60",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7qukw-lezuznvaotca87.webp",
+    "manufacturer_id": "8",
+    "description": "Elegant Second Sunday Evening Slides with a refined look. Perfect for relaxed evening gatherings or casual outings."
+  },
+  {
+    "price": "235.00",
+    "status_id": "12",
+    "product_name": "Denis MA1-17344-9",
+    "remaining": "44",
+    "img": "https://down-vn.img.susercontent.com/file/sg-11134301-7rdyr-lz5sd5emq6aq36.webp",
+    "manufacturer_id": "4",
+    "description": "Versatile Denis MA1-17344-9 with a unique design. This contemporary piece is perfect for a distinctive wardrobe."
+  },
+  {
+    "price": "368.00",
+    "status_id": "12",
+    "product_name": "Oxford PEALO form Relax Cotton",
+    "remaining": "84",
+    "img": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m0mttjew93hp1e.webp",
+    "manufacturer_id": "3",
+    "description": "Comfortable Oxford PEALO Shirt made from Relax Cotton. A classic design with modern comfort for daily wear."
+  }
+]
