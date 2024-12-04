@@ -71,6 +71,18 @@
     line-height: 25px;
 }
 
+.cart-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #088178;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    transition: opacity 0.3s;
+}
+
 /* ********* Related products ************ */
 
 #related-products {

@@ -1,5 +1,5 @@
 const passport = require('passport');
-const authService = require('../service/authService');
+const authService = require('../services/authService');
 
 exports.getRegister = (req, res) => {
     res.render('register/register', {

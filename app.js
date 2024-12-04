@@ -113,21 +113,21 @@ const authMiddleware = (req, res, next) => {
 
 app.use(authMiddleware);
 
-const homeRoutes = require('./routes/homeRoutes');
+const homeRoutes = require('./home/routes/homeRoutes.js');
 app.use('/', homeRoutes);
-const shopRoutes = require('./routes/shopRoutes');
+const shopRoutes = require('./shop/routes/shopRoutes.js');
 app.use('/shop', shopRoutes);
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('./authentication/routes/authRoutes.js');
 app.use('/auth', authRoutes);
-const cartRoutes = require('./cart/route/cartRoutes');
+const cartRoutes = require('./cart/routes/cartRoutes.js');
 app.use('/cart', cartRoutes);
 
 const orderRoutes = require('./order/routes/orderRoutes.js')
 app.use('/order',orderRoutes)
-const productController = require('./controllers/productController.js')
+const productController = require('./shop/controllers/productController.js')
 app.get('/products/partial',productController.getProducts)
 
-const productRoutes = require('./routes/productRoutes')
+const productRoutes = require('./shop/routes/productRoutes.js')
 app.use('/products',productRoutes)
 
 // Static routes
