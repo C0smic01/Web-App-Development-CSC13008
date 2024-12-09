@@ -75,10 +75,14 @@ const getAllProducts= async(query)=> {
         if (query.status_id) {
             filterConditions['status_id'] = query.status_id;
         }
-        const limit = query.limit ? Math.min(parseInt(query.limit, 10), 15) : 15 
-        const products = await Product.findAll({
+        const page = query.page ? parseInt(query.page, 9) : 1;
+        const limit = query.limit ? Math.min(parseInt(query.limit, 9), 9) : 9
+        const offset = (page - 1) * limit;
+
+        const {count, rows: products} = await Product.findAndCountAll({
             where: filterConditions, 
             limit: limit,
+            offset: offset,
             include: [{
                 model: Category,
                 as: 'categories',
@@ -89,7 +93,12 @@ const getAllProducts= async(query)=> {
             subQuery: false
         });
 
-        return products.map(p=>p.get({ plain: true }));
+        return {
+            products: products.map(p => p.get({ plain: true })),
+            currentPage: page,
+            totalPage: Math.ceil(count / limit)
+        };
+
     } catch (error) {
         console.error(error);
         throw new Error('Error filtering products');
@@ -110,14 +119,12 @@ const getRelatedProducts = async(currentProductId, queryStr = {}) => {
             throw new AppError('Current product not found', 404);
         }
 
-        // Get category IDs of the current product
         const categoryIds = currentProduct.categories.map(cat => cat.category_id);
 
-        // Find related products
         const relatedProducts = await Product.findAll({
             where: {
                 product_id: {
-                    [Sequelize.Op.ne]: currentProductId // Exclude current product
+                    [Sequelize.Op.ne]: currentProductId
                 }
             },
             include: [{
@@ -125,14 +132,13 @@ const getRelatedProducts = async(currentProductId, queryStr = {}) => {
                 through: { attributes: [] },
                 as: 'categories',
                 where: {
-                    category_id: categoryIds // Match at least one category
+                    category_id: categoryIds 
                 }
             }],
             limit: queryStr.limit || 3,
             order: sequelize.random()
         });
 
-        // If not enough related products, fetch additional random products
         if (relatedProducts.length < (queryStr.limit || 3)) {
             const additionalProducts = await Product.findAll({
                 where: {

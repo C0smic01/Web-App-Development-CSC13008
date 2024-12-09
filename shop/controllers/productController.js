@@ -8,11 +8,11 @@ const statusService = require('../services/statusService')
 exports.getShop = async(req, res,next) => {
     try{
         
-        const products = await productService.getAllProducts(req.query)
+        const {products, currentPage, totalPage} = await productService.getAllProducts(req.query)
         const categories = await categoryService.getAllCategories(req.query)
         const manufacturers = await manufacturerService.getAllManufacturers(req.query)
         const productStatus = await statusService.getProductStatus(req.query)
-        res.render('shop/shop',{products,categories,manufacturers,productStatus});
+        res.render('shop/shop',{products,categories,manufacturers,productStatus,currentPage,totalPage});
 
     }catch(e)
     {
@@ -22,7 +22,7 @@ exports.getShop = async(req, res,next) => {
 exports.getProducts = async(req, res,next) => {
     try{
         
-        const products = await productService.getAllProducts(req.query)
+        const {products, currentPage, totalPage} = await productService.getAllProducts(req.query)
         const productHtml = await new Promise((resolve, reject) => {
             res.app.render('product/productList', { products }, (err, html) => {
                 if (err) {
@@ -31,8 +31,8 @@ exports.getProducts = async(req, res,next) => {
                 resolve(html); 
             });
         });
-        res.json({ productHtml }); 
-    }catch(e)
+        res.json({ productHtml, currentPage, totalPage });
+    } catch(e)
     {
         next(e);
     }

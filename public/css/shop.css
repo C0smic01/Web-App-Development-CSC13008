@@ -23,7 +23,7 @@
     padding-top: 0;
 }
 
-#pagination a{
+#pagination button.page-btn {
     text-decoration: none;
     background-color: #e8f6ea;
     padding: 15px 20px;
@@ -33,17 +33,17 @@
     line-height: 40px;
     font-size: 600;
     font-weight: 600;
-}
-
-#pagination a:hover{
+  }
+  
+  #pagination button.page-btn:hover {
     background-color: #088178;
     color: #e8f6ea;
-}
-
-#pagination a i{
-    font-size: 16px;
-    font-weight: 600;
-}
+  }
+  
+  #pagination button.page-btn.active {
+    background-color: #088178;
+    color: #e8f6ea;
+  }
 
 
 .pro {
