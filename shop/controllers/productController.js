@@ -8,21 +8,22 @@ const statusService = require('../services/statusService')
 exports.getShop = async(req, res,next) => {
     try{
         
-        const products = await productService.getAllProducts(req.query)
+        const {products, currentPage, totalPage} = await productService.getAllProducts(req.query)
         const categories = await categoryService.getAllCategories(req.query)
         const manufacturers = await manufacturerService.getAllManufacturers(req.query)
         const productStatus = await statusService.getProductStatus(req.query)
-        res.render('shop/shop',{products,categories,manufacturers,productStatus});
+        res.render('shop/shop',{products,categories,manufacturers,productStatus,currentPage,totalPage});
 
     }catch(e)
     {
         next(e);
     }
 };
+
 exports.getProducts = async(req, res,next) => {
     try{
         
-        const products = await productService.getAllProducts(req.query)
+        const {products, currentPage, totalPage} = await productService.getAllProducts(req.query)
         const productHtml = await new Promise((resolve, reject) => {
             res.app.render('product/productList', { products }, (err, html) => {
                 if (err) {
@@ -31,8 +32,8 @@ exports.getProducts = async(req, res,next) => {
                 resolve(html); 
             });
         });
-        res.json({ productHtml }); 
-    }catch(e)
+        res.json({ productHtml, currentPage, totalPage });
+    } catch(e)
     {
         next(e);
     }
@@ -50,3 +51,24 @@ exports.getProductDetails = async(req,res,next)=>{
     }
 
 }
+
+exports.getProductsJSON = async(req, res, next) => {
+    try {
+        const {products, currentPage, totalPage} = await productService.getAllProducts(req.query)
+        res.json(
+            products.map(product => ({
+                product_id: product.product_id,
+                product_name: product.product_name,
+                price: product.price,
+                img: product.img,
+                remaining: product.remaining,
+                description: product.description,
+                status_id: product.status_id,
+                manufacturer_id: product.manufacturer_id,
+                categories: product.categories.map(cat => cat.category_name),
+            }))
+        );
+    } catch(e) {
+        next(e);
+    }
+};
