@@ -23,7 +23,7 @@
     padding-top: 0;
 }
 
-#pagination button.page-btn {
+#pagination button {
     text-decoration: none;
     background-color: #e8f6ea;
     padding: 15px 20px;
@@ -35,16 +35,22 @@
     font-weight: 600;
   }
   
-  #pagination button.page-btn:hover {
+  #pagination button:hover {
     background-color: #088178;
     color: #e8f6ea;
   }
   
-  #pagination button.page-btn.active {
+  #pagination button.active {
     background-color: #088178;
     color: #e8f6ea;
   }
 
+    #pagination button.fa-arrow-left:disabled,
+    #pagination button.fa-arrow-right:disabled {
+        background-color: #f2f2f2;
+        color: #ccc;
+        cursor: not-allowed;
+    }
 
 .pro {
     background-color: #fff; 

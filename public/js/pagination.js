@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const productList = document.getElementById('product-list');
     const paginationSection = document.getElementById('pagination');
 
-    function updatePaginationButtons(currentPage, totalPages) {
+    function updatePaginationButtons(currentPage, totalPage) {
         const prevButton = document.getElementById('prev-page');
         const nextButton = document.getElementById('next-page');
         const pageButtons = document.querySelectorAll('.page-btn');
@@ -32,14 +32,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (nextButton) 
         {
-            if (currentPage < totalPages) 
+            if (currentPage < totalPage) 
             {
                 nextButton.dataset.page = currentPage + 1;
                 nextButton.disabled = false;
             }
             else 
             {
-                nextButton.dataset.page = totalPages;
+                nextButton.dataset.page = totalPage;
                 nextButton.disabled = true;
             }
         }
@@ -68,9 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             productList.innerHTML = data.productHtml;
-            
+        
             // Update pagination
-            updatePaginationButtons(data.currentPage, data.totalPages);
+            updatePaginationButtons(data.currentPage, data.totalPage);
 
             // Update URL without page reload
             window.history.pushState(
@@ -85,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Event delegation for pagination
     paginationSection.addEventListener('click', (e) => {
+        console.log('Pagination click detected', e.target);
         const pageBtn = e.target.closest('.page-btn, #prev-page, #next-page');
         if (pageBtn && !pageBtn.disabled) {
             const page = pageBtn.dataset.page;
