@@ -54,7 +54,7 @@ exports.getProductDetails = async(req,res,next)=>{
 
 exports.getProductsJSON = async(req, res, next) => {
     try {
-        const {products, currentPage, totalPage} = await productService.getAllProducts(req.query)
+        const products = await productService.getAllProductsJson(req.query)
         res.json(
             products.map(product => ({
                 product_id: product.product_id,

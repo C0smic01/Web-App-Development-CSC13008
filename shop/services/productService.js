@@ -166,4 +166,21 @@ const getRelatedProducts = async(currentProductId, queryStr = {}) => {
     }
 };
 
-module.exports = { getAllProducts, getProductById, getRelatedProducts };
+const getAllProductsJson = async () => {
+    try {
+        let products = await Product.findAll({
+            include: [{
+                model: Category,
+                as: 'categories',
+                through: { attributes: [] }
+            }]
+        });
+
+        return products
+    } catch (e) {
+        console.error('Error fetching products:', e);
+        throw new AppError('Cannot get all products, error: ' + e.message, 404);
+    }
+};
+
+module.exports = { getAllProducts, getProductById, getRelatedProducts, getAllProductsJson };
