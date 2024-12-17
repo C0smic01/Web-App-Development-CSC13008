@@ -38,7 +38,19 @@ module.exports = (sequelize,DataTypes)=>{
         updated_at: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
-        }
+        },
+        is_verified: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        passwordResetToken: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        passwordResetExpires: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
     }, {
         timestamps: true, 
         createdAt: 'created_at',
