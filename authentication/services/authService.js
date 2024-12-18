@@ -105,6 +105,13 @@ class AuthService {
                 };
             }
 
+            else if (!user.is_verified) {
+                return {
+                    success: false,
+                    message: 'Email not verified'
+                };
+            }
+
             EmailSender.sendEmail(user, host, 'passwordReset');
             
             return {
