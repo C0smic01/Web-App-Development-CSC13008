@@ -88,7 +88,6 @@ const getAllProducts= async(query)=> {
                 as: 'categories',
                 required: false,
                 through: { attributes: [] }
-
             }],
             subQuery: false
         });

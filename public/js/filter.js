@@ -1,6 +1,5 @@
 const toggleButtons = document.querySelectorAll(".toggle-section");
 
-// Handle toggle hidden sections when clicking on the title
 toggleButtons.forEach((button) => {
   let isClicked = false;
 
@@ -42,12 +41,10 @@ const fetchData = (page = 1) => {
   const currentUrl = new URL(window.location.href);
   const params = new URLSearchParams();
 
-  // Always set the page parameter
   params.set('page', page);
 
   const filters = document.querySelectorAll(".filter");
 
-  // Foreach checkboxes
   filters.forEach((filter) => {
     if (filter.classList.contains("selected")) {
       const [key, value] = filter.dataset.query.split('=');
@@ -57,7 +54,6 @@ const fetchData = (page = 1) => {
     }
   });
 
-  // Concat the price's query
   const priceInputs = document.querySelectorAll(".price-filter");
   priceInputs.forEach((input) => {
     const name = input.name;
@@ -67,7 +63,6 @@ const fetchData = (page = 1) => {
     }
   });
 
-  // Concat the search's query
   const searchInput = document.querySelector("#search-input");
   if (searchInput.value) {
     params.set(searchInput.name, searchInput.value)
@@ -84,11 +79,9 @@ const fetchData = (page = 1) => {
       if (data.productHtml) {
         document.querySelector("#product-list").innerHTML = data.productHtml;
         
-        // Update pagination section
         const paginationSection = document.getElementById('pagination');
         paginationSection.innerHTML = data.paginationHtml;
 
-        // Update pagination event listeners
         attachPaginationListeners();
       }
       
@@ -100,7 +93,6 @@ const fetchData = (page = 1) => {
     });
 };
 
-// Function to attach pagination event listeners
 const attachPaginationListeners = () => {
   const paginationSection = document.getElementById('pagination');
   
@@ -114,7 +106,6 @@ const attachPaginationListeners = () => {
   });
 };
 
-// Handle price filter when input
 const priceInputs = document.querySelectorAll(".price-filter");
 priceInputs.forEach((input) => {
   input.addEventListener("change", () => {
@@ -122,7 +113,6 @@ priceInputs.forEach((input) => {
   });
 });
 
-// Handle filter when click on checkbox
 const checkboxes = document.querySelectorAll(".check-box");
 checkboxes.forEach((checkbox) => {
   checkbox.addEventListener("click", () => {
@@ -151,7 +141,6 @@ checkboxes.forEach((checkbox) => {
   });
 });
 
-// Handle when clicking search button
 document.querySelector(".search-btn").addEventListener("click", () => {
   const searchBar = document.querySelector("#search-input");
   if (searchBar.value) {
@@ -159,5 +148,14 @@ document.querySelector(".search-btn").addEventListener("click", () => {
   }
 });
 
-// Initial pagination listener attachment
+document.querySelector("#search-input").addEventListener("keypress", (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault(); 
+    const searchBar = document.querySelector("#search-input");
+    if (searchBar.value) {
+      fetchData();
+    }
+  }
+});
+
 document.addEventListener('DOMContentLoaded', attachPaginationListeners);
