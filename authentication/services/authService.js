@@ -2,8 +2,8 @@ const models = require('../../index');
 const User = models.User;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const transporter = require('../../config/email');
 const dotenv = require('dotenv')
+const EmailSender = require('../../utils/EmailSender');
 
 dotenv.config({path:'../config.env'})
 
@@ -28,15 +28,54 @@ class AuthService {
                 password: userData.password
             });
 
+            EmailSender.sendEmail(user, userData.host, 'emailVerification');
+
             return {
                 success: true,
-                message: 'Registration successful',
+                message: 'Registration successful. Please check your email to verify your account.',
                 user
             };
 
         } catch (error) {
             console.error('Service - Registration error:', error);
             throw error;
+        }
+    }
+
+    async verifyEmail(emailVerificationToken) {
+        try {
+            const decodedToken = jwt.verify(emailVerificationToken, process.env.JWT_SECRET);
+            const user = await User.findOne({where: {user_id: decodedToken.user_id, token: emailVerificationToken}});
+
+            if (!user) {
+                return {
+                    success: false,
+                    message: 'Incorrect verification link. Please request a new one.'
+                };
+            }
+
+            if (Date.now() > user.token_expired_at) {
+                return {
+                    success: false,
+                    message: 'Verification link has expired. Please request a new one.'
+                };
+            }
+
+            user.is_verified = true;
+            user.token = null;
+            user.token_expired_at = null;
+            await user.save();
+
+            return {
+                success: true,
+                message: 'Email verified successfully'
+            };
+        } catch (error) {
+            console.error('Email verification error:', error);
+            return {
+                success: false,
+                message: 'Incorrect verification link. Please request a new one'
+            };
         }
     }
 
@@ -62,27 +101,12 @@ class AuthService {
             if (!user) {
                 return {
                     success: false,
-                    message: 'User not found'
+                    message: 'User not found with this email'
                 };
             }
 
-            const token = jwt.sign({user_id: user.user_id}, process.env.JWT_SECRET);
-            user.passwordResetToken = token;
-            user.passwordResetExpires = Date.now() + 3600000;
-            await user.save();
-
-            const resetUrl = `http://${host}/auth/reset-password?token=${token}`;
-            const mailOptions = {
-                from: process.env.EMAIL_USER,
-                to: user.email,
-                subject: 'Password Reset Request',
-                html: `
-                <p>You requested a password reset. Click the link below to reset your password:</p>
-                <a href="${resetUrl}">${resetUrl}</a>
-              `,
-            };
-
-            await transporter.sendMail(mailOptions);
+            EmailSender.sendEmail(user, host, 'passwordReset');
+            
             return {
                 success: true,
                 message: 'Password reset email sent'
@@ -97,17 +121,17 @@ class AuthService {
         }
     }
 
-    async validateResetToken(token) {
+    async validateResetToken(passwordResetToken) {
         try {
-            const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-            const user = await User.findOne({where: {user_id: decodedToken.user_id, passwordResetToken: token}});
+            const decodedToken = jwt.verify(passwordResetToken, process.env.JWT_SECRET);
+            const user = await User.findOne({where: {user_id: decodedToken.user_id, token: passwordResetToken}});
             if (!user) {
                 return {
                     success: false,
                     message: 'Incorrect reset link. Please request a new one.'
                 };
             }
-            else if (user.passwordResetExpires < Date.now()) {
+            else if (user.token_expired_at < Date.now()) {
                 return {
                     success: false,
                     message: 'Reset link has expired. Please request a new one.'
@@ -127,13 +151,13 @@ class AuthService {
         }
     };
 
-    async resetPassword(token, password) {
+    async resetPassword(passwordResetToken, password) {
         try {
-            const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+            const decodedToken = jwt.verify(passwordResetToken, process.env.JWT_SECRET);
             const user = await User.findOne({
                 where: { 
                     user_id: decodedToken.user_id, 
-                    passwordResetToken: token
+                    token: passwordResetToken
                 }
             });
 
@@ -144,7 +168,7 @@ class AuthService {
                 };
             }
 
-            if (Date.now() > user.passwordResetExpires) 
+            if (Date.now() > user.token_expired_at) 
             {
                 return {
                     success: false,
@@ -162,8 +186,8 @@ class AuthService {
             }
 
             user.password = password;
-            user.passwordResetToken = null;
-            user.passwordResetExpires = null;
+            user.token = null;
+            user.token_expired_at = null;
             await user.save();
 
             return {
@@ -175,7 +199,7 @@ class AuthService {
             console.error('Reset password error:', error);
             return {
                 success: false,
-                message: 'Error resetting password'
+                message: 'Incorrect reset link. Please request a new one'
             };
         }
     }

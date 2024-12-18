@@ -43,11 +43,11 @@ module.exports = (sequelize,DataTypes)=>{
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
-        passwordResetToken: {
+        token: {
             type: DataTypes.STRING,
             allowNull: true,
         },
-        passwordResetExpires: {
+        token_expired_at: {
             type: DataTypes.DATE,
             allowNull: true,
         },

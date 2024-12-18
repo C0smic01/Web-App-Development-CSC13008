@@ -68,6 +68,10 @@
     background: #066557;
 }
 
+#register-form p {
+    margin: 8px 0;
+}
+
 #register-form p a {
     color: #088178;
     text-decoration: none;

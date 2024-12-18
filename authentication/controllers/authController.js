@@ -1,5 +1,6 @@
 const passport = require('passport');
 const authService = require('../services/authService');
+const EmailSender = require('../../utils/EmailSender');
 
 class authController {
     getRegister = (req, res) => {
@@ -15,19 +16,20 @@ class authController {
     postRegister = async(req, res, next) => {
         try {
             const { user_name, email, phone, password, confirm_password } = req.body;
+            const host = req.get('host');
 
             let errors = [];
 
             if (!user_name || !email || !password || !confirm_password) {
-                errors.push('All fields are required');
+                errors.push('All fields are required.');
             }
 
             if (password !== confirm_password) {
-                errors.push('Passwords do not match');
+                errors.push('Passwords do not match.');
             }
 
             if (password.length < 6) {
-                errors.push('Password must be at least 6 characters long');
+                errors.push('Password must be at least 6 characters long.');
             }
 
             if (errors.length > 0) {
@@ -44,7 +46,8 @@ class authController {
                 user_name,
                 email,
                 phone,
-                password
+                password,
+                host
             });
 
             if (!result.success) {
@@ -57,12 +60,12 @@ class authController {
                 });
             }
             
-            res.render('login/login', {
+            res.render('register/register', {
                 messages: {
                     error: [],
-                    success: ['Registration successful! Please log in to continue.']
+                    success: ['Registration successful! Please check your email to verify your account.']
                 },
-                formData: { email }
+                formData: { user_name, email, phone, password, confirm_password }
             });
 
         } catch (error) {
@@ -77,6 +80,45 @@ class authController {
                     email: req.body.email, 
                     phone: req.body.phone 
                 }
+            });
+        }
+    };
+
+    getVerifyEmail = async (req, res) => {
+        const { token } = req.query;
+
+        if (!token) {
+            return res.render('login/login', {
+                messages: {
+                    error: ['Invalid or missing verification token'],
+                },
+            });
+        }
+
+        try {
+            const result = await authService.verifyEmail(token);
+
+            if (!result.success) {
+                return res.render('login/login', {
+                    messages: {
+                        error: [result.message],
+                    },
+                });
+            }
+
+            return res.render('login/login', {
+                messages: {
+                    error: [],
+                    success: ['Email verified successfully! You can now log in.']
+                },
+            });
+
+        } catch (error) {
+            console.error('Email verification error:', error);
+            return res.render('login/login', {
+                messages: {
+                    error: ['An unexpected error occurred during email verification'],
+                },
             });
         }
     };
@@ -119,6 +161,16 @@ class authController {
                     messages: {
                         error: [info.message || 'Invalid email or password'],
                     },
+                });
+            }
+
+            if (!user.is_verified) {
+                EmailSender.sendEmail(user, req.get('host'), 'emailVerification');
+                return res.render('login/login', {
+                    messages: {
+                        error: ['Please check your email to verify your account before logging in.'],
+                    },
+                    formData: { email }
                 });
             }
 

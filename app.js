@@ -19,7 +19,7 @@ passport.use(new LocalStrategy({
     try {
         const user = await User.findOne({ 
             where: { email },
-            attributes: ['user_id', 'user_name', 'email', 'password']
+            attributes: ['user_id', 'user_name', 'email', 'password', 'is_verified', 'token', 'token_expired_at']
         });
 
         if (!user) {
