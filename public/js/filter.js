@@ -39,13 +39,24 @@ toggleButtons.forEach((button) => {
 
 // Fetch data via AJAX
 const fetchData = () => {
+
+  const currentUrl = new URL(window.location.href);
+  const params = new URLSearchParams();
+
+  if (currentUrl.searchParams.has('page')) {
+      params.set('page', currentUrl.searchParams.get('page'));
+  }
   const filters = document.querySelectorAll(".filter");
-  let queryString = "";
+  // let queryString = "";
 
   // Foreach checkboxes
   filters.forEach((filter) => {
     if (filter.classList.contains("selected")) {
-      queryString += filter.dataset.query + "&";
+      const [key, value] = filter.dataset.query.split('=');
+      // queryString += filter.dataset.query + "&";
+      if (key && value) {
+        params.set(key, value); 
+      }
     }
   });
 
@@ -55,18 +66,21 @@ const fetchData = () => {
     const name = input.name;
     const value = input.value;
     if (value) {
-      queryString += `${name}=${value}&`;
+      // queryString += `${name}=${value}&`;
+      params.set(name,value)
     }
   });
 
   // Concat the search's query
   const searchInput = document.querySelector("#search-input");
   if (searchInput.value) {
-    queryString += `${searchInput.name}=${searchInput.value}&`;
+    // queryString += `${searchInput.name}=${searchInput.value}&`;
+    params.set(searchInput.name,searchInput.value)
+
   }
 
-  queryString = queryString.slice(0, -1);
-  const response = fetch(`/products/partial?${queryString}`)
+  // queryString = queryString.slice(0, -1);
+  const response = fetch(`/products/partial?${params.toString()}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error("HTTP error! status: " + response.status);
@@ -77,6 +91,8 @@ const fetchData = () => {
       if (data.productHtml) {
         document.querySelector("#product-list").innerHTML = data.productHtml;
       }
+      const newUrl = `${currentUrl.origin}${currentUrl.pathname}?${params.toString()}`;
+      window.history.pushState(null, '', newUrl);    
     })
     .catch((error) => {
       console.error("Error:", error);
