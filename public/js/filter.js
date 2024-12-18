@@ -38,22 +38,19 @@ toggleButtons.forEach((button) => {
 });
 
 // Fetch data via AJAX
-const fetchData = () => {
-
+const fetchData = (page = 1) => {
   const currentUrl = new URL(window.location.href);
   const params = new URLSearchParams();
 
-  if (currentUrl.searchParams.has('page')) {
-      params.set('page', currentUrl.searchParams.get('page'));
-  }
+  // Always set the page parameter
+  params.set('page', page);
+
   const filters = document.querySelectorAll(".filter");
-  // let queryString = "";
 
   // Foreach checkboxes
   filters.forEach((filter) => {
     if (filter.classList.contains("selected")) {
       const [key, value] = filter.dataset.query.split('=');
-      // queryString += filter.dataset.query + "&";
       if (key && value) {
         params.set(key, value); 
       }
@@ -66,21 +63,17 @@ const fetchData = () => {
     const name = input.name;
     const value = input.value;
     if (value) {
-      // queryString += `${name}=${value}&`;
-      params.set(name,value)
+      params.set(name, value)
     }
   });
 
   // Concat the search's query
   const searchInput = document.querySelector("#search-input");
   if (searchInput.value) {
-    // queryString += `${searchInput.name}=${searchInput.value}&`;
-    params.set(searchInput.name,searchInput.value)
-
+    params.set(searchInput.name, searchInput.value)
   }
 
-  // queryString = queryString.slice(0, -1);
-  const response = fetch(`/products/partial?${params.toString()}`)
+  fetch(`/products/partial?${params.toString()}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error("HTTP error! status: " + response.status);
@@ -90,7 +83,15 @@ const fetchData = () => {
     .then((data) => {
       if (data.productHtml) {
         document.querySelector("#product-list").innerHTML = data.productHtml;
+        
+        // Update pagination section
+        const paginationSection = document.getElementById('pagination');
+        paginationSection.innerHTML = data.paginationHtml;
+
+        // Update pagination event listeners
+        attachPaginationListeners();
       }
+      
       const newUrl = `${currentUrl.origin}${currentUrl.pathname}?${params.toString()}`;
       window.history.pushState(null, '', newUrl);    
     })
@@ -99,8 +100,21 @@ const fetchData = () => {
     });
 };
 
-// Handle price filter when input
+// Function to attach pagination event listeners
+const attachPaginationListeners = () => {
+  const paginationSection = document.getElementById('pagination');
+  
+  paginationSection.querySelectorAll('.page-btn, #prev-page, #next-page').forEach(button => {
+    button.addEventListener('click', (e) => {
+      if (!button.disabled) {
+        const page = button.dataset.page;
+        fetchData(page);
+      }
+    });
+  });
+};
 
+// Handle price filter when input
 const priceInputs = document.querySelectorAll(".price-filter");
 priceInputs.forEach((input) => {
   input.addEventListener("change", () => {
@@ -109,7 +123,6 @@ priceInputs.forEach((input) => {
 });
 
 // Handle filter when click on checkbox
-
 const checkboxes = document.querySelectorAll(".check-box");
 checkboxes.forEach((checkbox) => {
   checkbox.addEventListener("click", () => {
@@ -145,3 +158,6 @@ document.querySelector(".search-btn").addEventListener("click", () => {
     fetchData();
   }
 });
+
+// Initial pagination listener attachment
+document.addEventListener('DOMContentLoaded', attachPaginationListeners);

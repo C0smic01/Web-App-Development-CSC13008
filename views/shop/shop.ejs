@@ -177,23 +177,8 @@
 
     <!-- Slider Page Icon -->
     <section id="pagination" class="section-p1">
-      <% if (currentPage > 1) { %>
-        <button id="prev-page" class="fa-solid fa-arrow-left" data-page="<%= currentPage - 1 %>"></button>
-      <% } else { %>
-        <button id="prev-page" class="fa-solid fa-arrow-left" data-page="1" disabled></button>
-      <% } %>
-      
-      <% for (let i = 1; i <= totalPage; i++) { %>
-          <button class="page-btn <% if (currentPage === i) { %>active<% } %>" 
-                  data-page="<%= i %>"><%= i %></button>
-      <% } %>
-      
-      <% if (currentPage < totalPage) { %>
-        <button id="next-page" class="fa-solid fa-arrow-right" data-page="<%= currentPage + 1 %>"></button>
-      <% } else { %>
-        <button id="next-page" class="fa-solid fa-arrow-right" data-page="<%= totalPage %>" disabled></button>
-      <% } %>
-    </section>  
+      <%- include('./pagination', {currentPage, totalPage}) %>
+    </section>
 
     <script src="/js/pagination.js"></script>
 
