@@ -156,7 +156,6 @@ class authController {
             }
 
             if (!user) {
-                console.log('Login failed: ', info.message); 
                 return res.render('login/login', {
                     messages: {
                         error: [info.message || 'Invalid email or password'],
@@ -174,7 +173,6 @@ class authController {
                 });
             }
 
-            // Log in the user
             req.logIn(user, (err) => {
                 if (err) {
                     console.error('Error during session login: ', err)
@@ -197,6 +195,47 @@ class authController {
         })(req, res, next);
     };
 
+    getGoogleAuth = (req, res, next) => {
+        passport.authenticate('google', {
+            scope: ['profile', 'email']
+        })(req, res, next);
+    };
+    
+    handleGoogleCallback = (req, res, next) => {
+        passport.authenticate('google', {
+            failureRedirect: '/auth/login',
+            failureFlash: true,
+            session: true 
+        }, (err, user, info) => {
+            if (err) { 
+                return next(err); 
+            }
+            if (!user) { 
+                return res.redirect('/auth/login'); 
+            }
+    
+            req.logIn(user, (err) => {
+                if (err) { 
+                    return next(err); 
+                }
+                
+                req.session.save((err) => {
+                    if (err) {
+                        console.error('Session save error:', err);
+                        return next(err);
+                    }
+                    
+                    if (req.session.returnTo) {
+                        const returnTo = req.session.returnTo;
+                        delete req.session.returnTo;
+                        return res.redirect(returnTo);
+                    }
+                    
+                    return res.redirect('/');
+                });
+            });
+        })(req, res, next);
+    };
 
     getAuthStatus = (req,res,next) => {
         if (req.isAuthenticated()) {

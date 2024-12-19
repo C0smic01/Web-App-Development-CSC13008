@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const app = express();
 const path = require("path");
 const expressLayouts = require('express-ejs-layouts');
@@ -34,6 +35,34 @@ passport.use(new LocalStrategy({
         return done(null, user);
     } catch (error) {
         return done(error);
+    }
+}));
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "/auth/google/callback",
+    passReqToCallback: true
+}, async (req, accessToken, refreshToken, profile, done) => {
+    try {
+        const existingUser = await User.findOne({
+            where: { email: profile.emails[0].value }
+        });
+
+        if (existingUser) {
+            return done(null, existingUser);
+        }
+
+        const newUser = await User.create({
+            user_name: profile.name.familyName + ' ' + profile.name.givenName,
+            email: profile.emails[0].value,
+            password: Math.random().toString(36).slice(-8),
+            is_verified: true
+        });
+
+        return done(null, newUser);
+    } catch (error) {
+        return done(error, null);
     }
 }));
 
@@ -70,7 +99,7 @@ app.use(session({
         secure: false,
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
-        sameSite: 'strict'
+        sameSite: 'lax'
     }
 }));
 
@@ -80,7 +109,6 @@ app.use(passport.session());
 
 app.use((req, res, next) => {
     res.locals.user = req.user || null; 
-
     next();
 });
 
