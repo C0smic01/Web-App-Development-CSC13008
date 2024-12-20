@@ -42,6 +42,23 @@ class AuthService {
         }
     }
 
+    async verifyUserByGoogleAuth(user) {
+        try {
+            user.is_verified = true;
+            user.token = null;
+            user.token_expired_at = null;
+            await user.save();
+
+            return {
+                success: true,
+                message: 'User verified successfully via Google authentication'
+            };
+        } catch (error) {
+            console.error('Google auth verification error:', error);
+            throw error;
+        }
+    }
+
     async verifyEmail(emailVerificationToken) {
         try {
             const decodedToken = jwt.verify(emailVerificationToken, process.env.JWT_SECRET);

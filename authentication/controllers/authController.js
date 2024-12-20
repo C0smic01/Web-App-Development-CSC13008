@@ -206,7 +206,7 @@ class authController {
             failureRedirect: '/auth/login',
             failureFlash: true,
             session: true 
-        }, (err, user, info) => {
+        }, async (err, user, info) => {
             if (err) { 
                 return next(err); 
             }
@@ -214,26 +214,35 @@ class authController {
                 return res.redirect('/auth/login'); 
             }
     
-            req.logIn(user, (err) => {
-                if (err) { 
-                    return next(err); 
+            try {
+                if (user && !user.is_verified) {
+                    await authService.verifyUserByGoogleAuth(user);
                 }
-                
-                req.session.save((err) => {
-                    if (err) {
-                        console.error('Session save error:', err);
-                        return next(err);
+
+                req.logIn(user, (err) => {
+                    if (err) { 
+                        return next(err); 
                     }
                     
-                    if (req.session.returnTo) {
-                        const returnTo = req.session.returnTo;
-                        delete req.session.returnTo;
-                        return res.redirect(returnTo);
-                    }
-                    
-                    return res.redirect('/');
+                    req.session.save((err) => {
+                        if (err) {
+                            console.error('Session save error:', err);
+                            return next(err);
+                        }
+                        
+                        if (req.session.returnTo) {
+                            const returnTo = req.session.returnTo;
+                            delete req.session.returnTo;
+                            return res.redirect(returnTo);
+                        }
+                        
+                        return res.redirect('/');
+                    });
                 });
-            });
+            } catch (error) {
+                console.error('Google authentication error:', error);
+                return res.redirect('/auth/login');
+            }
         })(req, res, next);
     };
 
