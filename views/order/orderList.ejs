@@ -14,10 +14,11 @@
                 <thead class="bg-gray-200">
                     <tr>
                         <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Order ID</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Customer</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Total</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Payment Method</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Payment Status</th>
+
                         <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Products</th>
                     </tr>
                 </thead>
@@ -27,128 +28,7 @@
                             <%- include('orderItem',{order}) %> 
                         <% }) %>
                         <% } %>
-                    <!-- <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-4 whitespace-nowrap">#1234</td>
-                        <td class="px-4 py-4">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0 h-10 w-10">
-                                    <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80" alt="John Doe">
-                                </div>
-                                <div class="ml-4">
-                                    <div class="text-sm font-medium text-gray-900">John Doe</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-4 py-4 whitespace-nowrap">Sept 28, 2023</td>
-                        <td class="px-4 py-4 whitespace-nowrap">$120.00</td>
-                        <td class="px-4 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Shipped
-                            </span>
-                        </td>
-                        <td class="px-4 py-4 whitespace-nowrap">
-                            <button class="text-blue-600 hover:text-blue-800 focus:outline-none" onclick="toggleProducts('products-1234')">
-                                View Products
-                            </button>
-                        </td>
-                    </tr>
-                    <tr id="products-1234" class="hidden bg-gray-50">
-                        <td colspan="6" class="px-4 py-4">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-100">
-                                    <tr>
-                                        <th class="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Image</th>
-                                        <th class="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Product Name</th>
-                                        <th class="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Price</th>
-                                        <th class="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Quantity</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-4 py-2 whitespace-nowrap">
-                                            <img src="/placeholder.svg?height=50&width=50" alt="Product A" class="h-12 w-12 object-cover rounded">
-                                        </td>
-                                        <td class="px-4 py-2 whitespace-nowrap">Product A</td>
-                                        <td class="px-4 py-2 whitespace-nowrap">$50.00</td>
-                                        <td class="px-4 py-2 whitespace-nowrap">2</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 whitespace-nowrap">
-                                            <img src="/placeholder.svg?height=50&width=50" alt="Product B" class="h-12 w-12 object-cover rounded">
-                                        </td>
-                                        <td class="px-4 py-2 whitespace-nowrap">Product B</td>
-                                        <td class="px-4 py-2 whitespace-nowrap">$30.00</td>
-                                        <td class="px-4 py-2 whitespace-nowrap">1</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 whitespace-nowrap">
-                                            <img src="/placeholder.svg?height=50&width=50" alt="Product C" class="h-12 w-12 object-cover rounded">
-                                        </td>
-                                        <td class="px-4 py-2 whitespace-nowrap">Product C</td>
-                                        <td class="px-4 py-2 whitespace-nowrap">$40.00</td>
-                                        <td class="px-4 py-2 whitespace-nowrap">1</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-4 whitespace-nowrap">#1235</td>
-                        <td class="px-4 py-4">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0 h-10 w-10">
-                                    <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80" alt="Jane Smith">
-                                </div>
-                                <div class="ml-4">
-                                    <div class="text-sm font-medium text-gray-900">Jane Smith</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-4 py-4 whitespace-nowrap">Sept 29, 2023</td>
-                        <td class="px-4 py-4 whitespace-nowrap">$75.50</td>
-                        <td class="px-4 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                Processing
-                            </span>
-                        </td>
-                        <td class="px-4 py-4 whitespace-nowrap">
-                            <button class="text-blue-600 hover:text-blue-800 focus:outline-none" onclick="toggleProducts('products-1235')">
-                                View Products
-                            </button>
-                        </td>
-                    </tr>
-                    <tr id="products-1235" class="hidden bg-gray-50">
-                        <td colspan="6" class="px-4 py-4">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-100">
-                                    <tr>
-                                        <th class="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Image</th>
-                                        <th class="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Product Name</th>
-                                        <th class="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Price</th>
-                                        <th class="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Quantity</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-4 py-2 whitespace-nowrap">
-                                            <img src="/placeholder.svg?height=50&width=50" alt="Product X" class="h-12 w-12 object-cover rounded">
-                                        </td>
-                                        <td class="px-4 py-2 whitespace-nowrap">Product X</td>
-                                        <td class="px-4 py-2 whitespace-nowrap">$25.50</td>
-                                        <td class="px-4 py-2 whitespace-nowrap">1</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 whitespace-nowrap">
-                                            <img src="/placeholder.svg?height=50&width=50" alt="Product Y" class="h-12 w-12 object-cover rounded">
-                                        </td>
-                                        <td class="px-4 py-2 whitespace-nowrap">Product Y</td>
-                                        <td class="px-4 py-2 whitespace-nowrap">$50.00</td>
-                                        <td class="px-4 py-2 whitespace-nowrap">1</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr> -->
+                    
                 </tbody>
             </table>
         </div>
@@ -158,6 +38,34 @@
             const element = document.getElementById(id);
             element.classList.toggle('hidden');
         }
+        function paymentViaVNPay(id) {
+            console.log('kaka')
+            console.log(id)
+            fetch('/order/vnpay-payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    order_id: id
+                }),
+            })
+            .then(response =>
+                response.json()
+            )
+            .then(data=>{
+                console.log(data,data.paymentUrl)
+                if (data && data.paymentUrl) {  
+                window.location.href = data.paymentUrl;
+                } else {
+                    console.error("No paymentUrl in response data:", data);
+                }
+
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+            }
     </script>
 </body>
 </html>

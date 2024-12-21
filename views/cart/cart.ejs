@@ -49,43 +49,73 @@
         </section>
 
         <!-- Checkout Details -->
-        <section id="Checkout-Details" class="section-p1">
-            <div id="coupon">
-                <h3>Apply Coupon</h3>
-                <div>
-                  <input type="text" placeholder="Enter Your Coupon Code" />
-                  <button class="normal">Apply</button>
+            <section id="Checkout-Details" class="section-p1">
+                <div id="sub-total">
+                    <h3>Delivery</h3>
+                        <table>
+                            <tr>
+                                <td>Full name</td>
+                                <td class="delivery-fullname">
+                                    <input class="outline-none w-full" name="userFullName" type="text" placeholder="Enter your full name">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Address</td>
+                                <td class="delivery-shippingAddress">
+                                    <input name="shippingAddress"  class="outline-none w-full" type="text" placeholder="Enter your address">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Phone number</td>
+                                <td class="delivery-userPhoneNumber">
+                                    <input name="userPhoneNumber"  class="outline-none w-full" type="number" placeholder="Enter your phone number">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Select Payment Method</strong></td>
+                                <td class="delivery-paymentMethod">
+                                    <div class="relative inline-block text-left">
+                                        <select 
+                                        name="paymentMethod"
+                                        class="h-10 w-full rounded-lg border font-semibold border-gray-200 bg-white pl-4 pr-10 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                                          <option value="" disabled>Choose payment method</option>
+                                          <option value="vnpay" >💳 VNPay</option>
+                                          <option value="cash" selected>💵 Cash on delivery</option>
+                                        </select>
+                                </td>
+                            </tr>
+                        </table>
+                    
+                   
                 </div>
-            </div>
-            <div id="sub-total">
-                <h3>Cart Totals</h3>
-                <table>
-                    <tr>
-                        <td>Cart Subtotal</td>
-                        <td class="card-subtotal">$ 325</td>
-                    </tr>
-                    <tr>
-                        <td>Shipping</td>
-                        <td ><span class="card-shipping">$ 99</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Total</strong></td>
-                        <td><strong class="card-total">$ 325</strong></td>
-                    </tr>
-                </table>
-                <%if(user){ %>
-                    <button id="checkoutBtn" class="normal">Proceed to checkout</button>
-
-                <%}else{%>
-                    <button 
-                    style="cursor: not-allowed;"
-                    id="checkoutBtn"  class="normal " disabled>Proceed to checkout</button>
-                    <p class="text-red-500 text-sm">Bạn cần đăng nhập để thiết lập đơn hàng.</p>
-
-                <%}%>
-                <!-- <button id="checkoutBtn" class="normal">Proceed to checkout</button> -->
-            </div>
+    
+                <div id="sub-total">
+                    <h3>Cart Totals</h3>
+                    <table>
+                        <tr>
+                            <td>Cart Subtotal</td>
+                            <td class="card-subtotal"></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td><strong class="card-total"></strong></td>
+                        </tr>
+                    </table>
+                    <%if(user){ %>
+                        <button type="submit" id="checkoutBtn" class="normal">Proceed to checkout</button>
+    
+                    <%}else{%>
+                        <button 
+                        style="cursor: not-allowed;"
+                        id="checkoutBtn"  class="normal " disabled>Proceed to checkout</button>
+                        <p class="text-red-500 text-sm">Bạn cần đăng nhập để thiết lập đơn hàng.</p>
+    
+                    <%}%>
+                    <!-- <button id="checkoutBtn" class="normal">Proceed to checkout</button> -->
+                </div>
+           
           </section>
+
   
     </body>
     <script type="module" src="/js/cart.js"></script>

@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const orderController = require('../../order/controllers/orderController');
 const authMiddleware = require('../../middleware/auth.js')
-router.get('/',authMiddleware.isAuthenticated, orderController.getOrders);
+const {getOrdersMiddleware} = require('../middleware/getOrders.js')
+
+router.get('/',authMiddleware.isAuthenticated,getOrdersMiddleware, orderController.getOrders);
 router.post('/',authMiddleware.isAuthenticated,orderController.placeOrder)
+router.get('/update-status/:order_id',authMiddleware.isAuthenticated,getOrdersMiddleware,orderController.updateOrderPaymentStatus)
+router.post('/vnpay-payment',authMiddleware.isAuthenticated,orderController.paymentViaVnpay)
 module.exports = router;

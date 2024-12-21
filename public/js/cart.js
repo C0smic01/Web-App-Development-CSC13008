@@ -1,4 +1,4 @@
-import { Cart } from '/cart/models/Cart.js'
+import Cart from '/cart/models/Cart.js'
 const cart = new Cart()
 function renderCart() {
   const cartItems = cart.loadCart();
@@ -68,22 +68,29 @@ function handleQuantityChange(event) {
 
 
 function updateCartTotals(totalQuantity, totalPrice) {
-  console.log(totalQuantity,totalPrice);
-  const cartSubtotal = totalPrice.toFixed(2);
-  const shipping = 99; 
 
-  const total = totalPrice + shipping;
+  const cartSubtotal = totalPrice.toFixed(2);
+
+  const total = totalPrice;
   
   // Cập nhật vào giao diện Checkout Details
-  document.querySelector(".card-subtotal").textContent = "$" + cartSubtotal;
-  document.querySelector(".card-shipping").textContent = "$" + shipping
-  document.querySelector(".card-total").textContent = "$" + total.toFixed(2);
+  document.querySelector(".card-subtotal").textContent =  cartSubtotal + ' ₫';
+  document.querySelector(".card-total").textContent =  total.toFixed(2) + '₫';
 }
 
 
 // Checkout to order
 document.getElementById("checkoutBtn").addEventListener("click", function() {
   const cartItems = cart.loadCart();
+  const userFullName = document.querySelector('[name="userFullName"]').value;
+  const shippingAddress = document.querySelector('[name="shippingAddress"]').value;
+  const userPhoneNumber = document.querySelector('[name="userPhoneNumber"]').value;
+  const paymentMethod = document.querySelector('[name="paymentMethod"]').value;
+
+  if (!userFullName || !shippingAddress || !userPhoneNumber || !paymentMethod) {
+    alert("Please fill all fields!");
+    return;
+}
   if(cartItems.items.length <=0) return ;
   fetch('/order', {
       method: 'POST',
@@ -91,17 +98,28 @@ document.getElementById("checkoutBtn").addEventListener("click", function() {
           'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-          cart: cartItems,
-      }),
+        cart: cartItems,
+        orderBody: {
+            userFullName: userFullName,
+            shippingAddress: shippingAddress,
+            userPhoneNumber: userPhoneNumber,
+            paymentMethod: paymentMethod
+        }
+        }),
   })
-  .then(response => response.json())
+  .then(response =>
+    response.json()
+  )
   .then(data=>{
-      console.log(data)
-      cart.clearCart()
+    console.log(data,data.paymentUrl)
+    if (data && data.paymentUrl) {  
+      window.location.href = data.paymentUrl;
+      cart.clearCart();
       renderCart();
-  })
-  .then(data => {
-     window.location.href = '/order';
+    } else {
+        console.error("No paymentUrl in response data:", data);
+    }
+
   })
   .catch(error => {
       console.error('Error:', error);
