@@ -107,14 +107,19 @@ document.getElementById("checkoutBtn").addEventListener("click", function() {
         }
         }),
   })
-  .then(response => response.json())
+  .then(response =>
+    response.json()
+  )
   .then(data=>{
-      console.log(data)
-      cart.clearCart()
+    console.log(data,data.paymentUrl)
+    if (data && data.paymentUrl) {  
+      window.location.href = data.paymentUrl;
+      cart.clearCart();
       renderCart();
-  })
-  .then(data => {
-     window.location.href = '/order';
+    } else {
+        console.error("No paymentUrl in response data:", data);
+    }
+
   })
   .catch(error => {
       console.error('Error:', error);

@@ -39,6 +39,12 @@ module.exports = (sequelize,DataTypes)=>{
         userFullName:{
             type: DataTypes.STRING,
             allowNull: false
+        },
+        paymentStatus: {
+            type: DataTypes.ENUM,
+            values: ['pending','paid'],
+            allowNull: false,
+            default: 'pending'
         }
     }, {
         timestamps: true,

@@ -5,7 +5,7 @@ const sequelize = models.sequelize
 const Product = models.Product
 const Order = models.Order
 const OrderDetail = models.OrderDetail
-
+const VNPayPayment = require('../../payment/service/vnpayPayment.service')
 exports.getOrdersByUserId = async (user_id) => {
     try {
         if (!user_id) {
@@ -14,6 +14,8 @@ exports.getOrdersByUserId = async (user_id) => {
 
         const orders = await Order.findAll({
             where: { user_id: user_id },
+            order: [['created_at', 'DESC']],
+
             include: [
                 {
                     model: User,
@@ -60,6 +62,7 @@ exports.createOrder = async(userId,orderBody,cart)=>{
             ...orderBody,
             user_id : userId,
             total: cart.totalPrice,
+            paymentStatus: 'pending'
 
         },{transaction})
         const orderDetails = cart.items.map(item=>{
@@ -72,7 +75,7 @@ exports.createOrder = async(userId,orderBody,cart)=>{
         })
         await Promise.all(orderDetails)
         await transaction.commit()
-        console.log(orderDetails)
+        return order.dataValues
     }catch(e)
     {
         if(transaction) await transaction.rollback()
@@ -81,3 +84,46 @@ exports.createOrder = async(userId,orderBody,cart)=>{
     }
 }
 
+exports.updateOrderPaymentStatus = async (orderId)=>{
+    try{
+
+        if(orderId == null) throw new AppError('OrderId is missing',404)
+        const order = await Order.findByPk(orderId)
+        if(order == null) throw new AppError('Order not found',404)
+
+        order.paymentStatus = 'paid'
+        await order.save();
+
+
+    }catch(e)
+    {
+        console.error(e)
+        throw new AppError('Error while updating order',500)
+    }
+}
+
+exports.paymentViaVNPay = async(order_id,ipAddr,returnUrl)=>{
+    try{
+
+        if(!order_id || !ipAddr || !returnUrl) throw new AppError('order_id , ipAddr, returnUrl is required')
+        const order = await Order.findByPk(order_id)
+
+        const vnPayPayment = new VNPayPayment({
+            orderId : order_id, 
+            amount : order.total, 
+            orderInfo : `Order with id ${order_id} with total amount ${order.total}`,
+            returnUrl: returnUrl,
+            ipAddr : ipAddr,
+            bankCode: ''
+        });
+
+
+        const paymentUrl = await vnPayPayment.createPaymentUrl();
+        
+        return paymentUrl ;
+
+    }catch(e)
+    {
+        throw new AppError('Error while payment via VNPay',500)
+    }
+}
