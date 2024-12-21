@@ -42,6 +42,20 @@ class AuthService {
         }
     }
 
+    async checkAvailability(field, value) {
+        try {
+            const user = await User.findOne({ where: {[field]: value} });
+            if (user) {
+                return false;
+            }
+            return true;
+        }
+        catch (error) {
+            console.error('Service - Check username/email availability error:', error);
+            throw error;
+        }
+    }
+
     async verifyUserByGoogleAuth(user) {
         try {
             user.is_verified = true;
@@ -54,7 +68,7 @@ class AuthService {
                 message: 'User verified successfully via Google authentication'
             };
         } catch (error) {
-            console.error('Google auth verification error:', error);
+            console.error('Service - Google auth verification error:', error);
             throw error;
         }
     }

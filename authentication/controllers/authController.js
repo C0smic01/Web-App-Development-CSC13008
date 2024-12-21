@@ -84,6 +84,26 @@ class authController {
         }
     };
 
+    getAvailability = async (req, res) => {
+        const {field, value} = req.query;
+
+        if (field != 'email' && field != 'user_name') {
+            return res.status(400).json({ message: 'Invalid field' });
+        }
+        else if (!value) {
+            return res.status(400).json({ message: 'Invalid value' });
+        }
+
+        try {
+            const isAvailable = await authService.checkAvailability(field, value);
+            res.json({ available: isAvailable });
+        }
+        catch (error) {
+            console.error('Availability check error:', error);
+            return res.status(500).json({ message: 'An unexpected error occurred' });
+        }
+    };
+
     getVerifyEmail = async (req, res) => {
         const { token } = req.query;
 
