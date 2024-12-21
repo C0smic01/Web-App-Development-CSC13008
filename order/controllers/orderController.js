@@ -20,13 +20,22 @@ exports.getOrders = async(req,res,next)=>{
 exports.placeOrder = async (req, res, next) => {
     try {
         const user = res.locals.user.dataValues || res.locals.user
-        const {cart } = req.body;
 
-        if (!user.user_id || !cart) {
+        const {cart,orderBody} = req.body
+        if (!user.user_id || !cart || !orderBody) {
             return res.status(400).json({ message: "userId and cart are required!!" });
         }
-        await orderService.createOrder(user.user_id, cart);
-        console.log(cart,user)
+
+        if (cart.items.length <= 0) {
+            return res.status(400).json({ message: "Cart is empty, please add items before placing an order." });
+        }
+
+        if (!orderBody.shippingAddress || !orderBody.paymentMethod) {
+            return res.status(400).json({ message: "Shipping address and payment method are required." });
+        }
+        console.log("Placing order with details:", cart, user, orderBody);
+        
+        await orderService.createOrder(user.user_id,orderBody,cart);
 
         res.status(200).json({ message: "Place order successfully" });
     } catch (e) {

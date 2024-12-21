@@ -5,6 +5,7 @@ const sequelize = models.sequelize
 const Product = models.Product
 const Order = models.Order
 const OrderDetail = models.OrderDetail
+
 exports.getOrdersByUserId = async (user_id) => {
     try {
         if (!user_id) {
@@ -46,7 +47,7 @@ exports.getOrdersByUserId = async (user_id) => {
     }
 };
 
-exports.createOrder = async(userId,cart)=>{
+exports.createOrder = async(userId,orderBody,cart)=>{
     let transaction
     try{
         if(userId == null) throw new AppError("userId is missing",400) 
@@ -56,8 +57,10 @@ exports.createOrder = async(userId,cart)=>{
         transaction = await sequelize.transaction()
 
         const order = await Order.create({
+            ...orderBody,
             user_id : userId,
-            total: cart.totalPrice
+            total: cart.totalPrice,
+
         },{transaction})
         const orderDetails = cart.items.map(item=>{
             return OrderDetail.create({
@@ -69,6 +72,7 @@ exports.createOrder = async(userId,cart)=>{
         })
         await Promise.all(orderDetails)
         await transaction.commit()
+        console.log(orderDetails)
     }catch(e)
     {
         if(transaction) await transaction.rollback()
