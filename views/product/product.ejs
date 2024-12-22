@@ -4,6 +4,7 @@
     onmouseout="this.style.boxShadow='20px 20px 30px rgba(0, 0, 0, 0.02)';"
     class=" relative p-3 rounded-2xl border border-teal-400 border-solid cursor-pointer hover:scale-105 " 
     onclick="window.location.href='/products/<%-product.product_id%>';">
+
         <img 
             class="h-[350px] object-cover rounded-xl w-full" src=<%= product.img %> alt="P-6">
             <div class="flex flex-col items-start pt-4 gap-2">
@@ -26,3 +27,4 @@
                 <i class="fa-solid fa-bag-shopping" ></i>
             </a>
 </div>
+
