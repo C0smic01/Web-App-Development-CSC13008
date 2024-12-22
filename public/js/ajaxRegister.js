@@ -49,6 +49,10 @@ function showValidationMessage(input, message, isError, field) {
         else if (field === 'password') {
             messageDiv.className = 'validation-message validation-message-password alert-error';
         }
+        else if (field === 'confirm_password') {
+            messageDiv.className = 'validation-message validation-message-confirm-password alert-error';
+        }
+
         messageDiv.style.fontSize = '0.8rem';
         messageDiv.style.marginTop = '2px';
         messageDiv.textContent = message;
@@ -161,16 +165,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = passwordInput.value.trim();
         const confirmPassword = event.target.value.trim();
     
-        const existingMessage = confirmPasswordInput.parentElement.querySelector('.validation-message-password');
+        const existingMessage = confirmPasswordInput.parentElement.querySelector('.validation-message-confirm-password');
         if (existingMessage) {
             existingMessage.remove();
             updateSubmitButtonState();
         }
     
         if (password !== confirmPassword) {
-            showValidationMessage(confirmPasswordInput, 'Passwords do not match', true, 'password');
+            showValidationMessage(confirmPasswordInput, 'Passwords do not match', true, 'confirm_password');
         } else {
-            showValidationMessage(confirmPasswordInput, '', false, 'password');
+            showValidationMessage(confirmPasswordInput, '', false, 'confirm_password');
         }
     }, 500);
 
