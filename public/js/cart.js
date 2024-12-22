@@ -111,13 +111,13 @@ document.getElementById("checkoutBtn").addEventListener("click", function() {
     response.json()
   )
   .then(data=>{
-    console.log(data,data.paymentUrl)
+    cart.clearCart();
+    renderCart();
     if (data && data.paymentUrl) {  
       window.location.href = data.paymentUrl;
-      cart.clearCart();
-      renderCart();
-    } else {
-        console.error("No paymentUrl in response data:", data);
+    }else{
+      window.location.href = '/order';
+
     }
 
   })
