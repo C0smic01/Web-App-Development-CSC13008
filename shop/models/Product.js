@@ -56,17 +56,23 @@ module.exports = (sequelize,DataTypes)=>{
         tableName: 'products'
     });
     Product.associate = (models)=>{
+        Product.hasMany(models.Review, {
+            foreignKey: 'product_id',
+            as: 'reviews',
+        });
         Product.belongsToMany(models.User,{
             foreignKey: {name :'product_id'},
-            as : 'product_review',
-            through : 'reviews'
-        }),
+            through: models.Review,
+            otherKey: 'user_id',
+            as : 'users'
+        });
+    
         Product.belongsTo(models.Status,{
             foreignKey: {name :'status_id'}
-        }),
+        });
         Product.belongsTo(models.Manufacturer,{
             foreignKey : {name : 'manufacturer_id'},
-        }),
+        });
         Product.belongsToMany(models.Category, {
             foreignKey: 'product_id',
             through: 'product_category',

@@ -159,6 +159,9 @@ app.get('/products/partial',productController.getProducts)
 const productRoutes = require('./shop/routes/productRoutes.js')
 app.use('/products',productRoutes)
 
+const reviewRoutes = require('./shop/routes/reviewRoutes.js')
+app.use('/reviews',reviewRoutes)
+
 // Static routes
 app.get('/about', (req, res) => {   
     res.render('about/about' );

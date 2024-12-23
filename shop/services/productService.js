@@ -6,6 +6,7 @@ const AppError = require('../../utils/AppError');
 const models = require('../../index');
 const Product = models.Product;
 const Category = models.Category;
+const Review = models.Review;
 
 const getProductById = async(productId) => {
     try {
@@ -14,14 +15,21 @@ const getProductById = async(productId) => {
                 model: Category,
                 as: 'categories',
                 through: { attributes: [] }
-            }]
+            },
+            {
+                model: Review,
+                as: 'reviews',
+            }
+            ]
         });
         if (!product) {
             throw new AppError('Product not found', 404);
         }
         product = product.get({ plain: true });
+        console.log(product)
         return product;
     } catch(e) {
+        console.error(e)
         throw new AppError('Cannot get product with id : ' + productId, 500);
     }
 }
@@ -88,7 +96,8 @@ const getAllProducts= async(query)=> {
                 as: 'categories',
                 required: false,
                 through: { attributes: [] }
-            }],
+                }
+            ],
             subQuery: false
         });
 
