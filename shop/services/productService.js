@@ -11,22 +11,34 @@ const Review = models.Review;
 const getProductById = async(productId) => {
     try {
         let product = await Product.findByPk(productId, {
-            include: [{
-                model: Category,
-                as: 'categories',
-                through: { attributes: [] }
-            },
-            {
-                model: Review,
-                as: 'reviews',
-            }
-            ]
+            include: [
+                {
+                    model: Category,
+                    as: 'categories',
+                    through: { attributes: [] },  
+                },
+                {
+                    model: Review,
+                    as: 'reviews',
+                    attributes: ['user_id', 'reviews_msg', 'rating', 'createdAt'],  
+                }
+            ],
+            subQuery: false, 
         });
         if (!product) {
             throw new AppError('Product not found', 404);
         }
+
         product = product.get({ plain: true });
-        console.log(product)
+
+        const reviews = product.reviews;
+        const totalReviews = reviews.length;
+        const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+        const avgRating = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : 0;
+        
+        product.total_rating = totalRating;
+        product.avg_rating = parseFloat(avgRating)
+        
         return product;
     } catch(e) {
         console.error(e)
