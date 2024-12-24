@@ -1,0 +1,65 @@
+<nav aria-label="Page navigation" class="flex justify-center items-center p-4">
+    <ul class="flex space-x-1">
+      <!-- Previous button -->
+       <% if(currentPage > 1) { %>
+        <li>
+          <a
+          data-page="<%= currentPage - 1 %>"
+          href="#" class=" pagination-button px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            Previous
+          </a>
+        </li>
+       <%}%>
+
+      <!-- Page numbers -->
+      <li>
+        <a
+        data-page="<%= currentPage %>" 
+        style="background-color: #088178"
+
+        href="#" aria-current="page" class="pagination-button px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-lg hover:bg-blue-700 dark:bg-blue-500 dark:border-blue-500 dark:hover:bg-blue-600">
+          <%= currentPage %>
+        </a>
+      </li>
+  
+      <!-- Next button -->
+      <% if(currentPage <totalPage) { %>
+        <li>
+          <a 
+          data-page="<%= currentPage + 1 %>"
+          href="#" class="pagination-button px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            Next
+          </a>
+        </li>
+       <%}%>
+    
+    </ul>
+    <script>
+      function initializePagination() {
+        document.querySelectorAll('.pagination-button').forEach(button => {
+          button.addEventListener('click', function(event) {
+            event.preventDefault();
+            
+            const page = event.target.getAttribute('data-page'); 
+            console.log(page);
+            fetch(`/reviews/partial/${'<%=product%>'}?review[page]=${page}`)
+              .then(response => response.json()) 
+              .then(data => {
+                if (data.reviewHtml) {
+                  document.getElementById('review-section').innerHTML = data.reviewHtml;
+    
+                  initializePagination();
+                }
+              })
+              .catch(error => console.error('Error loading page:', error));
+          });
+        });
+      }
+    
+      // Đảm bảo gọi lại hàm khi DOM đã được tải xong
+      document.addEventListener('DOMContentLoaded', initializePagination);
+    </script>
+    
+  </nav>
+  
+  

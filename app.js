@@ -159,6 +159,9 @@ app.get('/products/partial',productController.getProducts)
 const productRoutes = require('./shop/routes/productRoutes.js')
 app.use('/products',productRoutes)
 
+const reviewRoutes = require('./shop/routes/reviewRoutes.js')
+app.use('/reviews',reviewRoutes)
+
 // Static routes
 app.get('/about', (req, res) => {   
     res.render('about/about' );
@@ -177,13 +180,13 @@ app.get('/contact', (req, res) => {
 
 
 
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).render('layouts/layout', { 
-        body: '../errors/500',
-        message: 'Something went wrong!' 
-    });
-});
+// app.use((err, req, res, next) => {
+//     console.error(err.stack);
+//     res.status(500).render('layouts/layout', { 
+//         body: '../errors/500',
+//         message: 'Something went wrong!' 
+//     });
+// });
 
 const AppErrorHandler = require('./utils/AppErrorHandler.js')
 app.use(AppErrorHandler)

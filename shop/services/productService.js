@@ -6,22 +6,42 @@ const AppError = require('../../utils/AppError');
 const models = require('../../index');
 const Product = models.Product;
 const Category = models.Category;
+const Review = models.Review;
 
 const getProductById = async(productId) => {
     try {
         let product = await Product.findByPk(productId, {
-            include: [{
-                model: Category,
-                as: 'categories',
-                through: { attributes: [] }
-            }]
+            include: [
+                {
+                    model: Category,
+                    as: 'categories',
+                    through: { attributes: [] },  
+                },
+                // {
+                //     model: Review,
+                //     as: 'reviews',
+                //     attributes: ['user_id', 'reviews_msg', 'rating', 'createdAt'],  
+                // }
+            ],
+            subQuery: false, 
         });
         if (!product) {
             throw new AppError('Product not found', 404);
         }
+
         product = product.get({ plain: true });
+
+        // const reviews = product.reviews;
+        // const totalReviews = reviews.length;
+        // const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+        // const avgRating = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : 0;
+        
+        // product.total_rating = totalReviews;
+        // product.avg_rating = parseFloat(avgRating)
+        
         return product;
     } catch(e) {
+        console.error(e)
         throw new AppError('Cannot get product with id : ' + productId, 500);
     }
 }
@@ -88,7 +108,8 @@ const getAllProducts= async(query)=> {
                 as: 'categories',
                 required: false,
                 through: { attributes: [] }
-            }],
+                }
+            ],
             subQuery: false
         });
 

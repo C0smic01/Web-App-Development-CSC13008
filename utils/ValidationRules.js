@@ -62,3 +62,5 @@ const validatePassword = (password, confirmPassword = null) => {
     }
     return { isValid: true };
 };
+
+module.exports = {validateUsername,validateEmail,validatePassword}

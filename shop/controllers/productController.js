@@ -4,13 +4,14 @@ const productService = require('../services/productService')
 const categoryService = require('../services/categoryService')
 const manufacturerService = require('../services/manufacturerService')
 const statusService = require('../services/statusService')
-
+const reviewService = require('../services/reviewService')
 exports.getShop = async(req, res, next) => {
     try {
         const {products, currentPage, totalPage} = await productService.getAllProducts(req.query)
         const categories = await categoryService.getAllCategories(req.query)
         const manufacturers = await manufacturerService.getAllManufacturers(req.query)
         const productStatus = await statusService.getProductStatus(req.query)
+
         res.render('shop/shop', {
             products,
             categories,
@@ -59,8 +60,9 @@ exports.getProducts = async(req, res, next) => {
 exports.getProductDetails = async(req,res,next)=>{
     try{
         const product = await productService.getProductById(req.params.id)
+        const reviews = await reviewService.getReviewsByProductId(product.product_id,req.query.review)
         const relatedProducts = await productService.getRelatedProducts(req.params.id, {limit: 3})
-        res.render('product/productDetails', {product, relatedProducts})
+        res.render('product/productDetails', {product, relatedProducts,reviews})
     }
     catch(e)
     {
