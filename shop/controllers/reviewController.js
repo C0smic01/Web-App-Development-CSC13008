@@ -32,3 +32,32 @@ exports.createReview = async(req,res,next)=>{
         next(e)
     }
 }
+
+
+exports.getReviewsHtmlByProduct = async(req,res,next)=>{
+    try{
+        const product_id = req.params.product_id
+        if (!product_id ) {
+            return res.status(404).json({
+                success: false,
+                message: 'Invalid input: Missing required fields (product_id, reviews_msg, rating)',
+            });
+        }
+        const reviews = await reviewService.getReviewsByProductId(product_id,req.query.review)
+        const reviewHtml = await new Promise((resolve, reject) => {
+            res.app.render('review/reviewList', {reviews:reviews.reviews, currentPage: reviews.currentPage, totalPage: reviews.totalPage,product: product_id }, (err, html) => {
+                    if (err) return reject(err);
+                        resolve(html);
+                });
+            });
+        
+        
+        res.status(200).json({ 
+            reviewHtml
+        });
+            
+    }
+    catch(e){
+        next(e)
+    }
+}

@@ -17,11 +17,11 @@ const getProductById = async(productId) => {
                     as: 'categories',
                     through: { attributes: [] },  
                 },
-                {
-                    model: Review,
-                    as: 'reviews',
-                    attributes: ['user_id', 'reviews_msg', 'rating', 'createdAt'],  
-                }
+                // {
+                //     model: Review,
+                //     as: 'reviews',
+                //     attributes: ['user_id', 'reviews_msg', 'rating', 'createdAt'],  
+                // }
             ],
             subQuery: false, 
         });
@@ -31,13 +31,13 @@ const getProductById = async(productId) => {
 
         product = product.get({ plain: true });
 
-        const reviews = product.reviews;
-        const totalReviews = reviews.length;
-        const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
-        const avgRating = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : 0;
+        // const reviews = product.reviews;
+        // const totalReviews = reviews.length;
+        // const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+        // const avgRating = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : 0;
         
-        product.total_rating = totalRating;
-        product.avg_rating = parseFloat(avgRating)
+        // product.total_rating = totalReviews;
+        // product.avg_rating = parseFloat(avgRating)
         
         return product;
     } catch(e) {

@@ -3,25 +3,67 @@ const AppError = require('../../utils/AppError');
 const models = require('../../index');
 const Review = models.Review
 const Product = models.Product
-const getReviewsByProductId = async(productId)=>{
-    try{
-        const reviews = await Review.findAll(
-            {
-                where: {
-                    product_id: productId
+const User = models.User
+const sequelize = require('sequelize')
+
+const dayjs = require('dayjs');
+const relativeTime = require('dayjs/plugin/relativeTime');
+dayjs.extend(relativeTime); 
+
+const getReviewsByProductId = async (productId, query) => {
+    try {
+        if (!productId) throw new AppError('Product ID is required', 404);
+
+        const summary = await Review.findOne({
+            where: { product_id: productId },
+            attributes: [
+                [sequelize.fn('AVG', sequelize.col('rating')), 'avg_rating'],
+                [sequelize.fn('COUNT', sequelize.col('user_id')), 'total_review']
+            ],
+            raw: true,
+        });
+
+        const page = query?.page ? parseInt(query.page, 10) : 1; 
+        const limit = query?.limit ? Math.min(parseInt(query.limit, 10), 9) : 3; 
+        const offset = (page - 1) * limit;
+
+        const { count, rows: reviews } = await Review.findAndCountAll({
+            limit,
+            offset,
+            where: { product_id: productId },
+            order: [['createdAt', 'DESC']],
+            include: [
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ['user_name', 'phone'],
                 },
-                order: [['created_at','DESC']],
-                raw: true
-            }
-        )
-        console.log(reviews)
-        return reviews 
-    }catch(err)
-    {
-        console.error(err)
-        throw new AppError('Cannot get reviews for product: '+ productId,500)
+            ],
+            attributes: ['rating', 'createdAt', 'reviews_msg'],
+        });
+
+        const plainReviews = reviews.map((review) => {
+            const plainReview = review.get({ plain: true });
+            plainReview.createdAt = dayjs(plainReview.createdAt).fromNow();
+            return plainReview;
+        });
+
+        return {
+            currentPage: page,
+            totalPage: Math.ceil(count / limit),
+            avg_rating: summary?.avg_rating
+                ? parseFloat(summary.avg_rating).toFixed(1)
+                : '0.0',
+            total_review: summary?.total_review
+                ? parseInt(summary.total_review, 10)
+                : 0,
+            reviews: plainReviews,
+        };
+    } catch (err) {
+        console.error(err);
+        throw new AppError('Cannot get reviews for product: ' + productId, 500);
     }
-}
+};
 
 const createReviewForProduct = async(reviewBody)=>{
     try{
@@ -55,7 +97,7 @@ const createReviewForProduct = async(reviewBody)=>{
     }catch(err)
     {
         console.error(err)
-        throw new AppError('Cannot create review for product: '+ productId,500)
+        throw new AppError('Cannot create review for product: '+ product_id,500)
     }
 }
 
