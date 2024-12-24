@@ -13,7 +13,7 @@ exports.createReview = async(req,res,next)=>{
                 message: 'Invalid input: Missing required fields (product_id, reviews_msg, rating)',
             });
         }
-        
+      
         const reviewBody = {
             product_id,
             user_id: user.user_id,
@@ -29,6 +29,7 @@ exports.createReview = async(req,res,next)=>{
             data: {review}
         })
     }catch(e){
+        // console.error(e)
         next(e)
     }
 }

@@ -1,0 +1,117 @@
+<div class=" max-w-4xl mx-auto p-4 space-y-8">
+    <form id="review-form" class="bg-white rounded-lg shadow p-4 space-y-4 dark:bg-gray-800">
+      <!-- Rating Input -->
+      <div>
+        <label for="rating" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+          Rating (1-5)
+        </label>
+        <input
+          type="number"
+          id="rating"
+          name="rating"
+          min="1"
+          max="5"
+          step="0.5"
+          required
+          placeholder="4.5"
+          class="w-20 rounded border-gray-300 shadow-sm px-3 py-1.5 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm"
+        />
+      </div>
+  
+      <!-- Review Message -->
+      <div>
+        <label for="review" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+          Your Review
+        </label>
+        <textarea
+          id="review"
+          name="reviews_msg"
+          rows="3"
+          required
+          placeholder="Share your thoughts..."
+          class="w-full rounded border-gray-300 shadow-sm px-3 py-1.5 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm"
+        ></textarea>
+      </div>
+  
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        style="background-color: #088178"
+        class="w-full bg-blue-600 text-white px-4 py-2 rounded text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-500 dark:hover:bg-blue-600"
+      >
+        Submit Review
+      </button>
+    </form>
+
+    <script>
+        document.getElementById('review-form').addEventListener('submit', function(event) {
+            event.preventDefault();  
+    
+            const formData = new FormData(this);  
+            const reviews_msg = formData.get('reviews_msg');
+            const rating = formData.get('rating');
+    
+            fetch('/reviews', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  
+                },
+                body: JSON.stringify({
+                    product_id: '<%= product %>', 
+                    reviews_msg: reviews_msg,
+                    rating: rating
+                })
+            })
+            .then(response => response.json())  
+            .then(data => {
+                if (data.status === 'fail') {
+                    alert(data.message);
+                } else {
+                    document.getElementById('review-form').reset(); 
+    
+                    reloadReviews();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message);
+            });
+        });
+    
+        function reloadReviews() {
+            fetch(`/reviews/partial/${'<%= product %>'}?review[page]=1`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.reviewHtml) {
+                    document.getElementById('review-section').innerHTML = data.reviewHtml;
+    
+                    initializePagination();
+                }
+            })
+            .catch(error => {
+                console.error('Error loading reviews:', error);
+            });
+        }
+    
+        function initializePagination() {
+            document.querySelectorAll('.pagination-button').forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    
+                    const page = event.target.getAttribute('data-page');
+                    fetch(`/reviews/partial/${'<%=product%>'}?review[page]=${page}`)
+                    .then(response => response.json()) 
+                    .then(data => {
+                        if (data.reviewHtml) {
+                            document.getElementById('review-section').innerHTML = data.reviewHtml;
+                            initializePagination(); 
+                        }
+                    })
+                    .catch(error => console.error('Error loading page:', error));
+                });
+            });
+        } 
+    </script>
+  </div>
+  
+  

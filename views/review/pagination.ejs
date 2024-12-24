@@ -48,8 +48,7 @@
                 if (data.reviewHtml) {
                   document.getElementById('review-section').innerHTML = data.reviewHtml;
     
-                  // Đảm bảo sau khi cập nhật, lại gọi hàm initializePagination để đăng ký lại sự kiện cho phân trang
-                  initializePagination(); // Đăng ký lại sự kiện cho các nút phân trang
+                  initializePagination();
                 }
               })
               .catch(error => console.error('Error loading page:', error));

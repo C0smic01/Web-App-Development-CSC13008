@@ -98,6 +98,10 @@
                 </div>
                 <p class="text-gray-600 mt-1">Based on <%= reviews.total_review%> reviews</p>
             </div>
+            <div id="add-review-section">
+                <%- include('../review/reviewForm',{product: product.product_id})%>
+                
+            </div>
             <div id="review-section">
                 <%- include('../review/reviewList',{reviews: reviews.reviews, currentPage: reviews.currentPage, totalPage: reviews.totalPage, product:product.product_id})%>
                 

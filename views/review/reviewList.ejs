@@ -62,7 +62,9 @@
   
     <!-- Load More Button -->
     <div class="text-center mt-8">
-      <%- include('pagination', { currentPage,totalPage,product }) %>
+      <% if(reviews && reviews.length > 0) { %> 
+        <%- include('pagination', { currentPage, totalPage, product }) %>
+      <% } %>
     </div>
 
 

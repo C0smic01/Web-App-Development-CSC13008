@@ -68,6 +68,7 @@ const getReviewsByProductId = async (productId, query) => {
 const createReviewForProduct = async(reviewBody)=>{
     try{
         const {product_id,user_id,reviews_msg,rating} = reviewBody
+        
         if(!product_id || !user_id || !reviews_msg || !rating)
         {
             throw new AppError('Invalid data for review',404)
@@ -85,7 +86,16 @@ const createReviewForProduct = async(reviewBody)=>{
         if(!existingUser ){
             throw new AppError('User not found: '+ user_id,404)
         }
-
+        const existingReview = await Review.findOne({
+            where: {
+                product_id: product_id,
+                user_id: user_id
+            }
+        });
+        if(existingReview)
+        {
+            throw new AppError('You already reviewed this product',404)
+        }
         const review = await Review.create({
             product_id,
             user_id,
@@ -96,8 +106,7 @@ const createReviewForProduct = async(reviewBody)=>{
         return review
     }catch(err)
     {
-        console.error(err)
-        throw new AppError('Cannot create review for product: '+ product_id,500)
+        throw new AppError('Cannot create review for product: '+err.message,500)
     }
 }
 

@@ -180,13 +180,13 @@ app.get('/contact', (req, res) => {
 
 
 
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).render('layouts/layout', { 
-        body: '../errors/500',
-        message: 'Something went wrong!' 
-    });
-});
+// app.use((err, req, res, next) => {
+//     console.error(err.stack);
+//     res.status(500).render('layouts/layout', { 
+//         body: '../errors/500',
+//         message: 'Something went wrong!' 
+//     });
+// });
 
 const AppErrorHandler = require('./utils/AppErrorHandler.js')
 app.use(AppErrorHandler)
