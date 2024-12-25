@@ -76,7 +76,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
     try {
         const user = await User.findByPk(id, {
-            attributes: ['user_id', 'user_name', 'email']
+            attributes: ['user_id', 'user_name', 'email', 'avatar']
         });
         done(null, user);
     } catch (error) {
@@ -152,7 +152,11 @@ const cartRoutes = require('./cart/routes/cartRoutes.js');
 app.use('/cart', cartRoutes);
 
 const orderRoutes = require('./order/routes/orderRoutes.js')
-app.use('/order',orderRoutes)
+app.use('/order', orderRoutes)
+
+const profileRoutes = require('./profile/routes/profileRoutes.js')
+app.use('/profile', profileRoutes)
+
 const productController = require('./shop/controllers/productController.js')
 app.get('/products/partial',productController.getProducts)
 

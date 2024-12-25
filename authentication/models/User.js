@@ -51,6 +51,11 @@ module.exports = (sequelize,DataTypes)=>{
             type: DataTypes.DATE,
             allowNull: true,
         },
+        avatar: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: '/img/default-avatar.png',
+        },
     }, {
         timestamps: true, 
         createdAt: 'created_at',
