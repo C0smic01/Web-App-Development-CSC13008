@@ -422,24 +422,18 @@ class authController {
 
     postResetPassword = async (req, res) => {
         const { token, password, confirm_password } = req.body;
-
+    
         let errors = [];
-
+    
         if (!token) {
             errors.push('Invalid reset token');
         }
-
-        if (!password || !confirm_password) {
-            errors.push('All fields are required');
+    
+        const passwordValidation = validatePassword(password, confirm_password);
+        if (!passwordValidation.isValid) {
+            errors.push(passwordValidation.message);
         }
-
-        if (password !== confirm_password) {
-            errors.push('Passwords do not match');
-        }
-        if (password.length < 6) {
-            errors.push('Password must be at least 6 characters long');
-        }
-
+    
         if (errors.length > 0) {
             return res.render('login/resetPassword', {
                 messages: {
@@ -449,10 +443,10 @@ class authController {
                 token: token
             });
         }
-
+    
         try {
             const result = await authService.resetPassword(token, password);
-
+    
             if (!result.success) {
                 return res.render('login/resetPassword', {
                     messages: {
@@ -462,14 +456,14 @@ class authController {
                     token: token
                 });
             }
-
+    
             return res.render('login/login', {
                 messages: {
                     error: [],
                     success: ['Password reset successful. Please log in.']
                 }
             });
-
+    
         } catch (error) {
             return res.render('login/resetPassword', {
                 messages: {
