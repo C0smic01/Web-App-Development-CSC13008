@@ -71,8 +71,42 @@ async function updateAvatar(user_id, avatarUrl) {
     }
 }
 
+async function updatePassword(user_id, currentPassword, newPassword) {
+    try {
+        const user = await User.findByPk(user_id);
+        if (!user) {
+            return {
+                success: false,
+                message: 'User not found'
+            };
+        }
+
+        const isMatch = await user.validatePassword(currentPassword);
+        if (!isMatch) {
+            return {
+                success: false,
+                message: 'Current password is incorrect'
+            };
+        }
+
+        await user.update({ password: newPassword });
+
+        return {
+            success: true,
+            message: 'Password updated successfully'
+        };
+    } catch (error) {
+        console.error('Service - Update password error:', error);
+        return {
+            success: false,
+            message: 'Failed to update password'
+        };
+    }
+}
+
 module.exports = {
     avatarUpload,
     uploadAvatar,
-    updateAvatar
+    updateAvatar,
+    updatePassword
 };

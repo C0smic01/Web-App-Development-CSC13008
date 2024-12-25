@@ -6,5 +6,6 @@ const profileService = require('../services/profileService');
 
 router.get('/', isAuthenticated, profileController.getProfile);
 router.post('/avatar', isAuthenticated, profileService.avatarUpload, profileController.postAvatar);
+router.post('/password', isAuthenticated, profileController.postPassword);
 
 module.exports = router;

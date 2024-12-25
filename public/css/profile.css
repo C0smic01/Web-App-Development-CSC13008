@@ -99,16 +99,26 @@
     display: none;
 }
 
-.error-message {
-    color: #dc3545;
-    font-size: 14px;
-    margin-top: 5px;
-    display: none;
+.alert {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    text-align: left;
 }
 
+.alert-error {
+    background-color: #fde8e8;
+    border: 1px solid #f8b4b4;
+    color: #c81e1e;
+}
+
+.alert-success {
+    background-color: #e8f5e9;
+    border: 1px solid #a5d6a7;
+    color: #1b5e20;
+}
+
+.error-message, 
 .success-message {
-    color: #28a745;
-    font-size: 14px;
-    margin-top: 5px;
-    display: none;
+    margin: 5px 0;
 }
