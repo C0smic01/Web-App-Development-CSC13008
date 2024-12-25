@@ -198,36 +198,34 @@ class AuthService {
                     token: passwordResetToken
                 }
             });
-
+    
             if (!user) {
                 return {
                     success: false,
                     message: 'Incorrect reset link. Please request a new one.'
                 };
             }
-
-            if (Date.now() > user.token_expired_at) 
-            {
+    
+            if (Date.now() > user.token_expired_at) {
                 return {
                     success: false,
                     message: 'Reset link has expired. Please request a new one.'
                 };
             }
-
+    
             const isOldPassword = await bcrypt.compare(password, user.password);
-            if (isOldPassword) 
-            {
+            if (isOldPassword) {
                 return {
                     success: false,
                     message: 'New password cannot be the same as the old password'
                 };
             }
-
+    
             user.password = password;
             user.token = null;
             user.token_expired_at = null;
             await user.save();
-
+    
             return {
                 success: true,
                 message: 'Password reset successful'
