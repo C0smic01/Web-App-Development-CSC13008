@@ -120,7 +120,7 @@ app.use(helmet({
     contentSecurityPolicy: false,
 }));
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production' ? 'http://54.196.6.12:3000/' : 'http://localhost:3000',
+    origin: process.env.NODE_ENV === 'production' ? 'http://54.196.6.12:3000' : ['http://localhost:3000', 'http://localhost:5173'],
     credentials: true
 }));
 
@@ -158,13 +158,16 @@ const profileRoutes = require('./profile/routes/profileRoutes.js')
 app.use('/profile', profileRoutes)
 
 const productController = require('./shop/controllers/productController.js')
-app.get('/products/partial',productController.getProducts)
+app.get('/products/partial', productController.getProducts)
 
 const productRoutes = require('./shop/routes/productRoutes.js')
-app.use('/products',productRoutes)
+app.use('/products', productRoutes)
 
 const reviewRoutes = require('./shop/routes/reviewRoutes.js')
-app.use('/reviews',reviewRoutes)
+app.use('/reviews', reviewRoutes)
+
+const categoryRoutes = require('./shop/routes/categoryRoutes.js')
+app.use('/categories', categoryRoutes)
 
 // Static routes
 app.get('/about', (req, res) => {   
@@ -175,22 +178,7 @@ app.get('/contact', (req, res) => {
     res.render('contact/contact' );
 });
 
-// app.use((req, res, next) => {
-//     res.status(404).render('layouts/layout', { 
-//         body: '../errors/404',
-//         message: 'Page not found' 
-//     });
-// });
 
-
-
-// app.use((err, req, res, next) => {
-//     console.error(err.stack);
-//     res.status(500).render('layouts/layout', { 
-//         body: '../errors/500',
-//         message: 'Something went wrong!' 
-//     });
-// });
 
 const AppErrorHandler = require('./utils/AppErrorHandler.js')
 app.use(AppErrorHandler)
