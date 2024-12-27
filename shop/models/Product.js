@@ -1,5 +1,4 @@
 module.exports = (sequelize,DataTypes)=>{
-    
     const Product = sequelize.define('Product', {
         product_id: {
             type: DataTypes.INTEGER,
@@ -31,15 +30,14 @@ module.exports = (sequelize,DataTypes)=>{
         description:{
             type: DataTypes.STRING,
             allowNull: true
-        }
-        ,
+        },
         status_id :{
             type : DataTypes.INTEGER,
             allowNull : true
         },
         manufacturer_id :{
             type : DataTypes.INTEGER,
-            allowNull : true
+            allowNull : true  // Changed to true to allow NULL
         },
         created_at: {
             type: DataTypes.DATE,
@@ -59,7 +57,9 @@ module.exports = (sequelize,DataTypes)=>{
         Product.hasMany(models.Review, {
             foreignKey: 'product_id',
             as: 'reviews',
+            onDelete: 'CASCADE'
         });
+        
         Product.belongsToMany(models.User,{
             foreignKey: {name :'product_id'},
             through: models.Review,
@@ -70,9 +70,15 @@ module.exports = (sequelize,DataTypes)=>{
         Product.belongsTo(models.Status,{
             foreignKey: {name :'status_id'}
         });
+        
         Product.belongsTo(models.Manufacturer,{
-            foreignKey : {name : 'manufacturer_id'},
+            foreignKey : {
+                name : 'manufacturer_id',
+                allowNull: true  
+            },
+            onDelete: 'SET NULL'
         });
+        
         Product.belongsToMany(models.Category, {
             foreignKey: 'product_id',
             through: 'product_category',

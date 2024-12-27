@@ -7,6 +7,7 @@ module.exports = (sequelize,DataTypes)=>{
         },
         m_name: {
             type: DataTypes.STRING,
+            unique: true,
             allowNull: false
         }
     }, {
@@ -15,7 +16,11 @@ module.exports = (sequelize,DataTypes)=>{
     });
     Manufacturer.associate = (models)=>{
         Manufacturer.hasMany(models.Product,{
-            foreignKey: {name : 'manufacturer_id',allowNull : false}
+            foreignKey: {
+                name: 'manufacturer_id',
+                allowNull: true  
+            },
+            onDelete: 'SET NULL'  
         })
     }
     return Manufacturer

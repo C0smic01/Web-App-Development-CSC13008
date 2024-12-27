@@ -169,6 +169,9 @@ app.use('/reviews', reviewRoutes)
 const categoryRoutes = require('./shop/routes/categoryRoutes.js')
 app.use('/categories', categoryRoutes)
 
+const manufacturerRoutes = require('./shop/routes/manufacturerRoutes.js')
+app.use('/manufacturers', manufacturerRoutes)
+
 // Static routes
 app.get('/about', (req, res) => {   
     res.render('about/about' );
