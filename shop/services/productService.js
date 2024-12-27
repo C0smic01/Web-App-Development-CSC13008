@@ -203,4 +203,19 @@ const getAllProductsJson = async () => {
     }
 };
 
-module.exports = { getAllProducts, getProductById, getRelatedProducts, getAllProductsJson };
+const getAllProductCategories = async () => {
+    try {
+        return await sequelize.query(
+            'SELECT product_id, category_id FROM product_category',
+            {
+                type: Sequelize.QueryTypes.SELECT
+            }
+        );
+    } 
+    catch (error) {
+        console.error('Error:', error);
+        throw new AppError('Error while getting product categories: ' + error.message, 404);
+    }
+};
+
+module.exports = { getAllProducts, getProductById, getRelatedProducts, getAllProductsJson, getAllProductCategories };

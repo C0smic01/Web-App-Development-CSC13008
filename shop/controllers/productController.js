@@ -5,6 +5,7 @@ const categoryService = require('../services/categoryService')
 const manufacturerService = require('../services/manufacturerService')
 const statusService = require('../services/statusService')
 const reviewService = require('../services/reviewService')
+
 exports.getShop = async(req, res, next) => {
     try {
         const {products, currentPage, totalPage} = await productService.getAllProducts(req.query)
@@ -91,3 +92,12 @@ exports.getProductsJSON = async(req, res, next) => {
         next(e);
     }
 };
+
+exports.getProductCategories = async(req, res, next) => {
+    try {
+        const productCategories = await productService.getAllProductCategories()
+        res.json(productCategories);
+    } catch(error) {
+        res.status(500).json({ error: error.message });
+    }
+}
