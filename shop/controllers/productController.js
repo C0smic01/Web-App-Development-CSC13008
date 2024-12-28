@@ -75,19 +75,7 @@ exports.getProductDetails = async(req,res,next)=>{
 exports.getProductsJSON = async(req, res, next) => {
     try {
         const products = await productService.getAllProductsJson(req.query)
-        res.json(
-            products.map(product => ({
-                product_id: product.product_id,
-                product_name: product.product_name,
-                price: product.price,
-                img: product.img,
-                remaining: product.remaining,
-                description: product.description,
-                status_id: product.status_id,
-                manufacturer_id: product.manufacturer_id,
-                categories: product.categories.map(cat => cat.category_name),
-            }))
-        );
+        res.json(products);
     } catch(e) {
         next(e);
     }
