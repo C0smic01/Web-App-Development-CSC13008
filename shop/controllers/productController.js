@@ -81,6 +81,15 @@ exports.getProductsJSON = async(req, res, next) => {
     }
 };
 
+exports.createProduct = async (req, res, next) => {
+    try {
+        const result = await productService.createProduct(req.body, req.files);
+        res.status(201).json(result);
+    } catch (error) {
+        next(error);
+    }
+};
+
 exports.getProductCategories = async(req, res, next) => {
     try {
         const productCategories = await productService.getAllProductCategories()

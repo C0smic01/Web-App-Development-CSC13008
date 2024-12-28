@@ -1,11 +1,15 @@
 const Sequelize = require('sequelize');
 const { Op } = require('sequelize'); 
+const path = require('path');
+const multer = require('multer');
+const util = require('util');
 const sequelize = require('../../config/database');
 const QueryHelper = require('../../utils/QueryHelper');
 const AppError = require('../../utils/AppError');
 const models = require('../../index');
 const Product = models.Product;
 const Category = models.Category;
+const ProductImages = models.ProductImages;
 const Review = models.Review;
 
 const getProductById = async(productId) => {
@@ -203,6 +207,82 @@ const getAllProductsJson = async () => {
     }
 };
 
+
+const productStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadPath = path.join(__dirname, '../../public/img/uploads');
+        cb(null, uploadPath);
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, `product-${uniqueSuffix}${path.extname(file.originalname)}`);
+    }
+});
+
+// Export multer middleware directly
+const upload = multer({
+    storage: productStorage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+        const filetypes = /jpeg|jpg|png|webp/;
+        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = filetypes.test(file.mimetype);
+        
+        if (extname && mimetype) {
+            return cb(null, true);
+        }
+        cb(new Error('Only image files (jpeg, jpg, png, webp) are allowed!'));
+    }
+});
+
+const createProduct = async (productData, files) => {
+    const t = await sequelize.transaction();
+    
+    try {
+        if (!files || files.length === 0) {
+            throw new AppError('At least one product image is required', 400);
+        }
+
+        const uploadedPaths = files.map(file => `/img/uploads/${file.filename}`);
+
+        const product = await Product.create({
+            product_name: productData.name,
+            price: parseFloat(productData.price),
+            description: productData.description,
+            remaining: parseInt(productData.stock),
+            status_id: parseInt(productData.status_id),
+            manufacturer_id: productData.manufacturer_id ? parseInt(productData.manufacturer_id) : null,
+            img: uploadedPaths[0]
+        }, { transaction: t });
+
+        if (productData.categories) {
+            const categoryIds = Array.isArray(productData.categories) 
+                ? productData.categories.map(id => parseInt(id))
+                : productData.categories.split(',').map(id => parseInt(id.trim()));
+            await product.setCategories(categoryIds, { transaction: t });
+        }
+
+        if (uploadedPaths.length > 1) {
+            const additionalImages = uploadedPaths.slice(1).map(path => ({
+                product_id: product.product_id,
+                image_path: path
+            }));
+            
+            await ProductImages.bulkCreate(additionalImages, { transaction: t });
+        }
+
+        await t.commit();
+        return {
+            success: true,
+            data: product,
+            message: 'Product created successfully'
+        };
+    } catch (error) {
+        await t.rollback();
+        throw new AppError(error.message || 'Error creating product', error.status || 500);
+    }
+};
+
 const getAllProductCategories = async () => {
     try {
         return await sequelize.query(
@@ -218,4 +298,4 @@ const getAllProductCategories = async () => {
     }
 };
 
-module.exports = { getAllProducts, getProductById, getRelatedProducts, getAllProductsJson, getAllProductCategories };
+module.exports = { getAllProducts, getProductById, getRelatedProducts, getAllProductsJson, getAllProductCategories, createProduct, upload };

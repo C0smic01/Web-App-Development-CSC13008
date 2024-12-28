@@ -91,3 +91,11 @@ create table order_status (
 	foreign key (order_id) references orders(order_id)
 )
 
+CREATE TABLE product_images (
+    image_id SERIAL NOT NULL PRIMARY KEY,
+    product_id INTEGER NOT NULL,
+    image_path VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
+);
