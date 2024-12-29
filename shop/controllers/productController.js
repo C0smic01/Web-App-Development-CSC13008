@@ -72,6 +72,7 @@ exports.getProductDetails = async(req,res,next)=>{
 
 }
 
+// Get all products
 exports.getProductsJSON = async(req, res, next) => {
     try {
         const products = await productService.getAllProductsJson(req.query)
@@ -81,11 +82,19 @@ exports.getProductsJSON = async(req, res, next) => {
     }
 };
 
+// Get 1 product 
+exports.getProductJSON = async(req, res, next) => {
+    try {
+        const product = await productService.getProductById(req.params.id);
+        res.json(product);
+    } catch(e) {
+        next(e);
+    }
+};
+
 exports.createProduct = async (req, res, next) => {
     try {
         console.log(req.body.name)
-        console.log(req.body.price)
-        console.log(req.body.description)
         
         const result = await productService.createProduct(req.body, req.files);
         res.status(201).json(result);
@@ -102,3 +111,30 @@ exports.getProductCategories = async(req, res, next) => {
         res.status(500).json({ error: error.message });
     }
 }
+
+exports.deleteProduct = async (req, res, next) => {
+    try {
+        const result = await productService.deleteProduct(req.params.id);
+        res.json(result);
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.updateProduct = async (req, res, next) => {
+    try {
+        const result = await productService.updateProduct(req.params.id, req.body, req.files);
+        res.json(result);
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.deleteProductPhoto = async (req, res, next) => {
+    try {
+        const result = await productService.deleteProductPhoto(req.params.id, req.params.photoId);
+        res.json(result);
+    } catch (error) {
+        next(error);
+    }
+};

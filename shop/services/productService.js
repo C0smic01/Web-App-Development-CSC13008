@@ -270,10 +270,6 @@ const validateProductData = (productData, files) => {
         errors.push('At least one category is required');
     }
 
-    if (!files || !Array.isArray(files) || files.length === 0) {
-        errors.push('At least one product image is required');
-    }
-
     if (productData.description && (typeof productData.description !== 'string' || productData.description.trim().length < 10)) {
         errors.push('Description must be at least 10 characters long');
     }
@@ -358,4 +354,96 @@ const getAllProductCategories = async () => {
     }
 };
 
-module.exports = { getAllProducts, getProductById, getRelatedProducts, getAllProductsJson, getAllProductCategories, createProduct, upload };
+const deleteProduct = async (productId) => {
+    const t = await sequelize.transaction();
+    try {
+        const product = await Product.findByPk(productId);
+        if (!product) {
+            throw new AppError('Product not found', 404);
+        }
+        await product.destroy({ transaction: t });
+        await t.commit();
+        return {
+            success: true,
+            message: 'Product deleted successfully'
+        };
+    } catch (error) {
+        await t.rollback();
+        throw new AppError(error.message || 'Error deleting product', error.status || 500);
+    }
+};
+
+const updateProduct = async (productId, productData, files) => {
+    const t = await sequelize.transaction();
+    
+    try {
+        const product = await Product.findByPk(productId);
+        if (!product) {
+            throw new AppError('Product not found', 404);
+        }
+
+        await product.update({
+            product_name: productData.product_name,
+            price: parseFloat(productData.price),
+            remaining: parseInt(productData.remaining),
+            status_id: parseInt(productData.status_id),
+            manufacturer_id: productData.manufacturer_id ? parseInt(productData.manufacturer_id) : null,
+            description: productData.description ? productData.description.trim() : product.description
+        }, { transaction: t });
+
+        if (productData.category) {
+            const categoryId = parseInt(productData.category);
+            await product.setCategories([categoryId], { transaction: t });
+        }
+
+        if (files && files.length > 0) {
+            const uploadedPaths = files.map(file => `/img/uploads/${file.filename}`);
+            
+            const newPhotos = uploadedPaths.map(path => ({
+                product_id: product.product_id,
+                image_path: path
+            }));
+            
+            await ProductImages.bulkCreate(newPhotos, { transaction: t });
+        }
+
+        await t.commit();
+        return {
+            success: true,
+            data: product,
+            message: 'Product updated successfully'
+        };
+    } catch (error) {
+        await t.rollback();
+        throw new AppError(error.message || 'Error updating product', error.status || 500);
+    }
+};
+
+const deleteProductPhoto = async (productId, photoId) => {
+    const t = await sequelize.transaction();
+    try {
+        const photo = await ProductImages.findOne({
+            where: {
+                product_id: productId,
+                id: photoId
+            }
+        });
+
+        if (!photo) {
+            throw new AppError('Photo not found', 404);
+        }
+
+        await photo.destroy({ transaction: t });
+        await t.commit();
+
+        return {
+            success: true,
+            message: 'Photo deleted successfully'
+        };
+    } catch (error) {
+        await t.rollback();
+        throw new AppError(error.message || 'Error deleting photo', error.status || 500);
+    }
+};
+
+module.exports = { getAllProducts, getProductById, getRelatedProducts, getAllProductsJson, getAllProductCategories, createProduct, upload, deleteProduct, updateProduct, deleteProductPhoto };
