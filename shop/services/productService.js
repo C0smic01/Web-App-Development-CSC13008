@@ -373,6 +373,74 @@ const deleteProduct = async (productId) => {
     }
 };
 
+const validateUpdateData = (productData, files) => {
+    const errors = [];
+
+    // Product name validation
+    if (productData.product_name) {
+        if (typeof productData.product_name !== 'string' || productData.product_name.trim().length < 2) {
+            errors.push('Product name must be at least 2 characters');
+        }
+    }
+
+    // Price validation
+    if (productData.price) {
+        const price = parseFloat(productData.price);
+        if (isNaN(price) || price <= 0) {
+            errors.push('Price must be a positive number');
+        }
+    }
+
+    // Stock validation
+    if (productData.remaining) {
+        const stock = parseInt(productData.remaining);
+        if (isNaN(stock) || stock < 0) {
+            errors.push('Stock must be a non-negative number');
+        }
+    }
+
+    // Status validation
+    if (productData.status_id) {
+        const statusId = parseInt(productData.status_id);
+        if (isNaN(statusId)) {
+            errors.push('Invalid status');
+        }
+    }
+
+    // Manufacturer validation
+    if (productData.manufacturer_id) {
+        const manufacturerId = parseInt(productData.manufacturer_id);
+        if (isNaN(manufacturerId)) {
+            errors.push('Invalid manufacturer');
+        }
+    }
+
+    // Category validation
+    if (productData.category_id) {
+        const categoryId = parseInt(productData.category_id);
+        if (isNaN(categoryId)) {
+            errors.push('Invalid category');
+        }
+    }
+
+    // Photos validation
+    if (files && files.length > 0) {
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        files.forEach(file => {
+            if (file.size > maxSize) {
+                errors.push(`File ${file.originalname} exceeds 5MB size limit`);
+            }
+            
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+            if (!allowedTypes.includes(file.mimetype)) {
+                errors.push(`File ${file.originalname} is not a valid image type`);
+            }
+        });
+    }
+
+    return errors;
+};
+
 const updateProduct = async (productId, productData, files) => {
     const t = await sequelize.transaction();
     
@@ -382,20 +450,49 @@ const updateProduct = async (productId, productData, files) => {
             throw new AppError('Product not found', 404);
         }
 
+        // Validate input data
+        const validationErrors = validateUpdateData(productData, files);
+        if (validationErrors.length > 0) {
+            throw new AppError(validationErrors.join(', '), 400);
+        }
+
+        // Update main product data
         await product.update({
             product_name: productData.product_name,
             price: parseFloat(productData.price),
             remaining: parseInt(productData.remaining),
             status_id: parseInt(productData.status_id),
-            manufacturer_id: productData.manufacturer_id ? parseInt(productData.manufacturer_id) : null,
-            description: productData.description ? productData.description.trim() : product.description
+            manufacturer_id: productData.manufacturer_id ? parseInt(productData.manufacturer_id) : null
         }, { transaction: t });
 
-        if (productData.category) {
-            const categoryId = parseInt(productData.category);
-            await product.setCategories([categoryId], { transaction: t });
+        // Handle category update
+        if (productData.category_id) {
+            // Verify category exists
+            const categoryExists = await Category.findByPk(parseInt(productData.category_id));
+            if (!categoryExists) {
+                throw new AppError('Category not found', 404);
+            }
+
+            await sequelize.query(
+                'DELETE FROM product_category WHERE product_id = ?',
+                {
+                    replacements: [productId],
+                    type: Sequelize.QueryTypes.DELETE,
+                    transaction: t
+                }
+            );
+
+            await sequelize.query(
+                'INSERT INTO product_category (product_id, category_id) VALUES (?, ?)',
+                {
+                    replacements: [productId, parseInt(productData.category_id)],
+                    type: Sequelize.QueryTypes.INSERT,
+                    transaction: t
+                }
+            );
         }
 
+        // Handle new photos
         if (files && files.length > 0) {
             const uploadedPaths = files.map(file => `/img/uploads/${file.filename}`);
             
@@ -408,9 +505,18 @@ const updateProduct = async (productId, productData, files) => {
         }
 
         await t.commit();
+
+        const updatedProduct = await Product.findByPk(productId, {
+            include: [{
+                model: Category,
+                as: 'categories',
+                through: { attributes: [] }
+            }]
+        });
+
         return {
             success: true,
-            data: product,
+            data: updatedProduct,
             message: 'Product updated successfully'
         };
     } catch (error) {
