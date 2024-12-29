@@ -2,3 +2,5 @@
 /*.json
 /node_modules
 config/database.js
+public/img/uploads
+public/img/avatar

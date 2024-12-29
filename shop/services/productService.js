@@ -21,6 +21,11 @@ const getProductById = async(productId) => {
                     as: 'categories',
                     through: { attributes: [] },  
                 },
+                {
+                    model: ProductImages,
+                    as: 'additional_images',
+                    attributes: ['image_path']
+                }
                 // {
                 //     model: Review,
                 //     as: 'reviews',
@@ -235,20 +240,63 @@ const upload = multer({
     }
 });
 
+const validateProductData = (productData, files) => {
+    const errors = [];
+
+    if (!productData.name || typeof productData.name !== 'string' || productData.name.trim().length < 2) {
+        errors.push('Invalid product name');
+    }
+
+    const price = parseFloat(productData.price);
+    if (!price || isNaN(price) || price <= 0) {
+        errors.push('Invalid price');
+    }
+
+    const stock = parseInt(productData.stock);
+    if (isNaN(stock) || stock < 0) {
+        errors.push('Invalid stock quantity');
+    }
+
+    if (!productData.status_id) {
+        errors.push('Status is required');
+    }
+
+    if (!productData.manufacturer_id) {
+        errors.push('Manufacturer is required');
+    }
+
+    if (!productData.categories || 
+        (!Array.isArray(productData.categories) && typeof productData.categories !== 'string')) {
+        errors.push('At least one category is required');
+    }
+
+    if (!files || !Array.isArray(files) || files.length === 0) {
+        errors.push('At least one product image is required');
+    }
+
+    if (productData.description && (typeof productData.description !== 'string' || productData.description.trim().length < 10)) {
+        errors.push('Description must be at least 10 characters long');
+    }
+
+    return errors;
+};
+
 const createProduct = async (productData, files) => {
     const t = await sequelize.transaction();
     
     try {
-        if (!files || files.length === 0) {
-            throw new AppError('At least one product image is required', 400);
+        // Validate input data
+        const validationErrors = validateProductData(productData, files);
+        if (validationErrors.length > 0) {
+            throw new AppError(validationErrors.join(', '), 400);
         }
 
         const uploadedPaths = files.map(file => `/img/uploads/${file.filename}`);
 
         const product = await Product.create({
-            product_name: productData.name,
+            product_name: productData.name.trim(),
             price: parseFloat(productData.price),
-            description: productData.description,
+            description: productData.description ? productData.description.trim() : null,
             remaining: parseInt(productData.stock),
             status_id: parseInt(productData.status_id),
             manufacturer_id: productData.manufacturer_id ? parseInt(productData.manufacturer_id) : null,
@@ -259,6 +307,18 @@ const createProduct = async (productData, files) => {
             const categoryIds = Array.isArray(productData.categories) 
                 ? productData.categories.map(id => parseInt(id))
                 : productData.categories.split(',').map(id => parseInt(id.trim()));
+            
+            // Validate that all category IDs exist
+            const validCategories = await Category.findAll({
+                where: {
+                    category_id: categoryIds
+                }
+            });
+
+            if (validCategories.length !== categoryIds.length) {
+                throw new AppError('One or more invalid category IDs', 400);
+            }
+
             await product.setCategories(categoryIds, { transaction: t });
         }
 

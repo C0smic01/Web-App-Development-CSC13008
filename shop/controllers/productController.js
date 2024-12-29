@@ -83,6 +83,10 @@ exports.getProductsJSON = async(req, res, next) => {
 
 exports.createProduct = async (req, res, next) => {
     try {
+        console.log(req.body.name)
+        console.log(req.body.price)
+        console.log(req.body.description)
+        
         const result = await productService.createProduct(req.body, req.files);
         res.status(201).json(result);
     } catch (error) {
