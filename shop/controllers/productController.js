@@ -138,3 +138,12 @@ exports.deleteProductPhoto = async (req, res, next) => {
         next(error);
     }
 };
+
+exports.deleteMainPhoto = async (req, res, next) => {
+    try {
+        const result = await productService.deleteMainPhoto(req.params.id);
+        res.json(result);
+    } catch (error) {
+        next(error);
+    }
+};

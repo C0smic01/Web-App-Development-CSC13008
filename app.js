@@ -119,10 +119,26 @@ app.use((req, res, next) => {
 app.use(helmet({
     contentSecurityPolicy: false,
 }));
+
+// Configure CORS
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production' ? 'http://54.196.6.12:3000' : ['http://localhost:3000', 'http://localhost:5173'],
-    credentials: true
+    origin: process.env.NODE_ENV === 'production' 
+        ? 'http://54.196.6.12:3000' 
+        : ['http://localhost:3000', 'http://localhost:5173'],
+    credentials: true,
+    exposedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+// Add specific CORS headers for static files
+app.use('/img', (req, res, next) => {
+    res.header('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.header('Cross-Origin-Embedder-Policy', 'credentialless');
+    next();
+});
+
+// Then static file serving
+app.use(express.static(path.join(__dirname, "public")));
+app.use('/cart', express.static(path.join(__dirname, 'cart')));
 
 
 sessionStore.sync();

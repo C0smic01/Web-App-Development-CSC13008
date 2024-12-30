@@ -24,7 +24,7 @@ const getProductById = async(productId) => {
                 {
                     model: ProductImages,
                     as: 'additional_images',
-                    attributes: ['image_path']
+                    attributes: ['image_id', 'image_path']
                 }
                 // {
                 //     model: Review,
@@ -39,6 +39,18 @@ const getProductById = async(productId) => {
         }
 
         product = product.get({ plain: true });
+        const baseUrl = 'http://localhost:3000';
+        product.photos = [
+            ...(product.img ? [{
+                id: 'main',
+                url: `${baseUrl}${product.img}`
+            }] : []),
+            // Transform additional images
+            ...(product.additional_images || []).map(img => ({
+                id: img.image_id,
+                url: `${baseUrl}${img.image_path}`
+            }))
+        ];
 
         // const reviews = product.reviews;
         // const totalReviews = reviews.length;
@@ -281,7 +293,6 @@ const createProduct = async (productData, files) => {
     const t = await sequelize.transaction();
     
     try {
-        // Validate input data
         const validationErrors = validateProductData(productData, files);
         if (validationErrors.length > 0) {
             throw new AppError(validationErrors.join(', '), 400);
@@ -496,12 +507,24 @@ const updateProduct = async (productId, productData, files) => {
         if (files && files.length > 0) {
             const uploadedPaths = files.map(file => `/img/uploads/${file.filename}`);
             
-            const newPhotos = uploadedPaths.map(path => ({
-                product_id: product.product_id,
-                image_path: path
-            }));
+            // If product has no main image, use the first uploaded image as thumbnail
+            if (!product.img) {
+                await product.update({
+                    img: uploadedPaths[0]
+                }, { transaction: t });
+                
+                // Remove the first image from the array as it's now the thumbnail
+                uploadedPaths.shift();
+            }
             
-            await ProductImages.bulkCreate(newPhotos, { transaction: t });
+            if (uploadedPaths.length > 0) {
+                const newPhotos = uploadedPaths.map(path => ({
+                    product_id: product.product_id,
+                    image_path: path
+                }));
+                
+                await ProductImages.bulkCreate(newPhotos, { transaction: t });
+            }
         }
 
         await t.commit();
@@ -531,7 +554,7 @@ const deleteProductPhoto = async (productId, photoId) => {
         const photo = await ProductImages.findOne({
             where: {
                 product_id: productId,
-                id: photoId
+                image_id: photoId
             }
         });
 
@@ -552,4 +575,55 @@ const deleteProductPhoto = async (productId, photoId) => {
     }
 };
 
-module.exports = { getAllProducts, getProductById, getRelatedProducts, getAllProductsJson, getAllProductCategories, createProduct, upload, deleteProduct, updateProduct, deleteProductPhoto };
+const deleteMainPhoto = async (productId) => {
+    const t = await sequelize.transaction();
+    try {
+        // Find product with its additional images
+        const product = await Product.findByPk(productId, {
+            include: [{
+                model: ProductImages,
+                as: 'additional_images'
+            }]
+        });
+        
+        if (!product) {
+            throw new AppError('Product not found', 404);
+        }
+
+        if (!product.img) {
+            throw new AppError('No main photo exists', 404);
+        }
+
+        // Check if there are any additional images
+        if (product.additional_images && product.additional_images.length > 0) {
+            // Get the first additional image
+            const firstAdditionalImage = product.additional_images[0];
+            
+            // Set it as the main image
+            await product.update({
+                img: firstAdditionalImage.image_path
+            }, { transaction: t });
+            
+            // Delete it from additional_images
+            await firstAdditionalImage.destroy({ transaction: t });
+        } else {
+            // If no additional images, just set main image to null
+            await product.update({img: null}, { transaction: t });
+        }
+
+        await t.commit();
+
+        return {
+            success: true,
+            message: 'Main photo deleted successfully',
+            newMainPhoto: product.additional_images && product.additional_images.length > 0 
+                ? product.additional_images[0].image_path 
+                : null
+        };
+    } catch (error) {
+        await t.rollback();
+        throw new AppError(error.message || 'Error deleting main photo', error.status || 500);
+    }
+};
+
+module.exports = { getAllProducts, getProductById, getRelatedProducts, getAllProductsJson, getAllProductCategories, createProduct, upload, deleteProduct, updateProduct, deleteProductPhoto, deleteMainPhoto };
