@@ -191,6 +191,10 @@ app.use('/manufacturers', manufacturerRoutes)
 const statusRoutes = require('./shop/routes/statusRoutes.js')
 app.use('/statuses', statusRoutes)
 
+
+const userRoutes=  require('./authentication/routes/userRoutes.js')
+app.use('/users',userRoutes)
+
 // Static routes
 app.get('/about', (req, res) => {   
     res.render('about/about' );
