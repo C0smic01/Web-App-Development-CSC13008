@@ -127,3 +127,77 @@ exports.paymentViaVNPay = async(order_id,ipAddr,returnUrl)=>{
         throw new AppError('Error while payment via VNPay',500)
     }
 }
+
+exports.getAllOrders = async(query)=>{
+    try {
+        const whereCondition = {}
+        const {paymentStatus} = query 
+        if(['pending','paid'].includes(paymentStatus))
+        {
+            whereCondition.paymentStatus = paymentStatus
+        }
+        const orders = await Order.findAll({
+            where: whereCondition, 
+            order: [['created_at', 'DESC']],
+
+        });
+        console.log(orders)
+
+        return orders.map(order => ({
+            ...order.dataValues
+        }));
+    } catch (error) {
+        console.error(error);
+        throw new AppError('Error while getting orders', 404);
+    }
+}
+
+exports.getOrderDetails = async(orderId)=>{
+    try {
+
+        const order = await Order.findByPk(orderId,{
+
+            include: [
+                {
+                    model: User,
+                    attributes: ['user_name', 'email'], 
+                },
+                {
+                    model: OrderDetail,
+                    attributes: ['product_id', 'quantity', 'total'], 
+                    include: [
+                        {
+                            model: Product,
+                            attributes: ['product_name', 'price', 'img'], 
+                        }
+                    ]
+                }
+            ],
+        });
+
+        if(order)
+        {
+            return {
+                success: true,
+                data: {
+                    ...order.dataValues,
+                    User: order.User ? order.User.dataValues : null,
+                    OrderDetails: order.OrderDetails.map(detail => ({
+                        ...detail.dataValues,
+                        Product: detail.Product ? detail.Product.dataValues : null, 
+                    })),
+                }
+            }
+        }else
+        {
+            return {
+                success: false,
+                data: null
+            }
+        }
+
+    } catch (error) {
+        console.error(error);
+        throw new AppError('Error while getting order details', 404);
+    }
+}
