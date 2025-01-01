@@ -141,7 +141,6 @@ exports.getAllOrders = async(query)=>{
             order: [['created_at', 'DESC']],
 
         });
-        console.log(orders)
 
         return orders.map(order => ({
             ...order.dataValues
@@ -189,6 +188,39 @@ exports.getOrderDetails = async(orderId)=>{
                 }
             }
         }else
+        {
+            return {
+                success: false,
+                data: null
+            }
+        }
+
+    } catch (error) {
+        console.error(error);
+        throw new AppError('Error while getting order details', 404);
+    }
+}
+
+exports.updateOrderPaymentStatus = async(orderId,status)=>{
+    try {
+
+        const order = await Order.findByPk(orderId);
+
+        if(order)
+        {
+            if(['pending','paid'].includes(status))
+            {
+                order.paymentStatus = status;
+                await order.save();
+                return {
+                    success: true,
+                    data: {
+                        ...order.dataValues 
+                        },
+                    }
+            }
+        }
+        else
         {
             return {
                 success: false,
