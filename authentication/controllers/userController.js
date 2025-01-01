@@ -1,7 +1,7 @@
 const userService = require('../services/userService')
 
 const getAllUsers = async(req,res,next)=>{
-    const users = await userService.getAllUser(req.query)
+    const users = await userService.getAllUsers(req.query)
     if(users.success)
     {
         res.status(200).json(users)
@@ -9,5 +9,6 @@ const getAllUsers = async(req,res,next)=>{
         res.status(500).json('Error while getting users')
     }
 }
+
 
 module.exports = {getAllUsers}
