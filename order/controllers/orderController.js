@@ -93,3 +93,47 @@ exports.paymentViaVnpay = async(req,res,next)=>{
         next(e)
     }
 }
+
+exports.getAllOrders = async(req,res,next)=>{
+      try{
+            const orders = await orderService.getAllOrders(req.query)
+            return res.status(200).json(orders)
+        }catch(err)
+        {
+            return next(new Error('Internal Server Error: Unable to retrieve orders'))
+        }
+}
+
+exports.getOrderDetails = async(req,res,next)=>{
+
+    try{
+
+        const order = await orderService.getOrderDetails(req.params.id)
+        if(order.success)
+        {
+            return res.status(200).json(order)
+        }else{
+            return res.status(404).json({ success: false, message: 'Order not found' });
+        }
+            
+    }catch(err)
+    {
+        return next(new Error('Internal Server Error: Unable to retrieve user details'))
+    }
+}
+exports.updateOrderPaymentStatus = async(req,res,next)=>{
+    try{
+
+        const order = await orderService.updateOrderPaymentStatus(req.params.id,req.body.paymentStatus)
+        if(order.success)
+        {
+            return res.status(200).json(order)
+        }else{
+            return res.status(404).json({ success: false, message: 'Order not found' });
+        }
+            
+    }catch(err)
+    {
+        return next(new Error('Internal Server Error: Unable to update order status'))
+    }
+}
