@@ -37,7 +37,7 @@ const getAllUsers= async(query)=> {
             where: filterConditions, 
             limit: limit,
             offset: offset,
-            attributes : ['user_name','email','created_at','avatar'],
+            attributes : ['user_id','user_name','email','created_at','avatar','is_banned'],
             order: [[sortBy,sortOrder]]
         })
 
@@ -54,4 +54,54 @@ const getAllUsers= async(query)=> {
     }
 }
 
-module.exports ={getAllUsers}
+
+const getUserDetails = async(userId)=>{
+    try{
+    const user = await User.findByPk(userId,{
+        attributes: ['user_id','user_name','phone','email','created_at','avatar','is_banned']
+    })
+    if(user)
+        {
+            return {
+                success: true,
+                data: user
+            }
+        }else
+        {
+            return {
+                success: false,
+                data: null
+            }
+        }
+    }catch(e)
+    {
+        console.error(e)
+        throw new Error('Error while getting user details')
+    }
+}
+const toggleBanUserById = async(userId)=>{
+    try{
+        const user = await User.findByPk(userId)
+        if(user)
+        {
+            user.is_banned = !user.is_banned
+            await user.save()
+            const message = user.is_banned ? 'User has been banned' : 'User has been unbanned'
+            return {
+                success: true,
+                message: message
+            }
+        }else{
+            return {
+                success: false,
+                message: 'User not found'
+            }
+        }
+    }catch(e)
+    {
+        console.error(e)
+        throw new Error('Error while banning user')
+    }
+}
+
+module.exports ={getAllUsers,getUserDetails,toggleBanUserById}
