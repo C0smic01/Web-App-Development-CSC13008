@@ -56,6 +56,10 @@ module.exports = (sequelize,DataTypes)=>{
             allowNull: true,
             defaultValue: '/img/avatar/default-avatar.png',
         },
+        is_banned:{
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        }
     }, {
         timestamps: true, 
         createdAt: 'created_at',
