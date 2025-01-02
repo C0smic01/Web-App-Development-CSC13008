@@ -195,6 +195,10 @@ app.use('/statuses', statusRoutes)
 const userRoutes=  require('./authentication/routes/userRoutes.js')
 app.use('/users',userRoutes)
 
+
+const reportRoutes = require('./report/routes/reportRoutes.js')
+app.use('/reports',reportRoutes)
+
 // Static routes
 app.get('/about', (req, res) => {   
     res.render('about/about' );
