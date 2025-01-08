@@ -58,5 +58,31 @@ const toggleBanUser = async(req,res,next)=>{
         return next(new Error('Internal Server Error: Unable to ban user'))
     }
 }
+const updateProfile = async(req,res,next)=>{
+    try{
+        const current_user = res.locals.user 
+        if(!current_user || !current_user.dataValues)
+        {
+            return res.status(404).json({
+                success: false,
+                message: 'Need to login'
+            })
+        }
+        const userBody = req.body 
+        
+        const result = await userService.updateUser(current_user.dataValues.user_id,userBody)
 
-module.exports = {getAllUsers,getUserDetails,toggleBanUser}
+        if(result.success)
+            {
+                return res.status(200).json(result)
+            }else{
+                return res.status(500).json({success: false,message: 'Updated failed'})
+            }
+
+
+    }catch(err)
+    {
+        return next(new Error('Internal Server Error: Unable to update'))
+    }
+}
+module.exports = {getAllUsers,getUserDetails,toggleBanUser,updateProfile}

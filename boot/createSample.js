@@ -161,7 +161,14 @@ const createUserSample = async () => {
 
       console.log("Sample users created!");
     } 
-    if(!await User.findOne({where: {user_name: 'admin'}}))
+    if (!await User.findOne({
+      where: {
+        [Sequelize.Op.or]: [
+          { user_name: 'admin' },
+          { email: 'admin@example.com' }
+        ]
+      }
+    }))
       {
         const saltRounds = 10 
         const adminUser = await User.create({
