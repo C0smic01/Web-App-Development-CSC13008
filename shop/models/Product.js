@@ -1,5 +1,4 @@
 module.exports = (sequelize,DataTypes)=>{
-    
     const Product = sequelize.define('Product', {
         product_id: {
             type: DataTypes.INTEGER,
@@ -31,15 +30,14 @@ module.exports = (sequelize,DataTypes)=>{
         description:{
             type: DataTypes.STRING,
             allowNull: true
-        }
-        ,
+        },
         status_id :{
             type : DataTypes.INTEGER,
             allowNull : true
         },
         manufacturer_id :{
             type : DataTypes.INTEGER,
-            allowNull : true
+            allowNull : true  // Changed to true to allow NULL
         },
         created_at: {
             type: DataTypes.DATE,
@@ -56,23 +54,43 @@ module.exports = (sequelize,DataTypes)=>{
         tableName: 'products'
     });
     Product.associate = (models)=>{
+        Product.hasMany(models.Review, {
+            foreignKey: 'product_id',
+            as: 'reviews',
+            onDelete: 'CASCADE'
+        });
+        
         Product.belongsToMany(models.User,{
             foreignKey: {name :'product_id'},
-            as : 'product_review',
-            through : 'reviews'
-        }),
+            through: models.Review,
+            otherKey: 'user_id',
+            as : 'users'
+        });
+    
         Product.belongsTo(models.Status,{
             foreignKey: {name :'status_id'}
-        }),
+        });
+        
         Product.belongsTo(models.Manufacturer,{
-            foreignKey : {name : 'manufacturer_id'},
-        }),
+            foreignKey : {
+                name : 'manufacturer_id',
+                allowNull: true  
+            },
+            onDelete: 'SET NULL'
+        });
+        
         Product.belongsToMany(models.Category, {
             foreignKey: 'product_id',
             through: 'product_category',
             otherKey: 'category_id',
             as: 'categories',
             timestamps: false
+        });
+
+        Product.hasMany(models.ProductImages, {
+            foreignKey: 'product_id',
+            as: 'additional_images',
+            onDelete: 'CASCADE'
         });
     }
     return Product

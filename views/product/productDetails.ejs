@@ -8,11 +8,44 @@
     </head>
     <body>
         <section id="prodetails" class="section-p1">
-             <% if(product){ %>
-                <div class="w-[40%] ">
-                    <img 
-                    class="h-[500px] object-contain"
-                    src=<%= product.img  %> alt="P-1" width="100%" id="mainImg">
+            <% if(product){ %>
+                <div class="w-[40%]">
+                    <!-- Main product image container with fixed dimensions -->
+                    <div class="w-full h-[500px] mb-4 overflow-hidden">
+                        <img 
+                            src="<%= product.img %>" 
+                            alt="<%= product.product_name %>" 
+                            id="mainImg"
+                            class="w-full h-full object-contain bg-gray-50 rounded-lg"
+                        >
+                    </div>
+                    
+                    <!-- Thumbnail images container -->
+                    <% if (product.additional_images && product.additional_images.length > 0) { %>
+                        <div class="flex gap-2 overflow-x-auto">
+                            <!-- Main image thumbnail with fixed dimensions -->
+                            <div class="w-24 h-24 flex-shrink-0 overflow-hidden rounded-lg">
+                                <img 
+                                    src="<%= product.img %>" 
+                                    alt="Main thumbnail"
+                                    class="w-full h-full object-cover cursor-pointer hover:opacity-80 transition-opacity border-2 small-img"
+                                    onclick="changeMainImage(this.src)"
+                                >
+                            </div>
+                            
+                            <!-- Additional images thumbnails -->
+                            <% product.additional_images.forEach(function(image) { %>
+                                <div class="w-24 h-24 flex-shrink-0 overflow-hidden rounded-lg">
+                                    <img 
+                                        src="<%= image.image_path %>" 
+                                        alt="Additional thumbnail"
+                                        class="w-full h-full object-cover cursor-pointer hover:opacity-80 transition-opacity small-img"
+                                        onclick="changeMainImage(this.src)"
+                                    >
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } %>
                 </div>
                 <div class="w-[50%] pt-[30px]">
                     <h5 class="text-sm font-semibold">Home >
@@ -59,21 +92,55 @@
                     <h4 class="text-2xl font-bold pt-[40px] py-[20px]">Product Details</h4>
                     <span class="text-sm"><%= product.description %></span>
                 </div>
-             <% }  %>   
+            <% } %>   
+        </section>
+
+        <section>   
+            <div class="text-center mb-8 mt-12">
+                <h2 class="text-2xl font-bold mb-2">Customer Reviews</h2>
+                <div class="flex items-center justify-center gap-2">
+                    <div class="flex items-center">
+                        <!-- Full stars -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <!-- Repeat for all full stars -->
+                        <div class="relative">
+                            <!-- Half star background -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <!-- Half star overlay -->
+                            <div class="absolute inset-0 overflow-hidden w-[50%]">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-lg font-semibold"><%= reviews.avg_rating %> out of 5</span>
+                </div>
+                <p class="text-gray-600 mt-1">Based on <%= reviews.total_review%> reviews</p>
+            </div>
+            
+            <div id="add-review-section">
+                <%- include('../review/reviewForm',{product: product.product_id})%>
+            </div>
+            
+            <div id="review-section">
+                <%- include('../review/reviewList',{reviews: reviews.reviews, currentPage: reviews.currentPage, totalPage: reviews.totalPage, product:product.product_id})%>
+            </div>
         </section>
 
         <section>
-            <h2 class="text-xl font-semibold text-center w-full mt-[40px] py-[20px] ">You May Also Like</h2>
-            
+            <h2 class="text-2xl font-bold mb-2 text-center w-full mt-16 py-[20px] ">You May Also Like</h2>
             <div class="flex w-full justify-between px-[80px] ">
                 <%- include('productList',{products:relatedProducts})%>
-                
             </div>
         </section>
 
         <script type="module">
-
-            import {Cart} from '/cart/models/Cart.js'
+            import Cart from '/cart/models/Cart.js'
             const cart = new Cart();
 
             function showNotification(message) {
@@ -86,11 +153,11 @@
                 setTimeout(() => {
                     notification.style.opacity = '0';
                     setTimeout(() => {
-                    document.body.removeChild(notification);
+                        document.body.removeChild(notification);
                     }, 300);
                 }, 2000);
             }
-          
+            
             document.querySelector(".add-to-cart-btn").addEventListener("click", function () {
                 const productId = "<%= product.product_id %>"
                 const name = "<%= product.product_name %>"
@@ -102,8 +169,7 @@
                     alert("Please select a valid quantity.");
                     return;
                 }
-            
-            
+                
                 cart.addItem({
                     productId: productId,
                     name: name,
@@ -114,6 +180,30 @@
 
                 showNotification(`${quantity}x ${name} added to cart`);
             });
-          </script>
+        </script>
+        
+        <script>
+            function changeMainImage(src) {
+                document.getElementById('mainImg').src = src;
+            }
+
+            // Add highlight for selected thumbnail
+            document.addEventListener('DOMContentLoaded', function() {
+                const smallImages = document.querySelectorAll('.small-img');
+                smallImages.forEach(img => {
+                    img.addEventListener('click', function() {
+                        // Remove border from all thumbnails
+                        smallImages.forEach(i => i.classList.remove('border-violet-600', 'border-2'));
+                        // Add border to clicked thumbnail
+                        this.classList.add('border-violet-600', 'border-2');
+                    });
+                });
+
+                // Highlight the first thumbnail by default
+                if (smallImages.length > 0) {
+                    smallImages[0].classList.add('border-violet-600', 'border-2');
+                }
+            });
+        </script>
     </body>
 </html>

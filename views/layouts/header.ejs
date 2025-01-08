@@ -14,7 +14,13 @@
                     <li><a class="nav-link" href="/auth/register">Register</a></li>
                 <% } else { %>
                     <li class="relative"  id="profile-menu">
-                        <a class="nav-link" href="#" onclick="toggleDropdown()">Profile</a>
+                        <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
+                            <img 
+                                src="<%= user.avatar || '/img/default-avatar.png' %>" 
+                                alt="Profile" 
+                                class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-[#088178] transition-colors duration-200"
+                            />
+                        </div>
                         <!-- Dropdown menu -->
                         <ul id="profile-dropdown" class="w-48 absolute hidden bg-white text-black shadow-lg right-0 mt-2 rounded-md">
                             <li class="w-full hover:bg-gray-100  ">

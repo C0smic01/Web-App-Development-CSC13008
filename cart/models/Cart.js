@@ -1,5 +1,5 @@
 const CART_KEY =  'cart'
-export class Cart {
+export default class Cart {
     constructor(){
         this.cart = this.loadCart();
     }
@@ -39,4 +39,3 @@ export class Cart {
         this.saveCart();
       }
 }
-

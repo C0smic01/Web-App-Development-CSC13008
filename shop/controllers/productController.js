@@ -4,6 +4,7 @@ const productService = require('../services/productService')
 const categoryService = require('../services/categoryService')
 const manufacturerService = require('../services/manufacturerService')
 const statusService = require('../services/statusService')
+const reviewService = require('../services/reviewService')
 
 exports.getShop = async(req, res, next) => {
     try {
@@ -11,6 +12,7 @@ exports.getShop = async(req, res, next) => {
         const categories = await categoryService.getAllCategories(req.query)
         const manufacturers = await manufacturerService.getAllManufacturers(req.query)
         const productStatus = await statusService.getProductStatus(req.query)
+
         res.render('shop/shop', {
             products,
             categories,
@@ -59,8 +61,9 @@ exports.getProducts = async(req, res, next) => {
 exports.getProductDetails = async(req,res,next)=>{
     try{
         const product = await productService.getProductById(req.params.id)
+        const reviews = await reviewService.getReviewsByProductId(product.product_id,req.query.review)
         const relatedProducts = await productService.getRelatedProducts(req.params.id, {limit: 3})
-        res.render('product/productDetails', {product, relatedProducts})
+        res.render('product/productDetails', {product, relatedProducts,reviews})
     }
     catch(e)
     {
@@ -69,23 +72,78 @@ exports.getProductDetails = async(req,res,next)=>{
 
 }
 
+// Get all products
 exports.getProductsJSON = async(req, res, next) => {
     try {
         const products = await productService.getAllProductsJson(req.query)
-        res.json(
-            products.map(product => ({
-                product_id: product.product_id,
-                product_name: product.product_name,
-                price: product.price,
-                img: product.img,
-                remaining: product.remaining,
-                description: product.description,
-                status_id: product.status_id,
-                manufacturer_id: product.manufacturer_id,
-                categories: product.categories.map(cat => cat.category_name),
-            }))
-        );
+        res.json(products);
     } catch(e) {
         next(e);
+    }
+};
+
+// Get 1 product 
+exports.getProductJSON = async(req, res, next) => {
+    try {
+        const product = await productService.getProductById(req.params.id);
+        res.json(product);
+    } catch(e) {
+        next(e);
+    }
+};
+
+exports.createProduct = async (req, res, next) => {
+    try {
+        console.log(req.body.name)
+        
+        const result = await productService.createProduct(req.body, req.files);
+        res.status(201).json(result);
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.getProductCategories = async(req, res, next) => {
+    try {
+        const productCategories = await productService.getAllProductCategories()
+        res.json(productCategories);
+    } catch(error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+exports.deleteProduct = async (req, res, next) => {
+    try {
+        const result = await productService.deleteProduct(req.params.id);
+        res.json(result);
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.updateProduct = async (req, res, next) => {
+    try {
+        const result = await productService.updateProduct(req.params.id, req.body, req.files);
+        res.json(result);
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.deleteProductPhoto = async (req, res, next) => {
+    try {
+        const result = await productService.deleteProductPhoto(req.params.id, req.params.photoId);
+        res.json(result);
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.deleteMainPhoto = async (req, res, next) => {
+    try {
+        const result = await productService.deleteMainPhoto(req.params.id);
+        res.json(result);
+    } catch (error) {
+        next(error);
     }
 };

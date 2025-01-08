@@ -2,7 +2,7 @@
 
     <tr class="hover:bg-gray-50">
         <td class="px-4 py-4 whitespace-nowrap"><%= order.order_id%></td>
-        <td class="px-4 py-4">
+        <!-- <td class="px-4 py-4">
             <div class="flex items-center">
                 <div class="flex-shrink-0 h-10 w-10">
                     <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80" alt="John Doe">
@@ -11,13 +11,35 @@
                     <div class="text-sm font-medium text-gray-900"><%= order.User.user_name%></div>
                 </div>
             </div>
-        </td>
+        </td> -->
         <td class="px-4 py-4 whitespace-nowrap"><%= order.created_at %></td>
-        <td class="px-4 py-4 whitespace-nowrap"><%= order.total %> vnd</td>
+        <td class="px-4 py-4 whitespace-nowrap"><strong><%= order.total %> ₫</strong></td>
         <td class="px-4 py-4 whitespace-nowrap">
-            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                Processing
+            <span class="px-2 capitalize inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                <%= order.paymentMethod%>
             </span>
+        </td>
+        <td class="px-4 py-4 whitespace-nowrap">
+            <% if (order.paymentStatus === 'pending') { %>
+                <span class="px-2 capitalize inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                    <%= order.paymentStatus %>
+                </span>
+                <% if(order.paymentMethod === 'vnpay' ) {%>
+                    <button class="focus:outline-none" onclick="paymentViaVNPay('<%= order.order_id%>')">
+                        <span class="px-2 capitalize inline-flex text-xs leading-5 font-semibold rounded-full hover:text-blue-800 bg-blue-600 text-white">
+                           Repay →
+                        </span>
+                    </button>
+                    <% } %>
+            <% } else if (order.paymentStatus === 'paid') { %>
+                <span class="px-2 capitalize inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                    <%= order.paymentStatus %>
+                </span>
+            <% } else { %>
+                <span class="px-2 capitalize inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                    <%= order.paymentStatus %>
+                </span>
+            <% } %>
         </td>
         <td class="px-4 py-4 whitespace-nowrap">
             <button class="text-blue-600 hover:text-blue-800 focus:outline-none" onclick="toggleProducts('<%= order.order_id%>')">
@@ -39,7 +61,6 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     <% if(order.OrderDetails.length > 0){ %>
                         <% order.OrderDetails.forEach(product => { %>
-                            <% console.log(product)%>
                             <tr>
                                 <td class="px-4 py-2 whitespace-nowrap">
                                     <img src="<%= product.Product.img %>" alt="Product A" class="h-12 w-12 object-cover rounded">
@@ -50,30 +71,7 @@
                             </tr>
                         <% }) %>
                     <% } %>
-                    <!-- <tr>
-                        <td class="px-4 py-2 whitespace-nowrap">
-                            <img src="/placeholder.svg?height=50&width=50" alt="Product A" class="h-12 w-12 object-cover rounded">
-                        </td>
-                        <td class="px-4 py-2 whitespace-nowrap">Product A</td>
-                        <td class="px-4 py-2 whitespace-nowrap">$50.00</td>
-                        <td class="px-4 py-2 whitespace-nowrap">2</td>
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-2 whitespace-nowrap">
-                            <img src="/placeholder.svg?height=50&width=50" alt="Product B" class="h-12 w-12 object-cover rounded">
-                        </td>
-                        <td class="px-4 py-2 whitespace-nowrap">Product B</td>
-                        <td class="px-4 py-2 whitespace-nowrap">$30.00</td>
-                        <td class="px-4 py-2 whitespace-nowrap">1</td>
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-2 whitespace-nowrap">
-                            <img src="/placeholder.svg?height=50&width=50" alt="Product C" class="h-12 w-12 object-cover rounded">
-                        </td>
-                        <td class="px-4 py-2 whitespace-nowrap">Product C</td>
-                        <td class="px-4 py-2 whitespace-nowrap">$40.00</td>
-                        <td class="px-4 py-2 whitespace-nowrap">1</td>
-                    </tr> -->
+                    
                 </tbody>
             </table>
         </td>

@@ -1,6 +1,7 @@
 const passport = require('passport');
 const authService = require('../services/authService');
 const EmailSender = require('../../utils/EmailSender');
+const { validateUsername, validateEmail, validatePassword } = require('../../utils/ValidationRules');
 
 class authController {
     getRegister = (req, res) => {
@@ -20,16 +21,32 @@ class authController {
 
             let errors = [];
 
-            if (!user_name || !email || !password || !confirm_password) {
-                errors.push('All fields are required.');
+            const usernameValidation = validateUsername(user_name);
+            const emailValidation = validateEmail(email);
+            const passwordValidation = validatePassword(password, confirm_password);
+
+            if (!usernameValidation.isValid) errors.push(usernameValidation.message);
+            if (!emailValidation.isValid) errors.push(emailValidation.message);
+            if (!passwordValidation.isValid) errors.push(passwordValidation.message);
+
+            if (errors.length > 0) {
+                return res.render('register/register', {
+                    messages: {
+                        error: errors,
+                        success: []
+                    },
+                    formData: { user_name, email, phone }
+                });
             }
 
-            if (password !== confirm_password) {
-                errors.push('Passwords do not match.');
-            }
+            const isUsernameAvailable = await authService.checkAvailability('user_name', user_name);
+            const isEmailAvailable = await authService.checkAvailability('email', email);
 
-            if (password.length < 6) {
-                errors.push('Password must be at least 6 characters long.');
+            if (!isUsernameAvailable) {
+                errors.push('Username not available');
+            }
+            if (!isEmailAvailable) {
+                errors.push('Email already registered');
             }
 
             if (errors.length > 0) {
@@ -65,7 +82,7 @@ class authController {
                     error: [],
                     success: ['Registration successful! Please check your email to verify your account.']
                 },
-                formData: { user_name, email, phone, password, confirm_password }
+                formData: { user_name, email, phone }
             });
 
         } catch (error) {
@@ -81,6 +98,27 @@ class authController {
                     phone: req.body.phone 
                 }
             });
+        }
+    };
+
+
+    getAvailability = async (req, res) => {
+        const {field, value} = req.query;
+
+        if (field != 'email' && field != 'user_name') {
+            return res.status(400).json({ message: 'Invalid field' });
+        }
+        else if (!value) {
+            return res.status(400).json({ message: 'Invalid value' });
+        }
+
+        try {
+            const isAvailable = await authService.checkAvailability(field, value);
+            res.json({ available: isAvailable });
+        }
+        catch (error) {
+            console.error('Availability check error:', error);
+            return res.status(500).json({ message: 'An unexpected error occurred' });
         }
     };
 
@@ -435,24 +473,18 @@ class authController {
 
     postResetPassword = async (req, res) => {
         const { token, password, confirm_password } = req.body;
-
+    
         let errors = [];
-
+    
         if (!token) {
             errors.push('Invalid reset token');
         }
-
-        if (!password || !confirm_password) {
-            errors.push('All fields are required');
+    
+        const passwordValidation = validatePassword(password, confirm_password);
+        if (!passwordValidation.isValid) {
+            errors.push(passwordValidation.message);
         }
-
-        if (password !== confirm_password) {
-            errors.push('Passwords do not match');
-        }
-        if (password.length < 6) {
-            errors.push('Password must be at least 6 characters long');
-        }
-
+    
         if (errors.length > 0) {
             return res.render('login/resetPassword', {
                 messages: {
@@ -462,10 +494,10 @@ class authController {
                 token: token
             });
         }
-
+    
         try {
             const result = await authService.resetPassword(token, password);
-
+    
             if (!result.success) {
                 return res.render('login/resetPassword', {
                     messages: {
@@ -475,14 +507,14 @@ class authController {
                     token: token
                 });
             }
-
+    
             return res.render('login/login', {
                 messages: {
                     error: [],
                     success: ['Password reset successful. Please log in.']
                 }
             });
-
+    
         } catch (error) {
             return res.render('login/resetPassword', {
                 messages: {

@@ -51,27 +51,42 @@ module.exports = (sequelize,DataTypes)=>{
             type: DataTypes.DATE,
             allowNull: true,
         },
+        avatar: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: '/img/avatar/default-avatar.png',
+        },
+        is_banned:{
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        }
     }, {
         timestamps: true, 
         createdAt: 'created_at',
         updatedAt: 'updated_at',
         tableName: 'users'
     });
-    User.associate = (models)=>{
-        User.hasMany(models.Review,{
-            foreignKey : {name : 'user_id', allowNull : false},
-            onDelete : 'CASCADE',
-            as : 'user_review'
-        }),
-        User.belongsToMany(models.Role,{
-            foreignKey : {name : 'user_id', allowNull : false},
-            through : 'user_role'
-        }),
-        User.hasMany(models.Order,{
-            foreignKey :{name : 'user_id',allowNull : false},
-            onDelete : 'CASCADE'
-        })
-    }
+    User.associate = (models) => {
+        User.hasMany(models.Review, {
+            foreignKey: { name: 'user_id', allowNull: false },
+            onDelete: 'CASCADE',
+            as: 'user_review',
+        });
+        User.belongsToMany(models.Role, {
+            foreignKey: { name: 'user_id', allowNull: false },
+            through: 'user_role',
+        });
+        User.hasMany(models.Order, {
+            foreignKey: { name: 'user_id', allowNull: false },
+            onDelete: 'CASCADE',
+        });
+        User.belongsToMany(models.Product, {
+            through: models.Review,
+            foreignKey: 'user_id',
+            otherKey: 'product_id',
+            as: 'products',
+        });
+    };
     
     User.prototype.validatePassword = async function(password) {
         return await bcrypt.compare(password, this.password);

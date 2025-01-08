@@ -1,41 +1,38 @@
-
 [
-{
-    "category_id" : 1 ,
-    "category_name" : "Stockings"
-},
-{
-    "category_id" : 2 ,
-    "category_name" : "Scrunchie"
-},{
-    "category_id" : 3 ,
-    "category_name" : "Sandal"
-},{
-    "category_id" : 4 ,
-    "category_name" : "Sweater"
-},{
-    "category_id" : 5 ,
-    "category_name" : "Shoes"
-},{
-    "category_id" : 6 ,
-    "category_name" : "Scarf"
-},{
-    "category_id" : 7 ,
-    "category_name" : "Ring"
-},{
-    "category_id" : 8 ,
-    "category_name" : "Belt"
-},{
-    "category_id" : 9 ,
-    "category_name" : "Zipper"
-},{
-    "category_id" : 10 ,
-    "category_name" : "Hair Tie"
-},{
-    "category_id" : 11 ,
-    "category_name" : "Hoodie"
-},{
-    "category_id" : 12 ,
-    "category_name" : "Shirt"
-}
-]
+    {
+      "category_name": "Stockings"
+    },
+    {
+      "category_name": "Scrunchie"
+    },
+    {
+      "category_name": "Sandal"
+    },
+    {
+      "category_name": "Sweater"
+    },
+    {
+      "category_name": "Shoes"
+    },
+    {
+      "category_name": "Scarf"
+    },
+    {
+      "category_name": "Ring"
+    },
+    {
+      "category_name": "Belt"
+    },
+    {
+      "category_name": "Zipper"
+    },
+    {
+      "category_name": "Hair Tie"
+    },
+    {
+      "category_name": "Hoodie"
+    },
+    {
+      "category_name": "Shirt"
+    }
+  ]

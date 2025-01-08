@@ -6,6 +6,8 @@ const { isNotAuthenticated, isAuthenticated } = require('../../middleware/auth')
 router.get('/register', isNotAuthenticated, authController.getRegister);
 router.post('/register', isNotAuthenticated, authController.postRegister);
 
+router.get('/check-availability', isNotAuthenticated, authController.getAvailability);
+
 router.get('/verify-email', isNotAuthenticated, authController.getVerifyEmail);
 
 router.get('/login', isNotAuthenticated, authController.getLogin);

@@ -76,7 +76,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
     try {
         const user = await User.findByPk(id, {
-            attributes: ['user_id', 'user_name', 'email']
+            attributes: ['user_id', 'user_name', 'email', 'avatar']
         });
         done(null, user);
     } catch (error) {
@@ -119,10 +119,26 @@ app.use((req, res, next) => {
 app.use(helmet({
     contentSecurityPolicy: false,
 }));
+
+// Configure CORS
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production' ? 'http://54.196.6.12:3000/' : 'http://localhost:3000',
-    credentials: true
+    origin: process.env.NODE_ENV === 'production' 
+        ? 'http://54.196.6.12:3000' 
+        : ['http://localhost:3000', 'http://localhost:5173'],
+    credentials: true,
+    exposedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+// Add specific CORS headers for static files
+app.use('/img', (req, res, next) => {
+    res.header('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.header('Cross-Origin-Embedder-Policy', 'credentialless');
+    next();
+});
+
+// Then static file serving
+app.use(express.static(path.join(__dirname, "public")));
+app.use('/cart', express.static(path.join(__dirname, 'cart')));
 
 
 sessionStore.sync();
@@ -152,12 +168,36 @@ const cartRoutes = require('./cart/routes/cartRoutes.js');
 app.use('/cart', cartRoutes);
 
 const orderRoutes = require('./order/routes/orderRoutes.js')
-app.use('/order',orderRoutes)
+app.use('/order', orderRoutes)
+
+const profileRoutes = require('./profile/routes/profileRoutes.js')
+app.use('/profile', profileRoutes)
+
 const productController = require('./shop/controllers/productController.js')
-app.get('/products/partial',productController.getProducts)
+app.get('/products/partial', productController.getProducts)
 
 const productRoutes = require('./shop/routes/productRoutes.js')
-app.use('/products',productRoutes)
+app.use('/products', productRoutes)
+
+const reviewRoutes = require('./shop/routes/reviewRoutes.js')
+app.use('/reviews', reviewRoutes)
+
+const categoryRoutes = require('./shop/routes/categoryRoutes.js')
+app.use('/categories', categoryRoutes)
+
+const manufacturerRoutes = require('./shop/routes/manufacturerRoutes.js')
+app.use('/manufacturers', manufacturerRoutes)
+
+const statusRoutes = require('./shop/routes/statusRoutes.js')
+app.use('/statuses', statusRoutes)
+
+
+const userRoutes=  require('./authentication/routes/userRoutes.js')
+app.use('/users',userRoutes)
+
+
+const reportRoutes = require('./report/routes/reportRoutes.js')
+app.use('/reports',reportRoutes)
 
 // Static routes
 app.get('/about', (req, res) => {   
@@ -168,22 +208,7 @@ app.get('/contact', (req, res) => {
     res.render('contact/contact' );
 });
 
-// app.use((req, res, next) => {
-//     res.status(404).render('layouts/layout', { 
-//         body: '../errors/404',
-//         message: 'Page not found' 
-//     });
-// });
 
-
-
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).render('layouts/layout', { 
-        body: '../errors/500',
-        message: 'Something went wrong!' 
-    });
-});
 
 const AppErrorHandler = require('./utils/AppErrorHandler.js')
 app.use(AppErrorHandler)
