@@ -23,13 +23,17 @@ passport.use(new LocalStrategy({
             attributes: ['user_id', 'user_name', 'email', 'password', 'is_verified', 'token', 'token_expired_at']
         });
 
+        
         if (!user) {
-            return done(null, false, { message: 'Invalid email or password' });
+            console.log('invalid email')
+            return done(null, false, { message: 'Invalid email ' });
         }
 
         const isValid = await user.validatePassword(password);
         if (!isValid) {
-            return done(null, false, { message: 'Invalid email or password' });
+            console.log('invalid password')
+
+            return done(null, false, { message: 'Invalid password' });
         }
 
         return done(null, user);

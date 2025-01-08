@@ -131,27 +131,7 @@ const createProductSample = async () => {
 
 const createUserSample = async () => {
   try {
-    if(!await User.findOne({where: {user_name: 'admin'}}))
-    {
-      const saltRounds = 10 
-      const adminPwd = await bcrypt.hash('Admin1!!!',saltRounds)
-      const adminUser = await User.create({
-        user_name: 'admin',
-        email: 'admin@example.com',
-        password: adminPwd,
-        phone: '0123456789',
-        is_verified: true,
-      })
-      const allRoles = await Role.findAll()
-      if (allRoles && allRoles.length > 0) {
-        for (const role of allRoles) {
-          await UserRole.create({
-            user_id: adminUser.user_id, 
-            role_id: role.role_id,
-          });
-        }
-      }
-    }
+    
     if (await User.count() === 0) {
 
       const data = fs.readFileSync(path.join(__dirname, './json/users.json'), 'utf-8');
@@ -161,11 +141,11 @@ const createUserSample = async () => {
       
 
       for (const user of users) {
-        const hashedPwd = await bcrypt.hash(user.password,saltRounds)
+        // const hashedPwd = await bcrypt.hash(user.password,saltRounds)
         const createdUser = await User.create({
           user_name: user.user_name,
           email: user.email,
-          password: hashedPwd,
+          password: user.password,
           phone: user.phone,
         });
         
@@ -181,6 +161,26 @@ const createUserSample = async () => {
 
       console.log("Sample users created!");
     } 
+    if(!await User.findOne({where: {user_name: 'admin'}}))
+      {
+        const saltRounds = 10 
+        const adminUser = await User.create({
+          user_name: 'admin',
+          email: 'admin@example.com',
+          password: "Admin1!",
+          phone: '0123456789',
+          is_verified: true,
+        })
+        const allRoles = await Role.findAll()
+        if (allRoles && allRoles.length > 0) {
+          for (const role of allRoles) {
+            await UserRole.create({
+              user_id: adminUser.user_id, 
+              role_id: role.role_id,
+            });
+          }
+        }
+      }
   } catch (error) {
     console.error("Unable to create sample users:", error);
   }

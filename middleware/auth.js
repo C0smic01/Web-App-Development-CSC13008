@@ -13,7 +13,6 @@ exports.isNotAuthenticated = (req, res, next) => {
 };
 
 exports.authorize = (...roles)=>{
-    console.log(roles)
     return (req,res,next)=>{
         const user = res.locals.user
 
