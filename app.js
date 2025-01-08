@@ -10,7 +10,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const app = express();
 const path = require("path");
 const expressLayouts = require('express-ejs-layouts');
-const { sequelize, User } = require('./index.js');
+const { sequelize, User, Role } = require('./index.js');
 
 
 passport.use(new LocalStrategy({
@@ -23,13 +23,17 @@ passport.use(new LocalStrategy({
             attributes: ['user_id', 'user_name', 'email', 'password', 'is_verified', 'token', 'token_expired_at']
         });
 
+        
         if (!user) {
-            return done(null, false, { message: 'Invalid email or password' });
+            console.log('invalid email')
+            return done(null, false, { message: 'Invalid email ' });
         }
 
         const isValid = await user.validatePassword(password);
         if (!isValid) {
-            return done(null, false, { message: 'Invalid email or password' });
+            console.log('invalid password')
+
+            return done(null, false, { message: 'Invalid password' });
         }
 
         return done(null, user);
@@ -76,7 +80,15 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
     try {
         const user = await User.findByPk(id, {
-            attributes: ['user_id', 'user_name', 'email', 'avatar']
+            attributes: ['user_id', 'user_name', 'email', 'avatar'],
+            include : [
+                {
+                    model: Role,
+                    attributes: ['role_name'],
+                    through : {attributes: []}
+
+                }
+            ]
         });
         done(null, user);
     } catch (error) {

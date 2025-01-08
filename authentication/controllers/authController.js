@@ -67,6 +67,14 @@ class authController {
                 host
             });
 
+            const role = await Role.findOne({ where: { role_name: 'USER' } });
+            if (role) {
+            await UserRole.create({
+                user_id: result.user_id,
+                role_id: role.role_id,
+            });
+            } 
+
             if (!result.success) {
                 return res.render('register/register', {
                     messages: {
@@ -272,6 +280,10 @@ class authController {
                         message: 'Error during login process'
                     })
                 }
+
+                return res.status(200).json({
+                    message: 'Login successful'
+                });
 
                 // Successful login
                 // if (req.session.returnTo) {
