@@ -69,6 +69,7 @@ const updateProfile = async(req,res,next)=>{
             })
         }
         const userBody = req.body 
+        
         const result = await userService.updateUser(current_user.dataValues.user_id,userBody)
 
         if(result.success)
