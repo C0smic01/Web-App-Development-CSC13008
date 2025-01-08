@@ -10,6 +10,7 @@ const Manufacturer = require('../shop/models/Manufacturer')(sequelize, Sequelize
 const Status = require('../shop/models/Status')(sequelize, Sequelize.DataTypes);
 const Product = require('../shop/models/Product')(sequelize, Sequelize.DataTypes);
 const Category = require('../shop/models/Category')(sequelize, Sequelize.DataTypes);
+const UserRole = require('../authentication/models/UserRole')(sequelize, Sequelize.DataTypes);
 
 
 const createCategorySample = async () => {
@@ -130,21 +131,53 @@ const createProductSample = async () => {
 
 const createUserSample = async () => {
   try {
+    if(!await User.findOne({where: {user_name: 'admin'}}))
+    {
+      const saltRounds = 10 
+      const adminPwd = await bcrypt.hash('Admin1!!!',saltRounds)
+      const adminUser = await User.create({
+        user_name: 'admin',
+        email: 'admin@example.com',
+        password: adminPwd,
+        phone: '0123456789',
+        is_verified: true,
+      })
+      const allRoles = await Role.findAll()
+      if (allRoles && allRoles.length > 0) {
+        for (const role of allRoles) {
+          await UserRole.create({
+            user_id: adminUser.user_id, 
+            role_id: role.role_id,
+          });
+        }
+      }
+    }
     if (await User.count() === 0) {
 
       const data = fs.readFileSync(path.join(__dirname, './json/users.json'), 'utf-8');
       const users = JSON.parse(data)
       const saltRounds = 10 
 
+      
+
       for (const user of users) {
         const hashedPwd = await bcrypt.hash(user.password,saltRounds)
-        await User.create({
+        const createdUser = await User.create({
           user_name: user.user_name,
           email: user.email,
           password: hashedPwd,
-          phone: user.phone
+          phone: user.phone,
         });
+        
+        const role = await Role.findOne({ where: { role_name: 'USER' } });
+        if (role) {
+          await UserRole.create({
+            user_id: createdUser.user_id,
+            role_id: role.role_id,
+          });
+        } 
       }
+      
 
       console.log("Sample users created!");
     } 

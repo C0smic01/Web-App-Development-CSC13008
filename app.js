@@ -10,7 +10,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const app = express();
 const path = require("path");
 const expressLayouts = require('express-ejs-layouts');
-const { sequelize, User } = require('./index.js');
+const { sequelize, User, Role } = require('./index.js');
 
 
 passport.use(new LocalStrategy({
@@ -76,7 +76,15 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
     try {
         const user = await User.findByPk(id, {
-            attributes: ['user_id', 'user_name', 'email', 'avatar']
+            attributes: ['user_id', 'user_name', 'email', 'avatar'],
+            include : [
+                {
+                    model: Role,
+                    attributes: ['role_name'],
+                    through : {attributes: []}
+
+                }
+            ]
         });
         done(null, user);
     } catch (error) {

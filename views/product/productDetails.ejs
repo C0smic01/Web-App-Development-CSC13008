@@ -11,18 +11,18 @@
             <% if(product){ %>
                 <div class="w-[40%]">
                     <!-- Main product image container with fixed dimensions -->
-                    <div class="w-full h-[500px] mb-4 overflow-hidden">
+                    <div class="w-full h-[500px] mb-4 overflow-hidden rounded-lg">
                         <img 
                             src="<%= product.img %>" 
                             alt="<%= product.product_name %>" 
                             id="mainImg"
-                            class="w-full h-full object-contain bg-gray-50 rounded-lg"
+                            class="w-full h-full object-contain rounded-lg "
                         >
                     </div>
                     
                     <!-- Thumbnail images container -->
                     <% if (product.additional_images && product.additional_images.length > 0) { %>
-                        <div class="flex gap-2 overflow-x-auto">
+                        <div class="flex gap-2 overflow-x-auto ">
                             <!-- Main image thumbnail with fixed dimensions -->
                             <div class="w-24 h-24 flex-shrink-0 overflow-hidden rounded-lg">
                                 <img 
