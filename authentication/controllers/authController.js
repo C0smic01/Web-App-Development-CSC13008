@@ -247,6 +247,7 @@ class authController {
         
         if (!email || !password) {
             return res.status(404).json({
+                success: false,
                 message: 'Please provide both email and password'
             })
         }
@@ -255,12 +256,14 @@ class authController {
             if (err) {
                 console.error('Error during login: ', err); 
                 return res.status(501).json({
+                    success: false,
                     message: 'An unexpected error occurred'
                 })
             }
 
             if (!user) {
                 return res.status(404).json({
+                    success: false,
                     message: 'Invalid email or password'
                 })
             }
@@ -268,6 +271,7 @@ class authController {
             if (!user.is_verified) {
                 EmailSender.sendEmail(user, req.get('host'), 'emailVerification');
                 return res.status(403).json({
+                    success: false,
                     message: 'Please check your email to verify your account before logging in.'
                 })
             }
@@ -277,11 +281,15 @@ class authController {
                     
                     console.error('Error during session login: ', err)
                     return res.status(501).json({
+                        success: false,
+
                         message: 'Error during login process'
                     })
                 }
 
                 return res.status(200).json({
+                    success: true,
+                    data: user,
                     message: 'Login successful'
                 });
 
@@ -382,6 +390,43 @@ class authController {
         } catch (error) {
             console.error('Logout error:', error);
             next(error);
+        }
+    };
+    logoutJson = async (req, res, next) => {
+        try {
+            if (req.session && req.sessionStore) {
+                await authService.logoutUser(req.sessionStore, req.sessionID);
+            }
+    
+            req.logout((err) => {
+                if (err) {
+                    return res.status(500).json({
+                        success: false,
+                        error: err 
+                    });
+                }
+    
+                req.session.destroy((err) => {
+                    if (err) {
+                        return res.status(500).json({
+                            success: false,
+                            error: err 
+                        });
+                    }
+                    
+                    res.clearCookie('sessionId');
+                    return res.status(200).json({
+                        success: true,
+                        message: "Logout successfully"
+                    });
+                });
+            });
+        } catch (error) {
+            console.error('Logout error:', error);
+            return res.status(500).json({
+                success: false,
+                error: error.message 
+            });
         }
     };
 

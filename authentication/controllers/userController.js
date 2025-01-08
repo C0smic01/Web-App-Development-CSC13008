@@ -29,6 +29,23 @@ const getUserDetails = async(req,res,next)=>{
 
 const toggleBanUser = async(req,res,next)=>{
     try{
+        const current_user = res.locals.user 
+        if(!current_user)
+        {
+            return res.status(400).json({
+                success: false,
+                message: 'Need to login'
+            })
+        }
+
+        if(current_user.dataValues.user_id == req.params.id)
+        {
+            return res.status(404).json({
+                sucess: false,
+                message: 'Cannot ban yourself'
+            })
+        }
+
         const result = await userService.toggleBanUserById(req.params.id)
         if(result.success)
         {

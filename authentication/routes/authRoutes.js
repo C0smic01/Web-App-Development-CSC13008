@@ -18,6 +18,8 @@ router.get('/google', authController.getGoogleAuth);
 router.get('/google/callback', authController.handleGoogleCallback);
 
 router.get('/logout', isAuthenticated, authController.logout);
+router.get('/logout/json', isAuthenticated, authController.logoutJson);
+
 router.get('/status',authController.getAuthStatus);
 
 router.get('/forgot-password', isNotAuthenticated, authController.getForgotPassword);
