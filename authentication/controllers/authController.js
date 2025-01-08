@@ -195,6 +195,57 @@ class authController {
         })(req, res, next);
     };
 
+
+    postLoginJson = (req, res, next) => {
+        const { email, password } = req.body;
+        
+        if (!email || !password) {
+            return res.status(404).json({
+                message: 'Please provide both email and password'
+            })
+        }
+
+        passport.authenticate('local', (err, user, info) => {
+            if (err) {
+                console.error('Error during login: ', err); 
+                return res.status(501).json({
+                    message: 'An unexpected error occurred'
+                })
+            }
+
+            if (!user) {
+                return res.status(404).json({
+                    message: 'Invalid email or password'
+                })
+            }
+
+            if (!user.is_verified) {
+                EmailSender.sendEmail(user, req.get('host'), 'emailVerification');
+                return res.status(403).json({
+                    message: 'Please check your email to verify your account before logging in.'
+                })
+            }
+
+            req.logIn(user, (err) => {
+                if (err) {
+                    
+                    console.error('Error during session login: ', err)
+                    return res.status(501).json({
+                        message: 'Error during login process'
+                    })
+                }
+
+                // Successful login
+                // if (req.session.returnTo) {
+                //     const returnTo = req.session.returnTo;
+                //     delete req.session.returnTo;
+                //     return res.redirect(returnTo);
+                // }
+                // return res.redirect('/');
+            });
+        })(req, res, next);
+    };
+
     getGoogleAuth = (req, res, next) => {
         passport.authenticate('google', {
             scope: ['profile', 'email']

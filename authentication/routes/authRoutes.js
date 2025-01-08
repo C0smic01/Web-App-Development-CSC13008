@@ -10,6 +10,7 @@ router.get('/verify-email', isNotAuthenticated, authController.getVerifyEmail);
 
 router.get('/login', isNotAuthenticated, authController.getLogin);
 router.post('/login', isNotAuthenticated, authController.postLogin);
+router.post('/login/json', isNotAuthenticated, authController.postLoginJson)
 
 router.get('/google', authController.getGoogleAuth);
 router.get('/google/callback', authController.handleGoogleCallback);
