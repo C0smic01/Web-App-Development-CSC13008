@@ -116,6 +116,14 @@ const getAllProducts= async(query)=> {
         if (query.status_id) {
             filterConditions['status_id'] = query.status_id;
         }
+
+        let order = [['created_at', 'DESC']]; 
+
+        if (query.sortBy) {
+            const sortField = query.sortBy === 'price' ? 'price' : 'created_at';
+            const sortOrder = query.sortOrder === 'desc' ? 'DESC' : 'ASC';
+            order = [[sortField, sortOrder]]; 
+        }
         const page = query.page ? parseInt(query.page, 9) : 1;
         const limit = query.limit ? Math.min(parseInt(query.limit, 9), 9) : 9
         const offset = (page - 1) * limit;
@@ -129,8 +137,8 @@ const getAllProducts= async(query)=> {
                 as: 'categories',
                 required: false,
                 through: { attributes: [] }
-                }
-            ],
+            }],
+            order:order,
             subQuery: false
         });
 
