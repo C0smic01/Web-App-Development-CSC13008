@@ -103,5 +103,30 @@ const toggleBanUserById = async(userId)=>{
         throw new Error('Error while banning user')
     }
 }
+const updateUser = async (userId, userBody) => {
+    try {
+        const user = await User.findByPk(userId);
 
-module.exports ={getAllUsers,getUserDetails,toggleBanUserById}
+        if (!user) {
+            return {
+                success: false,
+                message: 'User not found'
+            };
+        }
+
+        await user.update(userBody);
+
+        return {
+            success: true,
+            message: 'User updated successfully',
+            data: user 
+        };
+
+    } catch (e) {
+        console.error(e);
+        throw new Error('Error while updating user');
+    }
+};
+
+
+module.exports ={getAllUsers,getUserDetails,toggleBanUserById,updateUser}
