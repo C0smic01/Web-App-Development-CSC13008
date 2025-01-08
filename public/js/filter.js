@@ -68,6 +68,15 @@ const fetchData = (page = 1) => {
     params.set(searchInput.name, searchInput.value)
   }
 
+  const sortProductSelect = document.querySelector('#product-sort')
+  if(sortProductSelect.value){
+    const [sortBy,sortOrder] = sortProductSelect.value.split(':')
+    if (sortBy && sortOrder) {
+      params.set('sortBy', sortBy);
+      params.set('sortOrder', sortOrder)
+    }
+  }
+
   fetch(`/products/partial?${params.toString()}`)
     .then((response) => {
       if (!response.ok) {
@@ -156,6 +165,18 @@ document.querySelector("#search-input").addEventListener("keypress", (e) => {
       fetchData();
     }
   }
+});
+
+document.querySelector('#product-sort').addEventListener('change', (event) => {
+  const selectedValue = event.target.value; 
+  const [sortBy, sortOrder] = selectedValue.split(':');
+  if(sortBy && sortOrder)
+  {
+    fetchData()
+    params.set('sortBy', sortBy)
+    params.set('sortOrder',sortOrder)
+  }
+
 });
 
 document.addEventListener('DOMContentLoaded', attachPaginationListeners);
