@@ -65,7 +65,20 @@ exports.createOrder = async(userId,orderBody,cart)=>{
             paymentStatus: 'pending'
 
         },{transaction})
-        const orderDetails = cart.items.map(item=>{
+        const orderDetails = cart.items.map(async(item)=>{
+            const product = await Product.findByPk(item.cartItem.productId)
+
+            if (!product) {
+                throw new AppError(`Product with id ${item.cartItem.productId} not found`, 400);
+            }
+            if (product.remaining < item.cartItem.quantity) {
+                throw new AppError(`Not enough stock for product ${item.cartItem.productId}`, 400);
+            }
+            
+            await product.update(
+                { remaining: product.remaining - item.cartItem.quantity },
+                { transaction }
+            );
             return OrderDetail.create({
                 order_id: order.dataValues.order_id,
                 product_id: item.cartItem.productId,
