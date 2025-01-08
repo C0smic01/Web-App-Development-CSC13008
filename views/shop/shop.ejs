@@ -26,6 +26,29 @@
       </div>
     </div>
 
+    <!-- Sort -->
+    <div class="flex justify-end px-5 gap-2">
+      <div class="flex items-center font-semibold">
+        Sort by: 
+      </div>
+      <div class="relative inline-block  ">
+        <select
+          name="sort"
+          id="product-sort"
+          class="appearance-none w-[200px] px-4 py-2 pr-8 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
+        >
+          <option value="newest">Newest</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+        </select>
+        <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+          <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
     <!-- Products -->
     <div class="flex justify-between gap-12 px-[40px] py-[40px]">
       <div class="w-1/4">
@@ -175,7 +198,6 @@
       </div>
     </div>
 
-    <!-- Slider Page Icon -->
     <section id="pagination" class="section-p1">
       <%- include('./pagination', {currentPage, totalPage}) %>
     </section>
