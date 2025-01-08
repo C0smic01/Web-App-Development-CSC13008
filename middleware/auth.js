@@ -2,14 +2,22 @@ exports.isAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
         return next();
     }
-    res.redirect('/auth/login');
+    res.status(403).json({
+        success: false,
+        error: 'You need to be logged in'
+    })
+    // res.redirect('/auth/login');
 };
 
 exports.isNotAuthenticated = (req, res, next) => {
     if (!req.isAuthenticated()) {
         return next();
     }
-    res.redirect('/');
+    res.status(403).json({
+        success: false,
+        error: 'You need to log out before continuing'
+    })
+    // res.redirect('/');
 };
 
 exports.authorize = (...roles)=>{

@@ -5,8 +5,8 @@ const { isNotAuthenticated, isAuthenticated, authorize } = require('../../middle
 const RoleName = require('../models/RoleName');
 const Role = require('../models/Role');
 
-router.get('/',authorize(RoleName.ADMIN,RoleName.MANAGER),userController.getAllUsers)
-router.get('/:id',authorize(RoleName.ADMIN,RoleName.MANAGER),userController.getUserDetails)
-router.patch('/:id/toggle-ban',authorize(RoleName.ADMIN,RoleName.MANAGER),userController.toggleBanUser)
+router.get('/',isAuthenticated,authorize(RoleName.ADMIN,RoleName.MANAGER),userController.getAllUsers)
+router.get('/:id',isAuthenticated,authorize(RoleName.ADMIN,RoleName.MANAGER),userController.getUserDetails)
+router.patch('/:id/toggle-ban',isAuthenticated,authorize(RoleName.ADMIN,RoleName.MANAGER),userController.toggleBanUser)
 
 module.exports = router
