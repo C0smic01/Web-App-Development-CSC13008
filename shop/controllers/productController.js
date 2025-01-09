@@ -75,8 +75,16 @@ exports.getProductDetails = async(req,res,next)=>{
 // Get all products
 exports.getProductsJSON = async(req, res, next) => {
     try {
-        const products = await productService.getAllProductsJson(req.query)
-        res.json(products);
+        const result = await productService.getAllProductsJson(req.query);
+        res.json({
+            success: true,
+            data: result.products,
+            pagination: {
+                total: result.total,
+                currentPage: result.currentPage,
+                totalPages: result.totalPages
+            }
+        });
     } catch(e) {
         next(e);
     }

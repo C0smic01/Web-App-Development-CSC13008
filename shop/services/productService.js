@@ -215,17 +215,105 @@ const getRelatedProducts = async(currentProductId, queryStr = {}) => {
     }
 };
 
-const getAllProductsJson = async () => {
+const getAllProductsJson = async (query) => {
+    if (!query) {
+        query = {};
+    }
+
     try {
-        let products = await Product.findAll({
-            include: [{
-                model: Category,
-                as: 'categories',
-                through: { attributes: [] }
-            }]
+        const page = parseInt(query.page) || 1;
+        const limit = parseInt(query.limit) || 10;
+        const offset = (page - 1) * limit;
+
+        const whereClause = {};
+        
+        if (query.search) {
+            whereClause[Op.or] = [
+                Sequelize.where(
+                    Sequelize.fn('LOWER', Sequelize.col('Product.product_name')),
+                    {
+                        [Op.like]: '%' + query.search.toLowerCase() + '%'
+                    }
+                )
+            ];
+        }
+
+        if (query.manufacturer) {
+            whereClause.manufacturer_id = query.manufacturer;
+        }
+
+        let order = [['created_at', 'DESC']];
+        if (query.sortField) {
+            const sortDir = query.sortDir && query.sortDir.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+            switch (query.sortField) {
+                case 'price':
+                    order = [['price', sortDir]];
+                    break;
+                case 'total_purchase':
+                    order = [['total_purchase', sortDir]];
+                    break;
+                case 'created_at':
+                    order = [['created_at', sortDir]];
+                    break;
+                default:
+                    order = [['created_at', 'DESC']];
+            }
+        }
+
+        const categoryInclude = {
+            model: Category,
+            as: 'categories',
+            through: { attributes: [] }
+        };
+
+        if (query.category) {
+            categoryInclude.where = {
+                category_name: query.category
+            };
+        }
+
+        const totalCount = await Product.count({
+            where: whereClause,
+            include: [categoryInclude],
+            distinct: true
         });
 
-        return products
+        const products = await Product.findAll({
+            where: whereClause,
+            include: [
+                categoryInclude,
+                {
+                    model: models.Status,
+                    as: 'Status',
+                    attributes: ['status_name']
+                },
+                {
+                    model: models.Manufacturer,
+                    as: 'Manufacturer',
+                    attributes: ['m_name']
+                }
+            ],
+            order: order,
+            limit: limit,
+            offset: offset,
+            distinct: true
+        });
+
+        const transformedProducts = products.map(function(product) {
+            const plainProduct = product.get({ plain: true });
+            const transformed = Object.assign({}, plainProduct);
+            transformed.status_name = plainProduct.Status ? plainProduct.Status.status_name : null;
+            transformed.manufacturer_name = plainProduct.Manufacturer ? plainProduct.Manufacturer.m_name : null;
+            return transformed;
+        });
+
+        return {
+            products: transformedProducts,
+            total: totalCount,
+            currentPage: page,
+            totalPages: Math.ceil(totalCount / limit)
+        };
+
     } catch (e) {
         console.error('Error fetching products:', e);
         throw new AppError('Cannot get all products, error: ' + e.message, 404);
