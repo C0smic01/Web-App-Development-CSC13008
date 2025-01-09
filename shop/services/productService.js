@@ -483,14 +483,12 @@ const deleteProduct = async (productId) => {
 const validateUpdateData = (productData, files) => {
     const errors = [];
 
-    // Product name validation
     if (productData.product_name) {
         if (typeof productData.product_name !== 'string' || productData.product_name.trim().length < 2) {
             errors.push('Product name must be at least 2 characters');
         }
     }
 
-    // Price validation
     if (productData.price) {
         const price = parseFloat(productData.price);
         if (isNaN(price) || price <= 0) {
@@ -498,7 +496,6 @@ const validateUpdateData = (productData, files) => {
         }
     }
 
-    // Stock validation
     if (productData.remaining) {
         const stock = parseInt(productData.remaining);
         if (isNaN(stock) || stock < 0) {
@@ -506,7 +503,6 @@ const validateUpdateData = (productData, files) => {
         }
     }
 
-    // Status validation
     if (productData.status_id) {
         const statusId = parseInt(productData.status_id);
         if (isNaN(statusId)) {
@@ -514,7 +510,6 @@ const validateUpdateData = (productData, files) => {
         }
     }
 
-    // Manufacturer validation
     if (productData.manufacturer_id) {
         const manufacturerId = parseInt(productData.manufacturer_id);
         if (isNaN(manufacturerId)) {
@@ -522,7 +517,6 @@ const validateUpdateData = (productData, files) => {
         }
     }
 
-    // Category validation
     if (productData.category_id) {
         const categoryId = parseInt(productData.category_id);
         if (isNaN(categoryId)) {
@@ -530,7 +524,6 @@ const validateUpdateData = (productData, files) => {
         }
     }
 
-    // Photos validation
     if (files && files.length > 0) {
         const maxSize = 5 * 1024 * 1024; // 5MB
         files.forEach(file => {
