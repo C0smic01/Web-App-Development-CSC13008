@@ -76,7 +76,10 @@ exports.createOrder = async(userId,orderBody,cart)=>{
             }
             
             await product.update(
-                { remaining: product.remaining - item.cartItem.quantity },
+                { 
+                    remaining: product.remaining - item.cartItem.quantity,
+                    total_purchase: product.total_purchase + 1
+                },
                 { transaction }
             );
             return OrderDetail.create({
