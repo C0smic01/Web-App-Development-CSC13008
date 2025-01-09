@@ -16,7 +16,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: sh -c "sleep 10 && node app.js"  # Simple wait before starting
+    command: sh -c "sleep 10 && node app.js"
     ports:
       - "3000:3000"
     environment:
