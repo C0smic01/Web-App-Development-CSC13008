@@ -73,7 +73,7 @@ class authController {
             const role = await Role.findOne({ where: { role_name: 'USER' } });
             if (role) {
             await UserRole.create({
-                user_id: result.user_id,
+                user_id: result.user.user_id,
                 role_id: role.role_id,
             });
             } 
