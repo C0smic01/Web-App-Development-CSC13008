@@ -9,8 +9,11 @@ services:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    networks:
-      - app-network
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+    command: >
+      /bin/sh -c "
+        chmod +x /docker-entrypoint-initdb.d/init-db.sh &&
+        docker-entrypoint.sh postgres"
 
   app:
     build:
@@ -37,12 +40,6 @@ services:
       - GA_TRACKING_ID=${GA_TRACKING_ID}
     depends_on:
       - postgres
-    networks:
-      - app-network
 
 volumes:
   postgres-data:
-
-networks:
-  app-network:
-    driver: bridge

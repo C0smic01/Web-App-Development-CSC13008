@@ -2,6 +2,9 @@ const passport = require('passport');
 const authService = require('../services/authService');
 const EmailSender = require('../../utils/EmailSender');
 const { validateUsername, validateEmail, validatePassword } = require('../../utils/ValidationRules');
+const models = require('../../index');
+const Role = models.Role;
+const UserRole = models.UserRole;
 
 class authController {
     getRegister = (req, res) => {
