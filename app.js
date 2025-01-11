@@ -104,7 +104,7 @@ const sessionStore = new SequelizeStore({
 });
 
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'your-dev-secret-key',
+    secret: process.env.SESSION_SECRET,
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
@@ -135,7 +135,7 @@ app.use(helmet({
 // Configure CORS
 app.use(cors({
     origin: process.env.NODE_ENV === 'production' 
-        ? 'http://54.196.6.12:3000' 
+        ? 'https://admincara.c0smic.tech' 
         : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:4173'],
     credentials: true,
     exposedHeaders: ['Content-Type', 'Authorization'],
