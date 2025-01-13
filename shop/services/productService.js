@@ -39,16 +39,22 @@ const getProductById = async(productId) => {
         }
 
         product = product.get({ plain: true });
-        const baseUrl = 'http://localhost:3000';
+
+        const isExternalUrl = (url) => {
+            return url && (url.startsWith('http://') || url.startsWith('https://'));
+        };
+        const BASE_URL = process.env.NODE_ENV === 'production' 
+            ? 'https://cara.c0smic.tech'
+            : 'http://localhost:3000';
+        
         product.photos = [
             ...(product.img ? [{
                 id: 'main',
-                url: `${baseUrl}${product.img}`
+                url: isExternalUrl(product.img) ? product.img : `${BASE_URL}${product.img}`
             }] : []),
-            // Transform additional images
             ...(product.additional_images || []).map(img => ({
                 id: img.image_id,
-                url: `${baseUrl}${img.image_path}`
+                url: isExternalUrl(img.image_path) ? img.image_path : `${BASE_URL}${img.image_path}`
             }))
         ];
 
