@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=${PG_DATABASE}
+      - POSTGRES_USER=${PG_USERNAME}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+    command: >
+      /bin/sh -c "
+        chmod +x /docker-entrypoint-initdb.d/init-db.sh &&
+        docker-entrypoint.sh postgres"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sh -c "sleep 10 && node app.js"
+    ports:
+      - "3000:3000"
+    environment:
+      - PG_HOST=postgres
+      - PG_PORT=5432
+    depends_on:
+      - postgres
+
+volumes:
+  postgres-data:

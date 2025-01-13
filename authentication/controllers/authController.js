@@ -2,6 +2,9 @@ const passport = require('passport');
 const authService = require('../services/authService');
 const EmailSender = require('../../utils/EmailSender');
 const { validateUsername, validateEmail, validatePassword } = require('../../utils/ValidationRules');
+const models = require('../../index');
+const Role = models.Role;
+const UserRole = models.UserRole;
 
 class authController {
     getRegister = (req, res) => {
@@ -70,7 +73,7 @@ class authController {
             const role = await Role.findOne({ where: { role_name: 'USER' } });
             if (role) {
             await UserRole.create({
-                user_id: result.user_id,
+                user_id: result.user.user_id,
                 role_id: role.role_id,
             });
             } 

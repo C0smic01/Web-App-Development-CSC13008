@@ -20,13 +20,20 @@ passport.use(new LocalStrategy({
     try {
         const user = await User.findOne({ 
             where: { email },
-            attributes: ['user_id', 'user_name', 'email', 'password', 'is_verified', 'token', 'token_expired_at','avatar','phone']
+            attributes: ['user_id', 'user_name', 'email', 'password', 'is_verified', 'token', 'token_expired_at','avatar','phone','is_banned']
         });
 
         
         if (!user) {
             console.log('invalid email')
             return done(null, false, { message: 'Invalid email ' });
+        }
+
+        if(user.is_banned)
+        {
+            console.log('Account got banned')
+
+            return done(null, false, { message: 'Account got banned' });
         }
 
         const isValid = await user.validatePassword(password);
@@ -106,7 +113,7 @@ const sessionStore = new SequelizeStore({
 });
 
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'your-dev-secret-key',
+    secret: process.env.SESSION_SECRET,
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
@@ -137,8 +144,8 @@ app.use(helmet({
 // Configure CORS
 app.use(cors({
     origin: process.env.NODE_ENV === 'production' 
-        ? 'http://54.196.6.12:3000' 
-        : ['http://localhost:3000', 'http://localhost:5173'],
+        ? 'https://admincara.c0smic.tech' 
+        : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:4173'],
     credentials: true,
     exposedHeaders: ['Content-Type', 'Authorization'],
 }));

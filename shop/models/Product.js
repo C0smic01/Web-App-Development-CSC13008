@@ -46,6 +46,10 @@ module.exports = (sequelize,DataTypes)=>{
         updated_at: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
+        },
+        total_purchase: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
         }
     }, {
         timestamps: true, 
