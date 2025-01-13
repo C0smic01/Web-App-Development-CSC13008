@@ -422,6 +422,7 @@ class authController {
                 });
             });
         } catch (error) {
+            res.clearCookie('sessionId');
             console.error('Logout error:', error);
             return res.status(500).json({
                 success: false,
